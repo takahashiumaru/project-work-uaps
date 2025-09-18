@@ -97,6 +97,7 @@
             </div>
             @yield('konten')
 
+            
             <!-- Flight Table -->
             <div class="table-responsive" style="overflow-x: auto;">
                 <table class="table table-bordered table-striped">
