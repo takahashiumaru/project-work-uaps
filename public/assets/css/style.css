@@ -25,6 +25,10 @@ body.page-login {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
+    overflow-x: auto !important;
+}
+
 
 .left-panel,
 .right-panel {
@@ -367,51 +371,68 @@ body.with-sidebar.sidebar-collapsed .profile-wrapper {
     color: #666;
 }
 
-/* Table Styling */
+/* Container card */
 .table-container {
     background: #ffffff;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow-x: auto; /* Scroll horizontal jika tabel terlalu lebar */
 }
 
+/* Table layout */
 table {
     table-layout: fixed;
     width: 100%;
+    min-width: 1200px; /* agar kolom tidak menempel */
 }
 
+/* Table utama */
 .table {
     margin-bottom: 0;
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
     border-radius: 10px;
+    table-layout: auto;
+    width: 100%;
 }
 
+/* Header tabel */
 .table>thead>tr {
     background-color: rgb(151, 189, 227);
     color: #000000;
     text-align: left;
 }
 
+/* Sticky header */
 .table>thead>tr>th {
     padding: 12px;
     font-weight: bold;
     border-bottom: none;
+    position: sticky;
+    top: 0;
+    background-color: rgb(151, 189, 227); /* sama dengan header */
+    z-index: 5;
+    white-space: nowrap; /* agar header tidak numpuk */
 }
 
+/* Body tabel */
 .table>tbody>tr>td {
     vertical-align: middle;
     text-align: left;
     padding: 10px;
     border-top: 1px solid #dee2e6;
+    white-space: nowrap; /* agar isi kolom tidak pindah baris */
 }
 
+/* Hover effect */
 .table>tbody>tr:hover {
     background-color: #f1f1f1;
     transition: background-color 0.3s ease;
 }
 
+/* Image hover effect */
 .table img {
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -419,6 +440,26 @@ table {
 
 .table img:hover {
     transform: scale(1.1);
+}
+
+/* Highlight sertifikat expiring */
+.expiring-soon {
+    background-color: #fff3cd; /* kuning */
+}
+
+/* Highlight sertifikat expired */
+.expired {
+    background-color: #f8d7da; /* merah */
+}
+
+/* Scrollbar modern */
+.table-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 4px;
 }
 
 body.with-create-user {
