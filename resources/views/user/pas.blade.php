@@ -1,154 +1,207 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layout.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT. Angkasa Pratama Sejahtera</title>
-    <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
+@section('title', 'Manajemen PAS Tahunan')
 
-    <!-- Bootstrap & FontAwesome -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="py-4">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <link rel="stylesheet" href="/assets/css/style.css">
-
-    <script src="{{ asset('/assets/js/script.js') }}" defer></script>
-    <style>
-        table {
-            width: 1000px;
-            min-width: 1000px;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            white-space: nowrap;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 15%;
-        }
-
-        th:nth-child(2),
-        td:nth-child(2) {
-            width: 15%;
-        }
-
-        th:nth-child(3),
-        td:nth-child(3) {
-            width: 15%;
-        }
-
-        th:nth-child(4),
-        td:nth-child(4) {
-            width: 15%;
-        }
-
-        th:nth-child(5),
-        td:nth-child(5) {
-            width: 15%;
-        }
-
-        th:nth-child(6),
-        td:nth-child(6) {
-            width: 10%;
-        }
-    </style>
-</head>
-
-<body class="with-sidebar">
-    @include('app')
-
-    <nav class="navbar navbar-custom navbar-fixed-top">
-        <div class="container-fluid d-flex align-items-center" style="gap: 10px;">
-            <button class="btn btn-primary toggle-btn-inside navbar-btn" id="toggleSidebar">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <a href="#" class="btn btn-default navbar-btn pull-right" id="profileToggle" style="border: none; background: none;">
-                <i class="fas fa-user"></i>
-                <span class="user-fullname">Hi, {{ Auth::user()->fullname }}, {{ Auth::user()->role }}</span>
-            </a>
+        {{-- Header dengan Breadcrumb --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0">Manajemen PAS Tahunan</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">PAS Tahunan</li>
+                </ol>
+            </nav>
         </div>
-    </nav>
 
-    <div class="card d-block d-sm-none" id="profileCard" style="position: fixed; top: 80px; right: 10px; z-index: 1050; width: 300px; display: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); background-color: #fff;">
-        <div class="card-body text-center">
-            <div class="profile-header">
-                <i class="fas fa-user-circle" style="font-size: 50px; color: #4CAF50;"></i>
+        {{-- Card Utama --}}
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0 text-white">
+                    <i class="bx bx-id-card me-2"></i>Data PAS (Izin Masuk Area Terbatas)
+                </h5>
+                <p class="mb-0 mt-1 small opacity-75">Informasi masa berlaku PAS pegawai PT. Angkasa Pratama Sejahtera</p>
             </div>
-            <h5 class="card-title mt-3" style="font-weight: bold;">{{ Auth::user()->fullname }}</h5>
-            <p class="card-text" style="font-size: 14px; color: #666;">Role: {{ Auth::user()->role }}</p>
-            <a href="{{ route('actionlogout') }}" class="btn btn-danger btn-sm w-100" style="border-radius: 25px;"><i class="fa fa-power-off"></i> Log Out</a>
-        </div>
-    </div>
+            <div class="card-body">
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <div class="header">
-                <h2 class="fa fa-address-card"> PAS</h2>
-                <p>Sebuah informasi tanda izin masuk daerah terbatas pada area Bandar Udara.</p>
+
+                {{-- Tabel PAS --}}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="15%">NIP</th>
+                                <th width="20%">Nama Lengkap</th>
+                                <th width="15%">PAS Terdaftar</th>
+                                <th width="15%">PAS Habis</th>
+                                <th width="15%">Status</th>
+                                <th width="10%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($user as $users)
+                            @php
+                            $now = strtotime(date('Y-m-d'));
+                            $expired = strtotime($users->pas_expired);
+                            $diff = $expired - $now;
+                            $months = floor($diff / (30 * 60 * 60 * 24));
+                            
+                            $statusClass = '';
+                            $statusText = '';
+                            $statusIcon = '';
+                            
+                            if ($months <= 2 && $months >= 0) {
+                                $statusClass = 'warning';
+                                $statusText = 'Akan Habis';
+                                $statusIcon = 'bx-time-five';
+                            } elseif ($months < 0) {
+                                $statusClass = 'danger';
+                                $statusText = 'Kadaluarsa';
+                                $statusIcon = 'bx-x-circle';
+                            } else {
+                                $statusClass = 'success';
+                                $statusText = 'Aktif';
+                                $statusIcon = 'bx-check-circle';
+                            }
+                            @endphp
+                            <tr>
+                                <td><strong>{{ $users->id }}</strong></td>
+                                <td>{{ $users->fullname }}</td>
+                                <td>{{ \Carbon\Carbon::parse($users->pas_registered)->translatedFormat('d M Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($users->pas_expired)->translatedFormat('d M Y') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $statusClass }}">
+                                        <i class="bx {{ $statusIcon }} me-1"></i>{{ $statusText }}
+                                    </span>
+                                    @if ($months <= 2 && $months >= 0)
+                                    <small class="d-block text-muted mt-1">Sisa: {{ $months }} bulan</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('users.PASEdit', $users->id) }}" 
+                                       class="btn btn-sm btn-outline-primary" 
+                                       title="Edit PAS">
+                                        <i class="bx bx-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="text-muted small">
+                        Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
+                    </div>
+                    <nav>
+                        {{ $user->links('pagination::bootstrap-5') }}
+                    </nav>
+                </div>
+
+                {{-- Legend Status --}}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <small class="d-block mb-2 fw-semibold">Keterangan Status:</small>
+                        <div class="row small">
+                            <div class="col-md-4">
+                                <span class="badge bg-success me-2"><i class="bx bx-check-circle"></i></span>
+                                Aktif = PAS masih berlaku (lebih dari 2 bulan)
+                            </div>
+                            <div class="col-md-4">
+                                <span class="badge bg-warning me-2"><i class="bx bx-time-five"></i></span>
+                                Akan Habis = PAS berakhir dalam 2 bulan atau kurang
+                            </div>
+                            <div class="col-md-4">
+                                <span class="badge bg-danger me-2"><i class="bx bx-x-circle"></i></span>
+                                Kadaluarsa = PAS sudah berakhir
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="table-responsive" style="overflow-x: auto;">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>NIP</th>
-                            <th>Fullname</th>
-                            <th>PAS Terdaftar</th>
-                            <th>PAS Habis</th>
-                            <th>Indikasi</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($user as $users)
-                        <tr>
-                            <td>{{ $users->id }}</td>
-                            <td>{{ $users->fullname }}</td>
-                            <td>{{ $users->pas_registered }}</td>
-                            <td>{{ $users->pas_expired }}</td>
-                            <td>
-                                @php
-                                $now = strtotime(date('Y-m-d'));
-                                $expired = strtotime($users->pas_expired);
-                                $diff = $expired - $now;
-                                $months = floor($diff / (30 * 60 * 60 * 24));
-                                @endphp
-                                @if ($months <= 2 && $months>= 0)
-                                    <span style="color: yellow; font-weight: bold">⚠️</span>
-                                    @elseif ($months < 0)
-                                        <span style="color: red; font-weight: bold">❌</span>
-                                        @else
-                                        <span style="color: green; font-weight: bold">✅</span>
-                                        @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('users.PASEdit', $users->id) }}">
-                                    <img src="{{ asset('storage/edit.png') }}" width="20" height="20" alt="Edit">
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{ $user->links() }}
-            </div>
-
-            @yield('konten')
         </div>
     </div>
-    @include('sweetalert::alert')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</body>
+</div>
+@endsection
 
-</html>
+@section('styles')
+<style>
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .badge {
+        font-size: 0.75rem;
+    }
+    .pagination {
+        margin-bottom: 0;
+    }
+    
+    /* Custom Pagination Styling */
+    .pagination .page-item {
+        margin: 2px;
+    }
+    
+    .pagination .page-link {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        border: 1px solid #d9dee3;
+        color: #697a8d;
+        background-color: #fff;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #4180c3;
+        border-color: #4180c3;
+        color: #fff;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #e7e7ff;
+        border-color: #4180c3;
+        color: #4180c3;
+    }
+</style>
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // SweetAlert untuk notifikasi
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bootstrapAlert = new bootstrap.Alert(alert);
+                bootstrapAlert.close();
+            });
+        }, 5000);
+    });
+</script>
+@endsection

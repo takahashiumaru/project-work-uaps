@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layout.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT. Angkasa Pratama Sejahtera</title>
-    <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
-
-    <!-- Bootstrap & FontAwesome -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-    <link rel="stylesheet" href="/assets/css/style.css">
-
+@section('styles')
     <style>
         .form-title {
             font-size: 24px;
@@ -71,23 +56,18 @@
 
         .btn-download:hover {
             background-color: #2980b9;
+            color: white; /* Menambahkan ini agar warna teks tetap putih saat hover */
         }
     </style>
+@endsection
 
-    <script src="{{ asset('/assets/js/script.js') }}" defer></script>
-</head>
+@section('content')
+    <div class="row">
+        <div class="col-lg-12">
+            <h4 class="fw-bold py-3 mb-4">
+                <span class="text-muted fw-light">Dokumen /</span> Cetak Dokumen
+            </h4>
 
-<body class="with-sidebar">
-    @include('app')
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <div class="header d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="fas fa-file"> Dokumen</h2>
-                    <p>Cetak Dokumen.</p>
-                </div>
-            </div>
             <h2 class="form-title">📄 Formulir Perpanjangan Pas Bandara</h2>
 
             <div class="form-card">
@@ -109,7 +89,7 @@
                 <a href="{{ asset('storage/file/formulir_pas_bandara.pdf') }}" class="btn-download" download>
                     ⬇️ Unduh Formulir
                 </a>
-                @yield('konten')
+                {{-- @yield('konten') dihilangkan karena tidak relevan di sini --}}
             </div>
 
             <br>
@@ -134,8 +114,5 @@
                 </a>
             </div>
         </div>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        @include('sweetalert::alert')
-</body>
-
-</html>
+    </div>
+@endsection

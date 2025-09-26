@@ -1,85 +1,99 @@
-@extends('app')
-
-@section('title', 'Form Pengajuan Cuti')
+@extends('layout.admin')
 
 @section('content')
-<div class="container" style="margin-top: 20px;">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Formulir Pengajuan Izin/Cuti</div>
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Apply Leave /</span> Formulir Pengajuan Izin/Cuti
+</h4>
 
-                <div class="panel-body">
-                    <p><strong>Sisa Cuti Tahunan Anda:</strong> {{ $leaveBalance ?? 0 }} hari</p>
-                    <hr>
+<div class="row">
+    {{-- Mengganti col-md-8 col-md-offset-2 menjadi col-lg-8, agar layout lebih responsif --}}
+    <div class="col-lg-8 mx-auto"> 
+        <div class="card mb-4">
+            <h5 class="card-header">Formulir Pengajuan Izin/Cuti</h5>
+            
+            <div class="card-body">
+                <p><strong>Sisa Cuti Tahunan Anda:</strong> {{ $leaveBalance ?? 0 }} hari</p>
+                <hr>
 
-                    {{-- Menampilkan error validasi --}}
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                {{-- Menampilkan error validasi --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error Pengajuan:</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                {{-- Route dan method tetap dipertahankan --}}
+                <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <div class="mb-3">
+                        <label for="leave_type" class="form-label">Jenis Pengajuan</label>
+                        {{-- Dropdown baru yang lebih lengkap --}}
+                        <select name="leave_type" id="leave_type" class="form-select @error('leave_type') is-invalid @enderror" required>
+                            <option value="">-- Pilih Jenis Cuti --</option>
+                            <option value="Cuti Tahunan" {{ old('leave_type') == 'Cuti Tahunan' ? 'selected' : '' }}>Cuti Tahunan</option>
+                            <option value="Cuti Sakit" {{ old('leave_type') == 'Cuti Sakit' ? 'selected' : '' }}>Cuti Sakit</option>
+                            <option value="Izin" {{ old('leave_type') == 'Izin' ? 'selected' : '' }}>Izin (Izin mendadak, izin ke dokter, dll.)</option>
+                            <option value="Cuti Melahirkan/Keguguran" {{ old('leave_type') == 'Cuti Melahirkan/Keguguran' ? 'selected' : '' }}>Cuti Melahirkan/Keguguran</option>
+                            <option value="Cuti Menikah" {{ old('leave_type') == 'Cuti Menikah' ? 'selected' : '' }}>Cuti Menikah</option>
+                            <option value="Cuti Duka" {{ old('leave_type') == 'Cuti Duka' ? 'selected' : '' }}>Cuti Duka (Meninggal Dunia)</option>
+                            <option value="Cuti Lainnya" {{ old('leave_type') == 'Cuti Lainnya' ? 'selected' : '' }}>Cuti Lainnya (Sertakan keterangan)</option>
+                        </select>
+                        @error('leave_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="start_date" class="form-label">Tanggal Mulai</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" value="{{ old('start_date') }}" required>
+                            @error('start_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('leaves.store') }}" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="leave_type">Jenis Pengajuan</label>
-                            {{-- Dropdown baru yang lebih lengkap --}}
-                            <select name="leave_type" id="leave_type" class="form-control @error('leave_type') is-invalid @enderror" required>
-                                <option value="">-- Pilih Jenis Cuti --</option>
-                                <option value="Cuti Tahunan" {{ old('leave_type') == 'Cuti Tahunan' ? 'selected' : '' }}>Annual Leave (Cuti Tahunan)</option>
-                                <option value="Cuti Sakit" {{ old('leave_type') == 'Cuti Sakit' ? 'selected' : '' }}>Sick Leave (Cuti Sakit)</option>
-                                <option value="Cuti Melahirkan" {{ old('leave_type') == 'Cuti Melahirkan' ? 'selected' : '' }}>Maternity Leave (Cuti Melahirkan)</option>
-                                <option value="Cuti Istri Melahirkan/Keguguran" {{ old('leave_type') == 'Cuti Istri Melahirkan/Keguguran' ? 'selected' : '' }}>Paternity Leave (Cuti Istri Melahirkan/Keguguran)</option>
-                                <option value="Cuti Keguguran" {{ old('leave_type') == 'Cuti Keguguran' ? 'selected' : '' }}>Miscarriage Leave (Cuti Keguguran)</option>
-                                <option value="Cuti Karyawan Menikah" {{ old('leave_type') == 'Cuti Karyawan Menikah' ? 'selected' : '' }}>Personal Marriage Leave (Cuti Karyawan Menikah)</option>
-                                <option value="Cuti Kedukaan Keluarga Inti Meninggal Dunia" {{ old('leave_type') == 'Cuti Kedukaan Keluarga Inti Meninggal Dunia' ? 'selected' : '' }}>Compassionate Leave (Cuti Kedukaan Keluarga Inti Meninggal Dunia)</option>
-                                <option value="Cuti Anak Khitan/Baptis" {{ old('leave_type') == 'Cuti Anak Khitan/Baptis' ? 'selected' : '' }}>Khitan/Baptism Leave (Cuti Anak Khitan/Baptis)</option>
-                                <option value="Cuti Datang Terlambat" {{ old('leave_type') == 'Cuti Datang Terlambat' ? 'selected' : '' }}>Late To Work (Datang Terlambat)</option>
-                                <option value="Cuti Pulang Cepat" {{ old('leave_type') == 'Cuti Pulang Cepat' ? 'selected' : '' }}>Leave Early (Pulang Cepat)</option>
-                                <option value="Cuti Kedukaan Keluarga Serumah Meninggal Dunia" {{ old('leave_type') == 'Cuti Kedukaan Keluarga Serumah Meninggal Dunia' ? 'selected' : '' }}>Same Home Compassionate Leave (Cuti Kedukaan Keluarga Serumah Meninggal Dunia)</option>
-                                <option value="Cuti Training" {{ old('leave_type') == 'Cuti Training' ? 'selected' : '' }}>Training</option>
-                            </select>
+                        <div class="col-md-6 mb-3">
+                            <label for="end_date" class="form-label">Tanggal Berakhir</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" value="{{ old('end_date') }}" required>
+                            @error('end_date')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="start_date">Tanggal Mulai</label>
-                            <input id="start_date" type="date" class="form-control" name="start_date" value="{{ old('start_date') }}" required>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total Durasi Pengajuan:</label>
+                        <div id="total_days_display"><strong>0 Hari</strong></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Alasan/Keterangan</label>
+                        <textarea name="reason" id="reason" rows="4" class="form-control @error('reason') is-invalid @enderror" required>{{ old('reason') }}</textarea>
+                        @error('reason')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        <div class="form-group">
-                            <label for="end_date">Tanggal Selesai</label>
-                            <input id="end_date" type="date" class="form-control" name="end_date" value="{{ old('end_date') }}" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Total Hari</label>
-                            <p id="total_days_display" class="form-control-static"><strong>0 Hari</strong></p>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="reason">Alasan</label>
-                            <textarea id="reason" class="form-control" name="reason" rows="4" required>{{ old('reason') }}</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="replacement_employee_name">Nama Karyawan Pengganti (Opsional)</label>
-                            <input id="replacement_employee_name" type="text" class="form-control" name="replacement_employee_name" value="{{ old('replacement_employee_name') }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="attachment">Lampiran (PDF/JPG/PNG, maks 2MB)</label>
-                            <input id="attachment" type="file" class="form-control" name="attachment">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Kirim Pengajuan</button>
-                         <a href="{{ route('leaves.pengajuan') }}" class="btn btn-default" style="margin-top: 20px;">Kembali</a>
-                    </form>
-                </div>
+                    <div class="mb-3">
+                        <label for="attachment_file" class="form-label">Lampiran (Opsional, max 2MB)</label>
+                        <input type="file" name="attachment_file" id="attachment_file" class="form-control @error('attachment_file') is-invalid @enderror">
+                        <small class="form-text text-muted">Contoh: Surat dokter, surat keterangan.</small>
+                        @error('attachment_file')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    {{-- Tombol aksi, penyesuaian style --}}
+                    <button type="submit" class="btn btn-primary mt-3">Kirim Pengajuan</button>
+                    {{-- Mengubah btn-default menjadi btn-secondary --}}
+                    <a href="{{ route('leaves.pengajuan') }}" class="btn btn-secondary mt-3">Kembali</a>
+                </form>
             </div>
         </div>
     </div>
@@ -87,6 +101,7 @@
 @endsection
 
 @section('scripts')
+{{-- Script perhitungan hari cuti dipindahkan ke section scripts --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const startDateInput = document.getElementById('start_date');
@@ -107,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
             totalDaysDisplay.innerHTML = `<strong>${diffDays} Hari</strong>`;
         } else {
-            totalDaysDisplay.innerHTML = '<strong style="color: red;">Tanggal tidak valid</strong>';
+            totalDaysDisplay.innerHTML = '<strong class="text-danger">Tanggal tidak valid</strong>';
         }
     }
     startDateInput.addEventListener('change', calculateDays);

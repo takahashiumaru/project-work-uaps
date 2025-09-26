@@ -1,173 +1,266 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layout.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT. Angkasa Pratama Sejahtera</title>
-    <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
+@section('title', 'Manajemen Porter Apron')
 
-    <!-- Bootstrap & FontAwesome -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="py-4">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {{-- Header dengan Breadcrumb --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0">Manajemen Porter Apron</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">User Management</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">Daftar User</a></li>
+                    <li class="breadcrumb-item active">Porter Apron</li>
+                </ol>
+            </nav>
+        </div>
 
-    <link rel="stylesheet" href="/assets/css/style.css">
-
-    <script src="{{ asset('/assets/js/script.js') }}" defer></script>
-    <style>
-        table {
-            width: 1000px;
-            min-width: 1000px;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            white-space: nowrap;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 15%;
-        }
-
-        th:nth-child(2),
-        td:nth-child(2) {
-            width: 15%;
-        }
-
-        th:nth-child(3),
-        td:nth-child(3) {
-            width: 15%;
-        }
-
-        th:nth-child(4),
-        td:nth-child(4) {
-            width: 15%;
-        }
-
-        th:nth-child(5),
-        td:nth-child(5) {
-            width: 15%;
-        }
-
-        th:nth-child(6),
-        td:nth-child(6) {
-            width: 15%;
-        }
-    </style>
-</head>
-
-<body class="with-sidebar">
-    @include('app')
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <div class="header d-flex justify-content-between align-items-center">
+        {{-- Card Utama --}}
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="fas fa-users"> Apron</h2>
-                    <p>Sebuah informasi tentang pegawai yang terdaftar dalam sistem.</p>
+                    <h5 class="card-title mb-0 text-white">
+                        <i class="bx bx-user me-2"></i>Data Porter Apron
+                    </h5>
+                    <p class="mb-0 mt-1 small opacity-75">Informasi pegawai porter apron PT. Angkasa Pratama Sejahtera</p>
                 </div>
-            </div>
-            <div class="text-right">
-                <a href="{{ route('users.create') }}" class="btn btn-primary" style="margin-bottom: 10px;">
-                    <i class="fa fa-plus-circle"></i> Create
+                <a href="{{ route('users.create') }}" class="btn btn-light btn-sm">
+                    <i class="bx bx-plus me-1"></i>Tambah User
                 </a>
             </div>
-            <div class="text-right">
-                <form action="{{ route('users.apron') }}" method="GET" class="form-inline" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari NIP / Nama" value="{{ request('search') }}">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-            <div class="table-responsive" style="overflow-x: auto;">
-                <table class="table table-bordered table-striped table-fixed">
-                    <thead>
-                        <tr>
-                            <th>NIP</th>
-                            <th>Fullname</th>
-                            <th>Role</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
-                            <th>ACTIONS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($user as $users)
-                        <tr>
-                            <td>{{ $users->id }}</td>
-                            <td>{{ $users->fullname }}</td>
-                            <td>{{ $users->role }}</td>
-                            <td>{{ $users->created_at }}</td>
-                            <td>{{ $users->updated_at }}</td>
-                            <td>
-                                <a href="{{ route('users.show', ['user' => $users->id, 'page' => request('page')]) }}">
-                                    <img src="{{ asset('storage/eye.png') }}" width="20" height="20" alt="Show" style="margin-right: 10px;">
-                                </a>
+            <div class="card-body">
 
-                                <a href="{{ route('users.edit', ['user' => $users->id, 'page' => request('page')]) }}">
-                                    <img src="{{ asset('storage/edit.png') }}" width="20" height="20" alt="Edit" style="margin-right: 10px;">
-                                </a>
-                                <form action="{{ route('users.destroy', $users->id) }}" method="POST" style="display:inline;" data-confirm-delete="True" onsubmit="return confirm('Apakah Anda Yakin?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="background: none; border: none; padding: 0;">
-                                        <img src="{{ asset('storage/delete.png') }}" width="20" height="20" alt="Delete" style="margin-right: 10px;">
-                                    </button>
-                                </form>
-                                <form id="resetPasswordForm-{{ $users->id }}" action="{{ route('user.resetPassword', $users->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="button" onclick="confirmReset({{ $users->id }})" style="background: none; border: none; padding: 0;">
-                                        <img src="{{ asset('storage/reset.png') }}" width="20" height="20" alt="Reset Password">
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{ $user->links() }}
+                {{-- Form Pencarian --}}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <form action="{{ route('users.apron') }}" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" 
+                                       placeholder="Cari berdasarkan NIP atau Nama" 
+                                       value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bx bx-search me-1"></i>Cari
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- Tabel Data --}}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="15%">NIP</th>
+                                <th width="20%">Nama Lengkap</th>
+                                <th width="15%">Role</th>
+                                <th width="15%">Dibuat Pada</th>
+                                <th width="15%">Diupdate Pada</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($user as $users)
+                            <tr>
+                                <td><strong>{{ $users->id }}</strong></td>
+                                <td>{{ $users->fullname }}</td>
+                                <td>
+                                    <span class="badge bg-label-primary">{{ $users->role }}</span>
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($users->created_at)->translatedFormat('d M Y H:i') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($users->updated_at)->translatedFormat('d M Y H:i') }}</td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        {{-- Tombol Show --}}
+                                        <a href="{{ route('users.show', ['user' => $users->id, 'page' => request('page')]) }}" 
+                                           class="btn btn-sm btn-outline-info" 
+                                           title="Lihat Detail">
+                                            <i class="bx bx-show"></i>
+                                        </a>
+                                        
+                                        {{-- Tombol Edit --}}
+                                        <a href="{{ route('users.edit', ['user' => $users->id, 'page' => request('page')]) }}" 
+                                           class="btn btn-sm btn-outline-warning" 
+                                           title="Edit Data">
+                                            <i class="bx bx-edit"></i>
+                                        </a>
+                                        
+                                        {{-- Tombol Reset Password --}}
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-secondary" 
+                                                title="Reset Password"
+                                                onclick="confirmReset({{ $users->id }}, '{{ $users->fullname }}')">
+                                            <i class="bx bx-refresh"></i>
+                                        </button>
+                                        
+                                        {{-- Tombol Delete --}}
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                title="Hapus User"
+                                                onclick="confirmDelete({{ $users->id }}, '{{ $users->fullname }}')">
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    {{-- Form Hidden untuk Reset Password --}}
+                                    <form id="resetPasswordForm-{{ $users->id }}" 
+                                          action="{{ route('user.resetPassword', $users->id) }}" 
+                                          method="POST" 
+                                          style="display: none;">
+                                        @csrf
+                                        @method('PUT')
+                                    </form>
+                                    
+                                    {{-- Form Hidden untuk Delete --}}
+                                    <form id="deleteForm-{{ $users->id }}" 
+                                          action="{{ route('users.destroy', $users->id) }}" 
+                                          method="POST" 
+                                          style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Pagination --}}
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div class="text-muted small">
+                        Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
+                    </div>
+                    <nav>
+                        {{ $user->links('pagination::bootstrap-5') }}
+                    </nav>
+                </div>
             </div>
-            @yield('konten')
         </div>
     </div>
+</div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function confirmReset(userId) {
+@section('styles')
+<style>
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .badge {
+        font-size: 0.75rem;
+    }
+    .pagination {
+        margin-bottom: 0;
+    }
+    
+    /* Custom Pagination Styling */
+    .pagination .page-item {
+        margin: 2px;
+    }
+    
+    .pagination .page-link {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        border: 1px solid #d9dee3;
+        color: #697a8d;
+        background-color: #fff;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #4180c3;
+        border-color: #4180c3;
+        color: #fff;
+    }
+    
+    .pagination .page-link:hover {
+        background-color: #e7e7ff;
+        border-color: #4180c3;
+        color: #4180c3;
+    }
+    
+    .btn-group .btn {
+        margin: 0 2px;
+    }
+</style>
+@endsection
+
+@section('scripts')
+<script>
+    function confirmReset(userId, userName) {
+        Swal.fire({
+            title: 'Reset Password?',
+            html: `Apakah Anda yakin ingin mereset password untuk <strong>${userName}</strong>?<br><small>Password akan direset ke default</small>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#4180c3',
+            cancelButtonColor: '#8592a3',
+            confirmButtonText: 'Ya, Reset!',
+            cancelButtonText: 'Batal',
+            customClass: {
+                popup: 'sweetalert-custom'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`resetPasswordForm-${userId}`).submit();
+            }
+        });
+    }
+
+    function confirmDelete(userId, userName) {
+        Swal.fire({
+            title: 'Hapus User?',
+            html: `Apakah Anda yakin ingin menghapus user <strong>${userName}</strong>?<br><small>Data yang dihapus tidak dapat dikembalikan</small>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#8592a3',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            customClass: {
+                popup: 'sweetalert-custom'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`deleteForm-${userId}`).submit();
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // SweetAlert untuk notifikasi
+        @if(session('success'))
             Swal.fire({
-                title: 'Reset Password?',
-                text: 'Apakah Anda ingin mereset password pengguna ini?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Reset!',
-                cancelButtonText: 'Batal'
-            }).then(function(result) {
-                if (result.isConfirmed) {
-                    document.getElementById('resetPasswordForm-' + userId).submit();
-                }
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
             });
-        }
-    </script>
+        @endif
 
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
 
-    @include('sweetalert::alert')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</body>
-
-</html>
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                const bootstrapAlert = new bootstrap.Alert(alert);
+                bootstrapAlert.close();
+            });
+        }, 5000);
+    });
+</script>
+@endsection

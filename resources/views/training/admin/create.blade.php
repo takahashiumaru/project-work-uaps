@@ -1,67 +1,64 @@
-@extends('app')
+@extends('layout.admin')
 
-@section('title', 'Halaman Training')
 @section('content')
-    <x-slot name="header">
-        <h2 class="h4 font-weight-bold">
-            Tambah Sertifikat Training Baru
-        </h2>
-    </x-slot>
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Training /</span> Tambah Sertifikat Training Baru
+</h4>
 
-    <div class="card shadow-sm">
-        <div class="card-header">
-            Form Sertifikat
-        </div>
-        <div class="card-body">
-            <form action="{{ route('admin.training.certificates.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="mb-3">
-                    <label for="user_id" class="form-label">Pilih Staff</label>
-                    <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
-                        <option value="">-- Pilih Staff --</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }} (NIP: {{ $user->nip }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('user_id')
+<div class="card mb-4">
+    <h5 class="card-header">Formulir Tambah Sertifikat</h5>
+    <div class="card-body">
+        {{-- Penyesuaian route name ke 'training.store' --}}
+        <form action="{{ route('admin.training.certificates.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="user_id" class="form-label">Pilih Staff</label>
+                <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
+                    <option value="">-- Pilih Staff --</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }} (NIP: {{ $user->nip }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('user_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="mb-3">
+                <label for="certificate_name" class="form-label">Nama Sertifikat Training</label>
+                <input type="text" class="form-control @error('certificate_name') is-invalid @enderror" id="certificate_name" name="certificate_name" value="{{ old('certificate_name') }}" required>
+                @error('certificate_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="start_date" class="form-label">Masa Berlaku Awal</label>
+                    <input type="date" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
+                    @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-3">
-                    <label for="certificate_name" class="form-label">Nama Sertifikat Training</label>
-                    <input type="text" class="form-control @error('certificate_name') is-invalid @enderror" id="certificate_name" name="certificate_name" value="{{ old('certificate_name') }}" required>
-                    @error('certificate_name')
+                <div class="col-md-6 mb-3">
+                    <label for="end_date" class="form-label">Masa Berlaku Akhir</label>
+                    <input type="date" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
+                    @error('end_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="start_date" class="form-label">Masa Berlaku Awal</label>
-                        <input type="date" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" value="{{ old('start_date') }}" required>
-                        @error('start_date')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="end_date" class="form-label">Masa Berlaku Akhir</label>
-                        <input type="date" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" value="{{ old('end_date') }}" required>
-                        @error('end_date')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="certificate_file" class="form-label">File Sertifikat (PDF, JPG, PNG)</label>
-                    <input type="file" class="form-control @error('certificate_file') is-invalid @enderror" id="certificate_file" name="certificate_file">
-                    @error('certificate_file')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-primary">Simpan Sertifikat</button>
-                <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-secondary">Batal</a>
-            </form>
-        </div>
+            </div>
+            <div class="mb-3">
+                <label for="certificate_file" class="form-label">File Sertifikat (PDF, JPG, PNG)</label>
+                <input type="file" class="form-control @error('certificate_file') is-invalid @enderror" id="certificate_file" name="certificate_file">
+                @error('certificate_file')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="btn btn-primary">Simpan Sertifikat</button>
+            {{-- Penyesuaian route name ke 'training.index' --}}
+            <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-secondary">Batal</a>
+        </form>
     </div>
+</div>
 @endsection
