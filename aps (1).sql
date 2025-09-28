@@ -298,11 +298,11 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=105240006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT IGNORE `attendances` (`id`, `user_id`, `check_in_time`, `status`, `check_out_time`, `check_in_latitude`, `check_in_longitude`, `check_out_latitude`, `check_out_longitude`, `check_in_ip`, `check_out_ip`, `check_in_notes`, `check_out_notes`, `created_at`, `updated_at`, `check_out_photo`, `check_in_photo`) VALUES
+INSERT INTO `attendances` (`id`, `user_id`, `check_in_time`, `status`, `check_out_time`, `check_in_latitude`, `check_in_longitude`, `check_out_latitude`, `check_out_longitude`, `check_in_ip`, `check_out_ip`, `check_in_notes`, `check_out_notes`, `created_at`, `updated_at`, `check_out_photo`, `check_in_photo`) VALUES
 (1, 101240001, '2025-07-11 03:30:32', NULL, NULL, NULL, NULL, NULL, NULL, '127.0.0.1', NULL, NULL, NULL, '2025-07-11 03:30:32', '2025-07-11 03:30:32', NULL, NULL),
 (3, 2240101, '2025-09-03 04:57:36', NULL, '2025-09-03 15:08:24', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-09-03 12:07:36', '2025-09-03 15:08:24', 'attendance_2240101_1756876104.png', 'attendance_2240101_1756876055.png');
 
-INSERT IGNORE `flight_details` (`id`, `flight_id`, `schedule_id`, `created_at`, `updated_at`) VALUES
+INSERT INTO `flight_details` (`id`, `flight_id`, `schedule_id`, `created_at`, `updated_at`) VALUES
 (1, 1, 82728, '2025-09-03 18:51:56', '2025-09-03 18:51:56'),
 (2, 1, 82729, '2025-09-03 18:51:56', '2025-09-03 18:51:56'),
 (3, 1, 82756, '2025-09-03 18:51:56', '2025-09-03 18:51:56'),
@@ -354,7 +354,7 @@ INSERT IGNORE `flight_details` (`id`, `flight_id`, `schedule_id`, `created_at`, 
 (49, 12, 82952, '2025-09-04 10:46:36', '2025-09-04 10:46:36'),
 (50, 12, 82953, '2025-09-04 10:46:36', '2025-09-04 10:46:36');
 
-INSERT IGNORE `flights` (`id`, `airline`, `flight_number`, `registasi`, `type`, `arrival`, `time_count`, `status`, `created_at`, `updated_at`) VALUES
+INSERT INTO `flights` (`id`, `airline`, `flight_number`, `registasi`, `type`, `arrival`, `time_count`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'JT 9081', 'PR124', 'VH679', 'Nero', '18:51:48', '18:51:51', 1, '2025-09-03 18:51:56', '2025-09-03 19:05:58'),
 (2, 'JT 9085', 'GA 169', 'VH679', 'Widebody', '19:07:21', '19:07:25', 1, '2025-09-03 19:07:21', '2025-09-03 19:07:21'),
 (3, 'JT 9081', 'PR124', 'VH679', 'Nero', '18:51:48', '18:51:51', 1, '2025-09-02 18:51:56', '2025-09-03 19:05:58'),
@@ -368,12 +368,12 @@ INSERT IGNORE `flights` (`id`, `airline`, `flight_number`, `registasi`, `type`, 
 (11, 'JT 9084', 'GA 168', 'PR124', 'Widebody', '10:46:29', '10:46:33', 1, '2025-09-04 10:46:35', '2025-09-04 10:46:35'),
 (12, 'JT 9084', 'GA 168', 'PR124', 'Widebody', '10:46:29', '10:46:33', 1, '2025-09-04 10:46:36', '2025-09-04 10:46:36');
 
-INSERT IGNORE `leaves` (`id`, `user_id`, `leave_type`, `start_date`, `end_date`, `total_days`, `number_of_days`, `reason`, `attachment_path`, `replacement_employee_name`, `status`, `document`, `created_at`, `updated_at`, `approved_by`, `approved_at`, `rejected_by`, `manager_comment`) VALUES
+INSERT INTO `leaves` (`id`, `user_id`, `leave_type`, `start_date`, `end_date`, `total_days`, `number_of_days`, `reason`, `attachment_path`, `replacement_employee_name`, `status`, `document`, `created_at`, `updated_at`, `approved_by`, `approved_at`, `rejected_by`, `manager_comment`) VALUES
 (2, 4250491, 'Cuti Tahunan', '2025-09-03', '2025-09-03', 1, NULL, 'test', NULL, NULL, 'approved', NULL, '2025-09-03 20:07:39', '2025-09-03 21:20:43', 101240001, '2025-09-03 21:20:43', NULL, NULL),
 (3, 2240087, 'Cuti Tahunan', '2025-09-03', '2025-09-03', 1, NULL, 'test', NULL, NULL, 'approved', NULL, '2025-09-03 20:15:44', '2025-09-04 07:54:00', 101240001, '2025-09-04 07:54:00', 102240008, NULL),
 (4, 4250491, 'Cuti Sakit', '2025-09-04', '2025-09-04', 1, NULL, 'sakit', NULL, NULL, 'approved', NULL, '2025-09-04 07:50:02', '2025-09-04 07:57:50', 101240001, '2025-09-04 07:57:50', 102240006, NULL);
 
-INSERT IGNORE `migrations` (`id`, `migration`, `batch`) VALUES
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '0001_01_01_000000_create_users_table', 1),
 (2, '0001_01_01_000001_create_cache_table', 1),
 (3, '0001_01_01_000002_create_jobs_table', 1),
@@ -392,7 +392,7 @@ INSERT IGNORE `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2025_07_11_035734_add_status_to_attendances_table', 2),
 (18, '2025_07_02_032813_create_certificates_table', 3);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (82306, 2240012, '2025-09-01', 'A', 1),
 (82307, 2240013, '2025-09-01', 'A', 1),
 (82308, 2240014, '2025-09-01', 'A', 1),
@@ -894,7 +894,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (82804, 2240160, '2025-09-03', 'off', 1),
 (82805, 2240161, '2025-09-03', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (82806, 2240162, '2025-09-03', 'off', 1),
 (82807, 2240163, '2025-09-03', 'off', 1),
 (82808, 2240164, '2025-09-03', 'off', 1),
@@ -1396,7 +1396,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (83304, 6240405, '2025-09-05', 'off', 1),
 (83305, 6240406, '2025-09-05', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (83306, 7240408, '2025-09-05', 'off', 1),
 (83307, 7240413, '2025-09-05', 'off', 1),
 (83308, 7240415, '2025-09-05', 'off', 1),
@@ -1898,7 +1898,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (83804, 2240061, '2025-09-08', 'off', 1),
 (83805, 2240066, '2025-09-08', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (83806, 2240067, '2025-09-08', 'off', 1),
 (83807, 2240069, '2025-09-08', 'off', 1),
 (83808, 2240070, '2025-09-08', 'off', 1),
@@ -2400,7 +2400,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (84304, 4240353, '2025-09-10', 'off', 1),
 (84305, 4240354, '2025-09-10', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (84306, 4240357, '2025-09-10', 'off', 1),
 (84307, 4240359, '2025-09-10', 'off', 1),
 (84308, 4240363, '2025-09-10', 'off', 1),
@@ -2902,7 +2902,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (84804, 10240466, '2025-09-12', 'off', 1),
 (84805, 10240467, '2025-09-12', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (84806, 10240468, '2025-09-12', 'off', 1),
 (84807, 11240470, '2025-09-12', 'off', 1),
 (84808, 11240471, '2025-09-12', 'off', 1),
@@ -3404,7 +3404,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (85304, 2240111, '2025-09-15', 'off', 1),
 (85305, 2240115, '2025-09-15', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (85306, 2240116, '2025-09-15', 'off', 1),
 (85307, 2240119, '2025-09-15', 'off', 1),
 (85308, 2240121, '2025-09-15', 'off', 1),
@@ -3906,7 +3906,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (85804, 6240389, '2025-09-17', 'off', 1),
 (85805, 6240390, '2025-09-17', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (85806, 6240395, '2025-09-17', 'off', 1),
 (85807, 6240398, '2025-09-17', 'off', 1),
 (85808, 6240400, '2025-09-17', 'off', 1),
@@ -4408,7 +4408,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (86304, 2240013, '2025-09-20', 'F', 1),
 (86305, 2240014, '2025-09-20', 'F', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (86306, 2240019, '2025-09-20', 'G', 1),
 (86307, 2240022, '2025-09-20', 'G', 1),
 (86308, 2240026, '2025-09-20', 'H', 1),
@@ -4910,7 +4910,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (86804, 2240235, '2025-09-22', 'off', 1),
 (86805, 2240236, '2025-09-22', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (86806, 2240238, '2025-09-22', 'off', 1),
 (86807, 2240245, '2025-09-22', 'off', 1),
 (86808, 2240248, '2025-09-22', 'off', 1),
@@ -5412,7 +5412,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (87304, 7240416, '2025-09-24', 'off', 1),
 (87305, 7240417, '2025-09-24', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (87306, 7240419, '2025-09-24', 'off', 1),
 (87307, 7240420, '2025-09-24', 'off', 1),
 (87308, 7240421, '2025-09-24', 'off', 1),
@@ -5914,7 +5914,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (87804, 2240131, '2025-09-27', 'E', 1),
 (87805, 2240133, '2025-09-27', 'E', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (87806, 2240134, '2025-09-27', 'E', 1),
 (87807, 2240137, '2025-09-27', 'E', 1),
 (87808, 2240138, '2025-09-27', 'F', 1),
@@ -6416,7 +6416,7 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (88304, 4250502, '2025-09-29', 'off', 1),
 (88305, 4250503, '2025-09-29', 'off', 1);
 
-INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
+INSERT INTO `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VALUES
 (88306, 5240382, '2025-09-29', 'off', 1),
 (88307, 5240383, '2025-09-29', 'off', 1),
 (88308, 5240384, '2025-09-29', 'off', 1),
@@ -6718,13 +6718,13 @@ INSERT IGNORE `schedules` (`id`, `user_id`, `date`, `shift_id`, `is_active`) VAL
 (88604, 2240084, '2025-09-30', 'off', 1),
 (88605, 2240085, '2025-09-30', 'off', 1);
 
-INSERT IGNORE `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
 ('0cuGB22msDTXWkiQvWTyBo4euSlmmbuuMOOvXL0E', 4250491, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMkI5NFBJczJVOGZOY3h6aTNDZG1hTjRzRGhNSlF5VDFPYkZaWW9EbCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9wcm9maWxlLzQyNTA0OTEiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo0MjUwNDkxO30=', 1756949486),
 ('18Af3qmK4GJHZxGg5Hh8vHpBpzG8wLr0tOqCviy5', 101240001, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiMmpXd3B2VkttWTU5ZDYxcU15NUpscDdQaG1EenFWOVk5RTBzekdyZiI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyNjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2hvbWUiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czozOToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3Byb2ZpbGUvMTAxMjQwMDAxIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTAxMjQwMDAxO3M6NToiYWxlcnQiO2E6MDp7fX0=', 1756957700),
 ('6gzUCsx9AlZlCNdjTnGDWmfVH1jXpwURCy29Lu1A', 101240001, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiMmIwSGhpSUNERjJoQnhKZlZYeHNjSGF1ZElUbHFDajhRZlZtSThxRyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyNjoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2hvbWUiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czozOToiaHR0cDovLzEyNy4wLjAuMTo4MDAwL3Byb2ZpbGUvMTAxMjQwMDAxIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTAxMjQwMDAxO3M6NToiYWxlcnQiO2E6MDp7fX0=', 1756965642),
 ('GzaOtayUKsj0iIITxCTFkvHpkmaG0WnedBQARxpi', 101240001, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiY2cwYUZFSjR0blh5alZuMHNVVG5zZEs4bXh6UEFQWGxjNkFrNGpiUiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTAxMjQwMDAxO3M6NToiYWxlcnQiO2E6MDp7fX0=', 1756949391);
 
-INSERT IGNORE `shifts` (`id`, `name`, `description`, `start_time`, `end_time`, `use_manpower`, `created_at`, `updated_at`) VALUES
+INSERT INTO `shifts` (`id`, `name`, `description`, `start_time`, `end_time`, `use_manpower`, `created_at`, `updated_at`) VALUES
 ('A', 'Pagi', 'Jam Masuk', '05:00:00', '15:00:00', 14, '2025-04-30 07:24:43', '2025-04-30 07:24:43'),
 ('B', 'Pagi', 'Jam Masuk', '06:30:00', '16:30:00', 10, '2025-04-30 07:24:43', '2025-04-30 07:24:43'),
 ('C', 'Pagi', 'Jam Masuk', '08:00:00', '18:00:00', 8, '2025-04-30 07:24:43', '2025-04-30 07:24:43'),
@@ -6735,7 +6735,7 @@ INSERT IGNORE `shifts` (`id`, `name`, `description`, `start_time`, `end_time`, `
 ('H', 'Malam', 'Jam Masuk', '23:00:00', '09:00:00', 6, '2025-04-30 07:24:43', '2025-04-30 07:24:43'),
 ('off', 'libur', 'libur', '00:00:00', '00:00:00', 0, '2025-04-30 07:24:43', '2025-04-30 07:24:43');
 
-INSERT IGNORE `users` (`id`, `fullname`, `job_title`, `role`, `station`, `email`, `phone`, `gender`, `password`, `join_date`, `contract_start`, `contract_end`, `pas_registered`, `pas_expired`, `salary`, `profile_picture`, `is_qantas`, `created_at`, `updated_at`, `cluster`, `unit`, `sub_unit`, `tanggal_lahir`, `manager`, `senior_manager`, `status`, `alamat`, `pendidikan`, `domisili`, `kota_domisili`, `no_hp`, `bpjs_tk`, `bpjs_kesehatan`) VALUES
+INSERT INTO `users` (`id`, `fullname`, `job_title`, `role`, `station`, `email`, `phone`, `gender`, `password`, `join_date`, `contract_start`, `contract_end`, `pas_registered`, `pas_expired`, `salary`, `profile_picture`, `is_qantas`, `created_at`, `updated_at`, `cluster`, `unit`, `sub_unit`, `tanggal_lahir`, `manager`, `senior_manager`, `status`, `alamat`, `pendidikan`, `domisili`, `kota_domisili`, `no_hp`, `bpjs_tk`, `bpjs_kesehatan`) VALUES
 (1250478, 'GUSTIKWAL DEKA', 'STAFF', 'Porter', 'Bge', 'gustkwaldeka@gmail.com', '0895 3805 19797', 'Male', '$2y$10$KF3kYuW4brlNM64y5mOyOupHEbFR7Y0VyOoLBXs.SXMAE0oPcNKyC', '2025-01-24', NULL, NULL, NULL, '2026-01-31', 'Rp 120.000', NULL, 0, '2025-07-10 18:54:44', '2025-07-10 18:54:44', NULL, NULL, NULL, '1996-08-17', NULL, NULL, 'APS', 'Kp. Melayu Barat RT 01/04 Des Pondok Baru Kec Teluknaga Kab Tangerang', NULL, NULL, NULL, '0895 3805 19797', NULL, NULL),
 (2240011, 'FRENDI SETIAWAN', 'STAFF', 'Ass Leader', 'Apron', 'gowes1630@gmail.com', '0858 9123 5097', 'Male', '$2y$10$KF3kYuW4brlNM64y5mOyOupHEbFR7Y0VyOoLBXs.SXMAE0oPcNKyC', '2024-01-02', NULL, NULL, NULL, '2025-12-31', 'Rp 140.000', NULL, 1, '2025-07-10 18:54:44', '2025-07-10 18:54:44', NULL, NULL, NULL, '1994-08-02', NULL, NULL, 'EXMAP', 'Selapajang, Rt004/005, Ds.Selapajang Jaya, Kec.Neglasari, (Kota.Tangerang)', NULL, NULL, NULL, '0858 9123 5097', '24053409009', '2100582347'),
 (2240012, 'SUKMA', 'STAFF', 'Porter', 'Apron', 'sukmaciuk@gmail.com', '0858 1400 0346', 'Male', '$2y$10$KF3kYuW4brlNM64y5mOyOupHEbFR7Y0VyOoLBXs.SXMAE0oPcNKyC', '2024-01-02', NULL, NULL, NULL, '2025-10-31', 'Rp 140.000', NULL, 1, '2025-07-10 18:54:44', '2025-07-10 18:54:44', NULL, NULL, NULL, '1983-03-17', NULL, NULL, 'EXMAP', 'Kp.Rawa Bereum, Rt003/003, Ds.Lebakwangi, Kec.Sepatan Timur (Kab.Tangerang)', NULL, NULL, NULL, '0858 1400 0346', '24053408290', '3063558273'),

@@ -54,7 +54,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $certificates->links() }}
+                {{ $certificates->links('pagination::bootstrap-5') }}
             @endif
         </div>
     </div>

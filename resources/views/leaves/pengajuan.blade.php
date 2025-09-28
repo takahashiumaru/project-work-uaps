@@ -1,10 +1,8 @@
-@extends('app')
-
-@section('title', 'Daftar Pengajuan Cuti')
+@extends('layout.admin')
 
 @section('styles')
 <style>
-    /* ... (CSS Anda sudah bagus, tidak perlu diubah) ... */
+    /* Style Badge Status dipindahkan ke sini */
     .status-badge {
         padding: .3em .6em;
         border-radius: .25rem;
@@ -34,24 +32,45 @@
 @endsection
 
 @section('content')
-<div class="container" style="margin-top: 20px;">
-    <div class="panel panel-default">
-        <div class="panel-heading" style="display:flex; justify-content:space-between; align-items:center;">
-            Daftar Pengajuan Izin & Cuti
-            <a href="{{ route('leaves.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i> Ajukan Izin/Cuti</a>
-        </div>
-        <div class="panel-body">
-            {{-- Bagian Data Personal --}}
-            @if(!in_array(Auth::user()->role, ['PIC', 'HEAD_OFFICE', 'ADMIN', 'HRD']))
-            <div class="personal-data-form">
-                <div class="form-group"><label>NIP:</label><input type="text" value="{{ $user->id }}" disabled /></div>
-                <div class="form-group"><label>Nama:</label><input type="text" value="{{ $user->fullname ?? 'N/A' }}" disabled /></div>
-                <div class="form-group"><label>Sisa Cuti:</label><input type="text" value="{{ $leaveBalance ?? 0 }} hari" disabled /></div>
-                <div class="form-group"><label>Cuti Terpakai:</label><input type="text" value="{{ $usedLeaveDays ?? 0 }} hari" disabled /></div>
+<h4 class="fw-bold py-3 mb-4">
+    <span class="text-muted fw-light">Apply Leave /</span> Pengajuan Leave
+</h4>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Daftar Pengajuan Izin & Cuti</h5>
+        {{-- Route 'leaves.create' tetap dipertahankan --}}
+        <a href="{{ route('leaves.create') }}" class="btn btn-primary btn-sm">
+            <i class="bx bx-plus-circle me-1"></i> Ajukan Izin/Cuti
+        </a>
+    </div>
+
+    <div class="card-body">
+        {{-- Bagian Data Personal --}}
+        @if(!in_array(Auth::user()->role, ['PIC', 'HEAD_OFFICE', 'ADMIN', 'HRD']))
+        <div class="row mb-4">
+            {{-- Mengubah struktur form-group lama menjadi grid Bootstrap 5 --}}
+            <div class="col-lg-3 col-md-6 mb-3">
+                <label class="form-label fw-bold">NIP:</label>
+                <input type="text" class="form-control" value="{{ $user->id }}" disabled />
             </div>
-            @endif
+            <div class="col-lg-3 col-md-6 mb-3">
+                <label class="form-label fw-bold">Nama:</label>
+                <input type="text" class="form-control" value="{{ $user->fullname ?? 'N/A' }}" disabled />
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <label class="form-label fw-bold">Sisa Cuti Tahunan:</label>
+                <input type="text" class="form-control" value="{{ $leaveBalance ?? 0 }} hari" disabled />
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <label class="form-label fw-bold">Cuti Terpakai:</label>
+                <input type="text" class="form-control" value="{{ $usedLeaveDays ?? 0 }} hari" disabled />
+            </div>
         </div>
-        <div class="table-responsive">
+        @endif
+
+        {{-- Tabel Riwayat --}}
+        <div class="table-responsive text-nowrap">
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
@@ -73,8 +92,8 @@
                         <td>
                             @php
                             $statusConfig = match($leave->status) {
-                            'pending Apron' => ['class' => 'status-pending', 'text' => 'Menunggu'],
-                            'pending Bge' => ['class' => 'status-pending', 'text' => 'Menunggu'],
+                            'pending Apron' => ['class' => 'status-pending', 'text' => 'Menunggu Apron'],
+                            'pending Bge' => ['class' => 'status-pending', 'text' => 'Menunggu BGE'],
                             'pending' => ['class' => 'status-pending', 'text' => 'Menunggu HO'],
                             'approved' => ['class' => 'status-approved', 'text' => 'Disetujui'],
                             'rejected_by_pic' => ['class' => 'status-rejected', 'text' => 'Ditolak PIC'],
@@ -85,7 +104,8 @@
                             <span class="status-badge {{ $statusConfig['class'] }}">{{ $statusConfig['text'] }}</span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#leaveDetailModal{{ $leave->id }}">Detail</button>
+                            {{-- Mengganti btn-xs menjadi btn-sm --}}
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#leaveDetailModal{{ $leave->id }}">Detail</button>
                         </td>
                     </tr>
                     @include('leaves.partials.modal_detail', ['leave' => $leave, 'statusConfig' => $statusConfig])
@@ -96,7 +116,8 @@
                     @endforelse
                 </tbody>
             </table>
-            <div class="text-center">{{ $leaves->links() }}</div>
+            {{-- Paginasi tetap dipertahankan --}}
+            <div class="mt-3 text-center">{{ $leaves->links('pagination::bootstrap-5') }}</div>
         </div>
     </div>
 </div>

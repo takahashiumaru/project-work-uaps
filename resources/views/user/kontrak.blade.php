@@ -1,142 +1,210 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layout.admin')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PT. Angkasa Pratama Sejahtera</title>
-    <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
+@section('title', 'Manajemen Kontrak Karyawan')
 
-    <!-- Bootstrap & FontAwesome -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+@section('content')
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="py-4">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {{-- Header dengan Breadcrumb --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold mb-0">Manajemen Kontrak Karyawan</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0);">User Management</a></li>
+                    <li class="breadcrumb-item active">Kontrak</li>
+                </ol>
+            </nav>
+        </div>
 
-    <link rel="stylesheet" href="/assets/css/style.css">
+        {{-- Card Utama --}}
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0 text-white">
+                    <i class="bx bx-calendar me-2"></i>Data Kontrak Karyawan
+                </h5>
+                <p class="mb-0 mt-1 small opacity-75">Informasi masa kontrak pegawai PT. Angkasa Pratama Sejahtera</p>
+            </div>
+            <div class="card-body">
 
-    <script src="{{ asset('/assets/js/script.js') }}" defer></script>
-    <style>
-        table {
-            width: 1000px;
-            min-width: 1000px;
-            border-collapse: collapse;
-        }
+                {{-- Form Pencarian --}}
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <form action="{{ route('users.kontrak') }}" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" 
+                                       placeholder="Cari berdasarkan NIP atau Nama" 
+                                       value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bx bx-search me-1"></i>Cari
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-        th,
-        td {
-            white-space: nowrap;
-            padding: 8px;
-            text-align: left;
-        }
+                {{-- Tabel Kontrak --}}
+                <div class="table-responsive" style="overflow-x: auto;">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="15%">NIP</th>
+                                <th width="20%">Nama Lengkap</th>
+                                <th width="15%">Kontrak Mulai</th>
+                                <th width="15%">Kontrak Berakhir</th>
+                                <th width="15%">Status</th>
+                                <th width="10%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($user as $users)
+                            @php
+                            $now = strtotime(date('Y-m-d'));
+                            $expired = strtotime($users->contract_end);
+                            $diff = $expired - $now;
+                            $months = floor($diff / (30 * 60 * 60 * 24));
+                            
+                            $statusClass = '';
+                            $statusText = '';
+                            $statusIcon = '';
+                            
+                            if ($months <= 2 && $months >= 0) {
+                                $statusClass = 'warning';
+                                $statusText = 'Akan Berakhir';
+                                $statusIcon = 'bx-time-five';
+                            } elseif ($months < 0) {
+                                $statusClass = 'danger';
+                                $statusText = 'Kadaluarsa';
+                                $statusIcon = 'bx-x-circle';
+                            } else {
+                                $statusClass = 'success';
+                                $statusText = 'Aktif';
+                                $statusIcon = 'bx-check-circle';
+                            }
+                            @endphp
+                            <tr>
+                                <td><strong>{{ $users->id }}</strong></td>
+                                <td>{{ $users->fullname }}</td>
+                                <td>{{ \Carbon\Carbon::parse($users->contract_start)->translatedFormat('d M Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($users->contract_end)->translatedFormat('d M Y') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $statusClass }}">
+                                        <i class="bx {{ $statusIcon }} me-1"></i>{{ $statusText }}
+                                    </span>
+                                    @if ($months <= 2 && $months >= 0)
+                                    <small class="d-block text-muted mt-1">Sisa: {{ $months }} bulan</small>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('users.KontrakEdit', ['id' => $users->id, 'page' => request('page')]) }}" 
+                                       class="btn btn-sm btn-outline-primary" 
+                                       title="Edit Kontrak">
+                                        <i class="bx bx-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 15%;
-        }
+                {{-- Pagination --}}
+                {{-- Pagination --}}
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <div class="text-muted small">
+        Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
+    </div>
+    <nav>
+        <ul class="pagination pagination-sm mb-0">
+            {{-- Previous --}}
+            <li class="page-item {{ $user->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $user->previousPageUrl() }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            
+            {{-- Page Numbers --}}
+            @for ($i = 1; $i <= $user->lastPage(); $i++)
+                <li class="page-item {{ $user->currentPage() == $i ? 'active' : '' }}">
+                    <a class="page-link" href="{{ $user->url($i) }}">{{ $i }}</a>
+                </li>
+            @endfor
+            
+            {{-- Next --}}
+            <li class="page-item {{ !$user->hasMorePages() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $user->nextPageUrl() }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
 
-        th:nth-child(2),
-        td:nth-child(2) {
-            width: 15%;
-        }
-
-        th:nth-child(3),
-        td:nth-child(3) {
-            width: 15%;
-        }
-
-        th:nth-child(4),
-        td:nth-child(4) {
-            width: 15%;
-        }
-
-        th:nth-child(5),
-        td:nth-child(5) {
-            width: 15%;
-        }
-
-        th:nth-child(6),
-        td:nth-child(6) {
-            width: 10%;
-        }
-    </style>
-</head>
-
-<body class="with-sidebar">
-    @include('app')
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <div class="container">
-            <div class="header d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="fas fa-calendar"> Kontrak</h2>
-                    <p>Sebuah informasi tentang masa kontrak yang dimiliki oleh seorang pegawai.</p>
+                {{-- Legend Status --}}
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <small class="d-block mb-2 fw-semibold">Keterangan Status:</small>
+                        <div class="row small">
+                            <div class="col-md-4">
+                                <span class="badge bg-success me-2"><i class="bx bx-check-circle"></i></span>
+                                Aktif = Kontrak masih berlaku (lebih dari 2 bulan)
+                            </div>
+                            <div class="col-md-4">
+                                <span class="badge bg-warning me-2"><i class="bx bx-time-five"></i></span>
+                                Akan Berakhir = Kontrak berakhir dalam 2 bulan atau kurang
+                            </div>
+                            <div class="col-md-4">
+                                <span class="badge bg-danger me-2"><i class="bx bx-x-circle"></i></span>
+                                Kadaluarsa = Kontrak sudah berakhir
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="text-right">
-                <form action="{{ route('users.index') }}" method="GET" class="form-inline" style="margin-top: 10px;">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Cari NIP / Nama" value="{{ request('search') }}">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-
-            <div class="table-responsive" style="overflow-x: auto;">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>NIP</th>
-                            <th>Fullname</th>
-                            <th>Kontrak Mulai</th>
-                            <th>Kontrak End</th>
-                            <th>Indikasi</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($user as $users)
-                        <tr>
-                            <td>{{ $users->id }}</td>
-                            <td>{{ $users->fullname }}</td>
-                            <td>{{ $users->contract_start }}</td>
-                            <td>{{ $users->contract_end }}</td>
-                            <td>
-                                @php
-                                $now = strtotime(date('Y-m-d'));
-                                $expired = strtotime($users->contract_end);
-                                $diff = $expired - $now;
-                                $months = floor($diff / (30 * 60 * 60 * 24));
-                                @endphp
-                                @if ($months <= 2 && $months>= 0)
-                                    <span style="color: yellow; font-weight: bold">⚠️</span>
-                                    @elseif ($months < 0)
-                                        <span style="color: red; font-weight: bold">❌</span>
-                                        @else
-                                        <span style="color: green; font-weight: bold">✅</span>
-                                        @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('users.KontrakEdit', ['id' => $users->id, 'page' => request('page')]) }}">
-                                    <img src="{{ asset('storage/edit.png') }}" width="20" height="20" alt="Edit">
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                {{ $user->links() }}
-            </div>
-
-            @yield('konten')
         </div>
     </div>
-    @include('sweetalert::alert')
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</body>
+</div>
+@endsection
 
-</html>
+@section('styles')
+<style>
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .badge {
+        font-size: 0.75rem;
+    }
+    .pagination {
+        margin-bottom: 0;
+    }
+</style>
+@endsection
+
+@section('scripts')
+<script>
+    // SweetAlert untuk konfirmasi jika ada
+    document.addEventListener('DOMContentLoaded', function() {
+        // Jika ada pesan sukses dari controller
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+    });
+</script>
+@endsection
