@@ -203,6 +203,7 @@
         font-size: 0.875rem;
     }
     .table-responsive {
+        overflow-x: auto;
         border-radius: 0.375rem;
     }
     .card-header.bg-primary {

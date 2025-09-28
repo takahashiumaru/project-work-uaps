@@ -7,6 +7,7 @@
     .table-responsive {
         border-radius: 0.75rem;
         overflow: hidden;
+        overflow-x: auto;
     }
     
     .shift-table {

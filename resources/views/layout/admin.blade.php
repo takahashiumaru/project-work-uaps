@@ -33,7 +33,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('template/') }}/assets/img/favicon/favicon.ico" />
+    <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -130,9 +130,9 @@
                 </li>
                 @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
                 <li class="menu-item">
-                  <a href="{{ route('schedule.show') }}" class="menu-link">
+                  {{-- <a href="{{ route('schedule.show') }}" class="menu-link">
                     <div data-i18n="Create">Create / Update Schedule</div>
-                  </a>
+                  </a> --}}
                 </li>
                 @endif
               </ul>

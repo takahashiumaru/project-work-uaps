@@ -30,7 +30,7 @@
 
 
                 {{-- Tabel PAS --}}
-                <div class="table-responsive">
+                <div class="table-responsive" style="overflow-x: auto;">
                     <table class="table table-bordered table-striped table-hover">
                         <thead class="table-light">
                             <tr>
