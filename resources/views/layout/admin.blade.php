@@ -80,7 +80,7 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
+            <a href="{{ route('home') }}" class="app-brand-link">
               <span class="app-brand-logo demo">
               <img src="{{ asset('storage/aps.jpeg') }}" alt="Logo" width="75">
               </span>

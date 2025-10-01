@@ -201,7 +201,7 @@
                         </div>
                         <div class="profile-info-item">
                             <span class="info-label">Join Date</span>
-                            <span class="info-value">{{ $user->join_date ?? 'N/A' }}</span>
+                            <span class="info-value">{{ $user->join_date ? \Carbon\Carbon::parse($user->join_date)->format('d F Y') : 'N/A' }}</span>
                         </div>
                         <div class="profile-info-item">
                             <span class="info-label">Gender</span>
@@ -210,14 +210,14 @@
                         @if($user->pas_registered)
                         <div class="profile-info-item">
                             <span class="info-label">PAS Registered</span>
-                            <span class="info-value">{{ $user->pas_registered }}</span>
+                            <span class="info-value">{{ user->pas_registered ? \Carbon\Carbon::parse($user->pas_registered)->format('d F Y') : 'N/A' }}</span>
                         </div>
                         @endif
                         @if($user->pas_expired)
                         <div class="profile-info-item">
                             <span class="info-label">PAS Expired</span>
                             <span class="info-value {{ \Carbon\Carbon::parse($user->pas_expired)->isPast() ? 'text-danger' : 'text-success' }}">
-                                {{ $user->pas_expired }}
+                                {{ \Carbon\Carbon::parse($user->pas_expired)->translatedFormat('d F Y') }}
                             </span>
                         </div>
                         @endif
@@ -331,7 +331,7 @@
                             </div>
                             <div class="profile-info-item">
                                 <span class="info-label">Join Date</span>
-                                <span class="info-value">{{ $user->join_date ?? 'N/A' }}</span>
+                                <span class="info-value">{{ $user->join_date ? \Carbon\Carbon::parse($user->join_date)->translatedFormat('d F Y') : 'N/A' }}</span>
                             </div>
                             <div class="profile-info-item">
                                 <span class="info-label">Gender</span>
@@ -349,7 +349,7 @@
                             <div class="profile-info-item">
                                 <span class="info-label">PAS Expired</span>
                                 <span class="info-value {{ \Carbon\Carbon::parse($user->pas_expired)->isPast() ? 'text-danger' : 'text-success' }}">
-                                    {{ $user->pas_expired }}
+                                    {{ \Carbon\Carbon::parse($user->pas_expired)->translatedFormat('d F Y') }}
                                 </span>
                             </div>
                             @endif
