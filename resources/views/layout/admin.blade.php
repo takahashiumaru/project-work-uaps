@@ -128,13 +128,21 @@
                     <div data-i18n="Data">Data Schedule</div>
                   </a>
                 </li>
-                @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
-                <li class="menu-item">
+                @if (in_array(Auth::user()->role, [
+                        'Admin',
+                        'Ass Leader Bge',
+                        'Ass Leader Apron',
+                        'Head Of Airport Service',
+                        'SPV',
+                        'Bge',
+                        'Apron',
+                    ]))
+<li class="menu-item">
                   {{-- <a href="{{ route('schedule.show') }}" class="menu-link">
                     <div data-i18n="Create">Create / Update Schedule</div>
                   </a> --}}
                 </li>
-                @endif
+@endif
               </ul>
             </li>
 
@@ -159,17 +167,17 @@
                   </a>
                 </li>
                 @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                <li class="menu-item">
+<li class="menu-item">
                   <a href="{{ route('attendance.reports') }}" class="menu-link">
                     <div data-i18n="Reports">Laporan Absensi</div>
                   </a>
                 </li>
-                @endif
+@endif
               </ul>
             </li>
 
             @if (in_array(Auth::user()->role, ['Admin']))
-            <!-- User Management Menu -->
+<!-- User Management Menu -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -210,7 +218,7 @@
                 </li>
               </ul>
             </li>
-            @endif
+@endif
 
             <!-- Document -->
             <li class="menu-item">
@@ -228,7 +236,7 @@
               </a>
               <ul class="menu-sub">
                 @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                <li class="menu-item">
+<li class="menu-item">
                   <a href="{{ route('training.index') }}" class="menu-link">
                     <div data-i18n="Management">Manajemen Training</div>
                   </a>
@@ -238,13 +246,13 @@
                     <div data-i18n="Add">Tambah Sertifikat</div>
                   </a>
                 </li>
-                @else
-                <li class="menu-item">
+@else
+<li class="menu-item">
                   <a href="{{ route('my.certificates') }}" class="menu-link">
                     <div data-i18n="My Certificates">Sertifikat Training Saya</div>
                   </a>
                 </li>
-                @endif
+@endif
               </ul>
             </li>
 
@@ -261,7 +269,7 @@
                   </a>
                 </li>
                 @if (in_array(Auth::user()->role, ['Leader', 'Ass Leader', 'Admin', 'SPV']))
-                <li class="menu-item">
+<li class="menu-item">
                   <a href="{{ route('leaves.index') }}" class="menu-link">
                     <div data-i18n="Approval">Approval Leave</div>
                   </a>
@@ -271,7 +279,7 @@
                     <div data-i18n="Report">Laporan Leave</div>
                   </a>
                 </li>
-                @endif
+@endif
               </ul>
             </li>
 
@@ -322,7 +330,11 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
+                      @if (!empty(Auth::user()->profile_picture))
+                      <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
+                      @else
                       <img src="{{ asset('template/') }}/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                      @endif
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -331,7 +343,11 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
+                              @if (!empty(Auth::user()->profile_picture))
+                              <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
+                              @else
                               <img src="{{ asset('template/') }}/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                              @endif
                             </div>
                           </div>
                           <div class="flex-grow-1">
@@ -379,9 +395,9 @@
                 <div class="mb-2 mb-md-0">
                   ©
                   <script>
-                    document.write(new Date().getFullYear());
+                      document.write(new Date().getFullYear());
                   </script>
-                  , made with ❤️ 
+                  , made with ❤️
                   <!-- by <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a> -->
                 </div>
                 <!-- <div>
@@ -437,26 +453,26 @@
 
     <!-- Date & Time Script -->
     <script>
-      function updateDateTime() {
-        const now = new Date();
-        const options = { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        };
-        const formattedDate = now.toLocaleDateString('id-ID', options);
-        document.getElementById('tanggalSekarang').textContent = formattedDate;
-      }
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const formattedDate = now.toLocaleDateString('id-ID', options);
+            document.getElementById('tanggalSekarang').textContent = formattedDate;
+        }
 
-      // Update immediately
-      updateDateTime();
-      
-      // Update every second
-      setInterval(updateDateTime, 1000);
+        // Update immediately
+        updateDateTime();
+
+        // Update every second
+        setInterval(updateDateTime, 1000);
     </script>
 
     @yield('scripts')

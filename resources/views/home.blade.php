@@ -228,7 +228,7 @@
                 @endphp
 
                 <h2 class="fw-bold mb-4">
-                    Hi, {{ Auth::user()->fullname }} Selamat {{ $timeGreeting }}
+                    Hi {{ Auth::user()->fullname }}, Selamat {{ $timeGreeting }}
                 </h2>
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="fw-bold py-3 mb-4">
