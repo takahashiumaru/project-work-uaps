@@ -49,7 +49,7 @@
               <div class="app-brand justify-content-center">
                 <a href="javascript:void(0);" class="app-brand-link gap-2">
                   {{-- Anda bisa mengganti logo SVG ini dengan elemen img Anda --}}
-                  <img src="{{ asset('storage/aps.jpeg') }}" alt="Logo" height="30">
+                  <img src="{{ asset('storage/aps.jpeg') }}" alt="Logo" height="80">
                 </a>
               </div>
               <h4 class="mb-2">Employee Login 👋</h4>
