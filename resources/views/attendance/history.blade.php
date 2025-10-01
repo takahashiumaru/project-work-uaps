@@ -77,25 +77,31 @@
                                 {{-- Kolom In --}}
                                 <td class="
                                     @if(!$isFuture && !$isShiftKosong)
-                                        @if(!$checkIn) bg-danger text-white
-                                        @elseif($checkIn->gt($startTime)) bg-danger text-white
-                                        @elseif($checkIn->lte($startTime)) bg-success text-white
+                                        @if(!$checkIn || !($checkIn instanceof \DateTimeInterface))
+                                            bg-danger text-white
+                                        @elseif($checkIn instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkIn->gt(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                            bg-danger text-white
+                                        @elseif($checkIn instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkIn->lte(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                            bg-success text-white
                                         @endif
                                     @endif
                                 ">
-                                    {{ $checkIn ? $checkIn->format('H:i') : '-' }}
+                                    {{ $checkIn instanceof \DateTimeInterface ? $checkIn->format('H:i') : ($checkIn ? (string) $checkIn : '-') }}
                                 </td>
 
                                 {{-- Kolom Out --}}
                                 <td class="
                                     @if(!$isFuture && !$isShiftKosong)
-                                        @if(!$checkOut) bg-danger text-white
-                                        @elseif($checkOut->lt($endTime)) bg-danger text-white
-                                        @elseif($checkOut->gte($endTime)) bg-success text-white
+                                        @if(!$checkOut || !($checkOut instanceof \DateTimeInterface))
+                                            bg-danger text-white
+                                        @elseif($checkOut instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkOut->gt(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                            bg-danger text-white
+                                        @elseif($checkOut instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkOut->lte(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                            bg-success text-white
                                         @endif
                                     @endif
                                 ">
-                                    {{ $checkOut ? $checkOut->format('H:i') : '-' }}
+                                    {{ $checkIn instanceof \DateTimeInterface ? $checkOut->format('H:i') : ($checkOut ? (string) $checkOut : '-') }}
                                 </td>
                             </tr>
                             @endforeach
