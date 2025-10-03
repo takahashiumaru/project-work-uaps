@@ -187,8 +187,8 @@
         <div class="col-12">
             <div class="attendance-card">
                 <div class="attendance-header">
-                    <h5 class="mb-0">
-                        <i class="bx bx-user-check me-2"></i>Today's Attendance Status
+                    <h5 class="mb-0" style="color: white;">
+                        <i class="bx bx-user-check me-2" style="color: white;"></i>Today's Attendance Status
                     </h5>
                 </div>
                 <div class="attendance-body">

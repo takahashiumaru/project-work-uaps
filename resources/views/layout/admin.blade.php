@@ -331,23 +331,23 @@
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                       @if (!empty(Auth::user()->profile_picture))
-                      <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
-                      @else
-                      <img src="{{ asset('template/') }}/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                      @endif
+                          <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
+                          @else
+                          <img src="{{ asset('storage/photo/user.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
+                          @endif
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                      <a class="dropdown-item" href="{{ route('users.profile', Auth::user()->id) }}">
+                      <a class="dropdown-item" href="">
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
                               @if (!empty(Auth::user()->profile_picture))
-                              <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
-                              @else
-                              <img src="{{ asset('template/') }}/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
-                              @endif
+                                <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}" alt="Profile" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;"/>
+                                @else
+                                <img src="{{ asset('storage/photo/user.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                @endif
                             </div>
                           </div>
                           <div class="flex-grow-1">
@@ -359,6 +359,12 @@
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{{ route('users.profile', Auth::user()->id) }}">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">Profile</span>
+                      </a>
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>

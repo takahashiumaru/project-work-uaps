@@ -349,77 +349,96 @@
         </div>
 
         {{-- Tabel Data Penerbangan Hari Ini --}}
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="bx bx-list-ul me-2"></i> Data Penerbangan Hari Ini
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Airline</th>
-                                <th>Flight Number</th>
-                                <th>Registrasi</th>
-                                <th>Tipe</th>
-                                <th>Kedatangan</th>
-                                <th>Hitung Mundur</th>
-                                <th>Dibuat Pada</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($flights as $flight)
-                                <tr class="clickable-row" data-bs-toggle="modal"
-                                    data-bs-target="#viewFlightModal{{ $flight->id }}">
-                                    <td>{{ $flight->airline }}</td>
-                                    <td>{{ $flight->flight_number }}</td>
-                                    <td>{{ $flight->registasi }}</td>
-                                    <td>{{ $flight->type }}</td>
-                                    <td>{{ $flight->arrival }}</td>
-                                    <td><span class="countdown" data-time="{{ $flight->time_count }}"></span></td>
-                                    <td>{{ $flight->created_at->format('d M Y, H:i') }}</td>
-                                    <td>
-                                        @if ($flight->status)
-                                            <span class="badge bg-label-success">Selesai</span>
-                                        @else
-                                            <span class="badge bg-label-warning">Dalam Proses</span>
-                                        @endif
-                                    </td>
-                                    <td class="no-click">
-                                        @if ($flight->status)
-                                            <span class="badge bg-label-secondary">Done</span>
-                                        @else
-                                            @if (in_array(Auth::user()->role, ['Ass Leader', 'Leader']))
-                                                <form action="{{ route('flights.update', $flight->id) }}" method="POST"
-                                                    style="display:inline;">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit" class="btn btn-success btn-sm">
-                                                        <i class="bx bx-check-circle me-1"></i> Mark as Done
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <span class="badge bg-label-warning">In Progress</span>
-                                            @endif
-                                        @endif
-                                    </td>
-                                </tr>
-                                {{-- Pastikan Anda memiliki modal view_flight --}}
-                                @include('modal.view_flight', ['flight' => $flight])
-                            @empty
-                                <tr>
-                                    <td colspan="9" class="text-center">Tidak ada data penerbangan untuk hari ini.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bx bx-list-ul me-2"></i> Data Penerbangan Hari Ini
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover kontrak-table">
+                                <thead>
+                                    <tr>
+                                        <th>Airline</th>
+                                        <th>Flight Number</th>
+                                        <th>Registrasi</th>
+                                        <th>Tipe</th>
+                                        <th>Kedatangan</th>
+                                        <th>Hitung Mundur</th>
+                                        <th>Dibuat Pada</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($flights as $flight)
+                                        <tr class="clickable-row" data-bs-toggle="modal"
+                                            data-bs-target="#viewFlightModal{{ $flight->id }}">
+                                            <td>{{ $flight->airline }}</td>
+                                            <td>{{ $flight->flight_number }}</td>
+                                            <td>{{ $flight->registasi }}</td>
+                                            <td>{{ $flight->type }}</td>
+                                            <td>{{ $flight->arrival }}</td>
+                                            <td><span class="countdown" data-time="{{ $flight->time_count }}"></span></td>
+                                            <td>{{ $flight->created_at->format('d M Y, H:i') }}</td>
+                                            <td class="no-click">
+                                                @if ($flight->status)
+                                                    <span class="badge bg-label-success">Selesai</span>
+                                                @else
+                                                    <span class="badge bg-label-warning">Dalam Proses</span>
+                                                @endif
+                                            </td>
+                                            <td class="no-click">
+                                                @if ($flight->status)
+                                                    <span class="badge bg-label-secondary">Done</span>
+                                                @else
+                                                    @if (in_array(Auth::user()->role, ['Ass Leader', 'Leader']))
+                                                        <form action="{{ route('flights.update', $flight->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit" class="btn btn-success btn-sm">
+                                                                <i class="bx bx-check-circle me-1"></i> Mark as Done
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <span class="badge bg-label-warning">In Progress</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        {{-- Pastikan Anda memiliki modal view_flight --}}
+                                        @include('modal.view_flight', ['flight' => $flight])
+                                    @empty
+                                        <tr>
+                                            <td colspan="9" class="text-center">Tidak ada data penerbangan untuk hari
+                                                ini.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty State -->
+                        {{-- @if ($shifts->isEmpty())
+                    <div class="text-center py-5">
+                        <i class="bx bx-time bx-lg text-muted mb-3" style="font-size: 4rem;"></i>
+                        <h5 class="text-muted">Belum ada shift</h5>
+                        <p class="text-muted">Mulai dengan membuat shift pertama Anda</p>
+                        <a href="{{ route('shift.create') }}" class="create-btn mt-3">
+                            <i class="bx bx-plus-circle"></i> Create First Shift
+                        </a>
+                    </div>
+                    @endif --}}
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 
     {{-- Pastikan Anda memiliki modal add_flight dan flight --}}
