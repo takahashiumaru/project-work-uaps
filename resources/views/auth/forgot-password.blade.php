@@ -9,13 +9,19 @@
 >
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
-    <title>Ganti Password</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Lupa Password</title>
     <meta name="description" content="" />
     <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="{{ asset('template/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{ asset('template/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('template/assets/css/demo.css') }}" />
@@ -35,34 +41,42 @@
                   <img src="{{ asset('storage/aps.jpeg') }}" alt="Logo" height="80">
                 </a>
               </div>
-              <h4 class="mb-2">Ganti Password</h4>
-              <p class="mb-4">Silakan masukkan password baru Anda.</p>
-              @if(session('success'))
-                <div class="alert alert-success alert-dismissible" role="alert">
-                  {{ session('success') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              @endif
-              @if($errors->any())
+              <h4 class="mb-2">Lupa Password 🔒</h4>
+              <p class="mb-4">Masukkan NIP Anda untuk menerima OTP reset password melalui email.</p>
+              @if(session('error'))
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                  @foreach($errors->all() as $error)
-                    {{ $error }}<br>
-                  @endforeach
+                  {{ session('error') }}
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               @endif
-              <form method="POST" action="/forgot-password/change">
+              @if(session('otp_sent'))
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  OTP telah dikirim ke email Anda.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              @endif
+              <form method="POST" action="{{ session('otp_sent') ? route('forgot.password.verify') : route('forgot.password.send') }}">
                 @csrf
                 <div class="mb-3">
-                  <label for="password" class="form-label">Password Baru</label>
-                  <input type="password" class="form-control" name="password" required autofocus>
+                    <label for="id" class="form-label">NIP</label>
+                    <input type="text" class="form-control @error('id') is-invalid @enderror" name="id" value="{{ old('id') }}" required autofocus {{ session('otp_sent') ? 'readonly' : '' }}>
+                    @error('id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-                <div class="mb-3">
-                  <label for="password_confirmation" class="form-label">Konfirmasi Password Baru</label>
-                  <input type="password" class="form-control" name="password_confirmation" required>
-                </div>
-                <button type="submit" class="btn btn-primary d-grid w-100">Simpan Password</button>
-              </form>
+                @if(session('otp_sent'))
+                    <div class="mb-3">
+                    <label for="otp" class="form-label">OTP</label>
+                    <input type="text" class="form-control @error('otp') is-invalid @enderror" name="otp" required>
+                    @error('otp')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    </div>
+                    <button type="submit" class="btn btn-primary d-grid w-100">Verifikasi OTP</button>
+                @else
+                    <button type="submit" class="btn btn-primary d-grid w-100">Kirim OTP</button>
+                @endif
+                </form>
               <div class="text-center mt-3">
                 <a href="{{ route('login') }}"><small>&larr; Kembali ke Login</small></a>
               </div>

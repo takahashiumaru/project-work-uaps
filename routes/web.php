@@ -26,6 +26,12 @@ Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [LoginController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
+Route::post('/forgot-password', [LoginController::class, 'sendForgotPassword'])->name('forgot.password.send');
+Route::post('/forgot-password/verify', [LoginController::class, 'verifyForgotPassword'])->name('forgot.password.verify');
+Route::get('/forgot-password/change', [LoginController::class, 'showChangePasswordForm'])->name('change.password.form');
+Route::post('/forgot-password/change', [LoginController::class, 'changePassword'])->name('change.password');
+
 Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('document', [HomeController::class, 'document'])->name('document')->middleware('auth');
 Route::get('/surat', [HomeController::class, 'generatePDF'])->name('surat.generate');
