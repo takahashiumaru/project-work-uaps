@@ -2,28 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Certificate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
 
 class AdminTrainingCertificateController extends Controller
 {
-
-
     public function index(Request $request)
     {
         $query = Certificate::leftJoin('users', 'certificates.user_id', '=', 'users.id')
-            ->select('certificates.*', 'users.fullname', 'users.nip');
+        ->select('certificates.*', 'users.fullname');
+
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
                 $q->where('certificates.certificate_name', 'like', "%{$search}%")
                     ->orWhere('users.fullname', 'like', "%{$search}%")
-                    ->orWhere('users.nip', 'like', "%{$search}%");
+                    ->orWhere('users.id', 'like', "%{$search}%");
             });
         }
 
@@ -34,11 +31,10 @@ class AdminTrainingCertificateController extends Controller
         return view('training.admin.index', compact('certificates'));
     }
 
-
-
     public function create()
     {
         $users = User::orderBy('fullname')->get(['id', 'fullname']);
+
         return view('training.admin.create', compact('users'));
     }
 
@@ -52,14 +48,23 @@ class AdminTrainingCertificateController extends Controller
             'certificate_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         ]);
 
+        // Format tanggal
+        $validatedData['start_date'] = date('Y-m-d', strtotime($validatedData['start_date']));
+        $validatedData['end_date'] = date('Y-m-d', strtotime($validatedData['end_date']));
+
+        // Upload file (jika ada)
         if ($request->hasFile('certificate_file')) {
-            $filePath = $request->file('certificate_file')->store('certificates', 'public');
-            $validatedData['file_path'] = $filePath;
+            $file = $request->file('certificate_file');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $filePath = $file->storeAs('certificates', $filename, 'public');
+            $validatedData['certificate_file'] = $filePath; // Simpan ke kolom yang benar
         }
 
         Certificate::create($validatedData);
 
-        return redirect()->route('admin.training.certificates.index')->with('success', 'Sertifikat berhasil ditambahkan!');
+        return redirect()
+            ->route('admin.training.certificates.index')
+            ->with('success', 'Sertifikat berhasil ditambahkan!');
     }
 
     public function show(Certificate $certificate)
@@ -69,7 +74,8 @@ class AdminTrainingCertificateController extends Controller
 
     public function edit(Certificate $certificate)
     {
-        $users = User::orderBy('name')->get(['id', 'name', 'nip']);
+        $users = User::orderBy('fullname')->get(['id', 'fullname']);
+
         return view('training.admin.edit', compact('certificate', 'users'));
     }
 

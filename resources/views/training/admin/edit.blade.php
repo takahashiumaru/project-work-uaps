@@ -8,6 +8,7 @@
 <div class="card mb-4">
     <h5 class="card-header">Formulir Edit Sertifikat</h5>
     <div class="card-body">
+        {{-- {{ dd($certificate->id) }} --}}
         {{-- Penyesuaian route name ke 'training.update' --}}
         <form action="{{ route('admin.training.certificates.update', $certificate) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -19,7 +20,7 @@
                     <option value="">-- Pilih Staff --</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{ (old('user_id', $certificate->user_id) == $user->id) ? 'selected' : '' }}>
-                            {{ $user->name }} (NIP: {{ $user->nip }})
+                            {{ $user->fullname }} (NIP: {{ $user->id }})
                         </option>
                     @endforeach
                 </select>
@@ -56,9 +57,9 @@
                 @error('certificate_file')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
-                @if ($certificate->file_path)
+                @if ($certificate->certificate_file)
                     <div class="mt-2">
-                        File saat ini: <a href="{{ Storage::url($certificate->file_path) }}" target="_blank">Lihat File</a>
+                        File saat ini: <a href="{{ Storage::url($certificate->certificate_file) }}" target="_blank">Lihat File</a>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="remove_file" id="remove_file" value="1">
                             <label class="form-check-label" for="remove_file">

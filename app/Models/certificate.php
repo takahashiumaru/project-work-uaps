@@ -12,6 +12,7 @@ class Certificate extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
         'safety_management_system',
         'human_factors',
@@ -21,6 +22,10 @@ class Certificate extends Model
         'airport_emergency_plan',
         'ground_support_equipment_operation',
         'basic_first_aid',
+        'certificate_name',
+        'start_date',
+        'end_date',
+        'certificate_file',
     ];
 
     protected $casts = [

@@ -13,6 +13,7 @@ class Certificate extends Model
     protected $table = 'certificates';
 
     protected $fillable = [
+        'id',
         'user_id',
         'certificate_name',
         'start_date',
