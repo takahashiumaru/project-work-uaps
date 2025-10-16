@@ -13,6 +13,7 @@
     <meta name="description" content="" />
 
     <link rel="icon" href="{{ asset('storage/aps_mini.png') }}" sizes="48x48" type="image/png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -96,7 +97,8 @@
                                         class="form-control @error('password') is-invalid @enderror" name="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                         aria-describedby="password" required />
-                                    <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    <span class="input-group-text cursor-pointer"><i
+                                            class="icon-base bx bx-show"></i></span>
                                 </div>
 
                                 @error('password')
@@ -137,6 +139,26 @@
     <script src="{{ asset('template/assets/js/main.js') }}"></script>
 
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.querySelector('.form-password-toggle .input-group-text');
+            const passwordInput = document.querySelector('#password');
+            const icon = togglePassword.querySelector('i');
+
+            togglePassword.addEventListener('click', function() {
+                // Jika tipe password, ubah ke text (show)
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bx-show');
+                    icon.classList.add('bx-hide');
+                } else { // jika text, ubah kembali ke password (hide)
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bx-hide');
+                    icon.classList.add('bx-show');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
