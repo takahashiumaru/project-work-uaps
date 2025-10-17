@@ -139,17 +139,17 @@
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Job Title</label>
-                                            <input type="text" class="form-control" value="{{ $user->JobTitle }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->job_title }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Unit</label>
-                                            <input type="text" class="form-control" value="{{ $user->Unit }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->unit }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Manager</label>
-                                            <input type="text" class="form-control" value="{{ $user->Manager }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->manager }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
@@ -167,17 +167,17 @@
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Cluster</label>
-                                            <input type="text" class="form-control" value="{{ $user->Cluster }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->cluster }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Sub Unit</label>
-                                            <input type="text" class="form-control" value="{{ $user->SubUnit }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->sub_unit }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
                                             <label class="form-label fw-semibold">Senior Manager</label>
-                                            <input type="text" class="form-control" value="{{ $user->SeniorManager }}" readonly>
+                                            <input type="text" class="form-control" value="{{ $user->senior_manager }}" readonly>
                                         </div>
                                         
                                         <div class="mb-3">
