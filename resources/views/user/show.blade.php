@@ -49,7 +49,7 @@
                                         </label>
                                         <h4 class="fw-bold mt-3">{{ $user->fullname }}</h4>
                                         <span class="badge bg-primary fs-6">{{ $user->role ?? 'No Role' }}</span>
-                                        <p class="text-muted mt-2">{{ $user->JobTitle ?? 'No Job Title' }}</p>
+                                        <p class="text-muted mt-2">{{ $user->job_title ?? 'No Job Title' }}</p>
                                     </div>
                                 </form>
                             </div>
