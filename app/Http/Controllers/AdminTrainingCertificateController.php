@@ -55,7 +55,7 @@ class AdminTrainingCertificateController extends Controller
         // Upload file (jika ada)
         if ($request->hasFile('certificate_file')) {
             $file = $request->file('certificate_file');
-            $filename = time().'_'.$file->getClientOriginalName();
+            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time();
             $filePath = $file->storeAs('certificates', $filename, 'public');
             $validatedData['certificate_file'] = $filePath; // Simpan ke kolom yang benar
         }
