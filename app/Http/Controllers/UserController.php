@@ -47,7 +47,6 @@ class UserController extends Controller
         $search = request('search');
 
         $user = User::where('role', 'Porter Apron')
-            // ->where('station', 'Apron')
             ->where(function ($q) use ($search) {
                 if ($search) {
                     $q->where('fullname', 'like', "%{$search}%")
@@ -76,7 +75,6 @@ class UserController extends Controller
         $search = request('search');
 
         $user = User::where('role', 'Porter Bge')
-            // ->where('station', 'Bge')
             ->where(function ($q) use ($search) {
                 if ($search) {
                     $q->where('fullname', 'like', "%{$search}%")
@@ -104,7 +102,7 @@ class UserController extends Controller
 
         $search = request('search');
 
-        $user = User::where('station', 'Ho')
+        $user = User::whereNotIn('role', ['Porter Bge', 'Porter Apron'])
             ->where(function ($q) use ($search) {
                 if ($search) {
                     $q->where('fullname', 'like', "%{$search}%")
