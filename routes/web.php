@@ -92,7 +92,15 @@ Route::prefix('admin/training')->name('admin.training.')->middleware(['auth', 'a
 });
 Route::get('/training', [AdminTrainingCertificateController::class, 'index'])->name('training.index');
 Route::get('/training/create', [AdminTrainingCertificateController::class, 'create'])->name('training.create');
+Route::get('/training/edit/{certificate}', [AdminTrainingCertificateController::class, 'edit'])->name('training.edit');
+Route::delete('/training/destroy/{certificate}', [AdminTrainingCertificateController::class, 'destroy'])->name('training.destroy');
 
+Route::get('admin/training/certificates', [AdminTrainingCertificateController::class, 'index'])->name('admin.training.certificates.index');
+Route::post('admin/training/certificates', [AdminTrainingCertificateController::class, 'store'])->name('admin.training.certificates.store');
+Route::get('admin/training/certificates/create', [AdminTrainingCertificateController::class, 'create'])->name('admin.training.certificates.create');
+Route::put('admin/training/certificates/{certificate}', [AdminTrainingCertificateController::class, 'update'])
+    ->name('admin.training.certificates.update');
+    
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');
