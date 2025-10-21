@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Freelance;
 use App\Models\User;
-use App\Models\Shift;
 use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -44,7 +44,7 @@ class ScheduleController extends Controller
         $today = Carbon::today();
         $nowTime = Carbon::now('Asia/Jakarta')->format('H:i:s');
 
-        $schedules = Schedule::with('shift', 'user')
+        $schedules = Schedule::with('shift', 'user', 'freelance')
             ->whereDate('date', $today)
             ->get();
 
@@ -75,203 +75,47 @@ class ScheduleController extends Controller
         ]);
     }
 
-    // public function autoCreate()
-    // {
-    //     try {
-    //         $startDate = Carbon::now()->startOfMonth();
-    //         $endDate = Carbon::now()->endOfMonth();
-
-    //         $existingSchedules = DB::table('schedules')
-    //             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
-    //             ->exists();
-
-    //         if ($existingSchedules) {
-    //             Alert::info('Informasi', 'Data jadwal untuk bulan ini sudah ada.');
-    //             return back();
-    //         }
-    //         $porters = User::where('role', 'PORTER')->get();
-    //         $shifts = Shift::where('id', '!=', 'off')->pluck('id')->values();
-    //         $offShiftId = Shift::where('id', 'off')->value('id');
-
-    //         $shiftManpowerLimits = Shift::where('id', '!=', 'off')->pluck('use_manpower', 'id')->toArray();
-
-    //         $totalDays = $startDate->diffInDays($endDate) + 1;
-
-    //         DB::beginTransaction();
-
-    //         foreach ($porters as $porter) {
-    //             $cyclePosition = rand(0, 7);
-
-    //             for ($i = 0; $i < $totalDays; $i++) {
-    //                 $currentDate = $startDate->copy()->addDays($i);
-
-    //                 if ($cyclePosition >= 6) {
-    //                     $shiftId = $offShiftId;
-    //                 } else {
-    //                     $availableShift = null;
-
-    //                     foreach ($shifts as $candidateShiftId) {
-    //                         $scheduledCount = DB::table('schedules')
-    //                             ->where('date', $currentDate->toDateString())
-    //                             ->where('shift_id', $candidateShiftId)
-    //                             ->count();
-
-    //                         if ($scheduledCount < $shiftManpowerLimits[$candidateShiftId]) {
-    //                             $availableShift = $candidateShiftId;
-    //                             break;
-    //                         }
-    //                     }
-    //                     $shiftId = $availableShift ?? $offShiftId;
-    //                 }
-
-    //                 DB::table('schedules')->updateOrInsert(
-    //                     ['user_id' => $porter->id, 'date' => $currentDate->toDateString()],
-    //                     ['shift_id' => $shiftId]
-    //                 );
-    //                 $cyclePosition = ($cyclePosition + 1) % 8;
-    //             }
-    //         }
-
-    //         DB::commit();
-    //         Alert::success('Success', 'Auto create berhasil dilakukan');
-    //         return back();
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         Log::error('Error saat melalukan auto create: ' . $e->getMessage());
-    //         Alert::error('Terjadi Kesalahan', 'Gagal melalukan auto create.');
-    //         return back();
-    //     }
-    // }
-
-    // public function autoCreate()
-    // {
-    //     try {
-    //         $startDate = Carbon::now()->startOfMonth();
-    //         $endDate = Carbon::now()->endOfMonth();
-
-    //         $existingSchedules = DB::table('schedules')
-    //             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
-    //             ->exists();
-
-    //         if ($existingSchedules) {
-    //             Alert::info('Informasi', 'Data jadwal untuk bulan ini sudah ada.');
-    //             return back();
-    //         }
-
-    //         // Ambil porter dengan flag qantas
-    //         $qantas = User::where('role', 'PORTER')->where('is_qantas', 1)->pluck('id')->toArray();
-    //         $nonQantas = User::where('role', 'PORTER')->where('is_qantas', 0)->pluck('id')->toArray();
-
-    //         $shifts = Shift::where('id', '!=', 'off')->pluck('id')->values()->toArray();
-    //         $offShiftId = Shift::where('id', 'off')->value('id');
-
-    //         $shiftManpowerLimits = Shift::where('id', '!=', 'off')->pluck('use_manpower', 'id')->toArray();
-
-    //         $totalDays = $startDate->diffInDays($endDate) + 1;
-
-    //         DB::beginTransaction();
-
-    //         for ($i = 0; $i < $totalDays; $i++) {
-    //             $currentDate = $startDate->copy()->addDays($i);
-
-    //             // Shuffle biar random
-    //             shuffle($qantas);
-    //             shuffle($nonQantas);
-
-    //             $usedQantas = [];
-    //             $usedNonQantas = [];
-
-    //             foreach ($shifts as $shiftId) {
-    //                 $limit = $shiftManpowerLimits[$shiftId];
-
-    //                 // Tentukan quota Qantas sesuai aturan
-    //                 if (in_array($limit, [14, 12, 10])) {
-    //                     $qantasQuota = min(4, count($qantas));
-    //                 } elseif (in_array($limit, [8, 6])) {
-    //                     $qantasQuota = min(2, count($qantas));
-    //                 } else {
-    //                     $qantasQuota = 0;
-    //                 }
-
-    //                 $assigned = [];
-
-    //                 // Assign Qantas dulu
-    //                 for ($j = 0; $j < $qantasQuota; $j++) {
-    //                     $q = array_shift($qantas);
-    //                     if ($q) {
-    //                         DB::table('schedules')->updateOrInsert(
-    //                             ['user_id' => $q, 'date' => $currentDate->toDateString()],
-    //                             ['shift_id' => $shiftId]
-    //                         );
-    //                         $assigned[] = $q;
-    //                         $usedQantas[] = $q;
-    //                     }
-    //                 }
-
-    //                 // Assign sisanya Non-Qantas
-    //                 $remaining = $limit - count($assigned);
-    //                 for ($j = 0; $j < $remaining; $j++) {
-    //                     $nq = array_shift($nonQantas);
-    //                     if ($nq) {
-    //                         DB::table('schedules')->updateOrInsert(
-    //                             ['user_id' => $nq, 'date' => $currentDate->toDateString()],
-    //                             ['shift_id' => $shiftId]
-    //                         );
-    //                         $assigned[] = $nq;
-    //                         $usedNonQantas[] = $nq;
-    //                     }
-    //                 }
-    //             }
-
-    //             // Porter yang belum dapet shift → off
-    //             foreach (array_merge($qantas, $nonQantas) as $p) {
-    //                 DB::table('schedules')->updateOrInsert(
-    //                     ['user_id' => $p, 'date' => $currentDate->toDateString()],
-    //                     ['shift_id' => $offShiftId]
-    //                 );
-    //             }
-
-    //             // Reset list porter untuk hari berikutnya
-    //             $qantas = array_merge($qantas, $usedQantas);
-    //             $nonQantas = array_merge($nonQantas, $usedNonQantas);
-    //         }
-
-    //         DB::commit();
-    //         Alert::success('Success', 'Auto create berhasil dilakukan');
-    //         return back();
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         Log::error('Error saat auto create: ' . $e->getMessage());
-    //         Alert::error('Terjadi Kesalahan', 'Gagal melakukan auto create.');
-    //         return back();
-    //     }
-    // }
-
     public function autoCreate()
     {
+        if (!in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron'])) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
         try {
             $startDate = Carbon::now()->startOfMonth();
             $endDate   = Carbon::now()->endOfMonth();
+            $roleSpv = Auth::user()->role;
+            $rolePorter = null;
+
+            if ($roleSpv === 'SPV Bge') {
+                $rolePorter = 'Porter Bge';
+            } elseif ($roleSpv === 'SPV Apron') {
+                $rolePorter = 'Porter Apron';
+            }
 
             // Cegah duplikasi jadwal sebulan penuh
             $existing = DB::table('schedules')
                 ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+                ->whereIn('user_id', function ($query) use ($rolePorter) {
+                    $query->select('id')
+                        ->from('users')
+                        ->where('role', $rolePorter);
+                })
                 ->exists();
 
             if ($existing) {
-                Alert::info('Informasi', 'Data jadwal untuk bulan ini sudah ada.');
+                Alert::info('Informasi', "Data jadwal untuk $rolePorter bulan ini sudah ada.");
                 return back();
             }
 
-            // Users (PORTER) + flag Qantas
+            // Users (PORTER sesuai SPV)
             $users = DB::table('users')
-                ->where('role', 'PORTER')
+                ->where('role', $rolePorter)
                 ->select('id', 'is_qantas')
                 ->orderBy('id')
                 ->get();
 
             if ($users->isEmpty()) {
-                Alert::warning('Perhatian', 'Tidak ada user dengan role PORTER.');
+                Alert::warning('Perhatian', "Tidak ada user dengan role $rolePorter.");
                 return back();
             }
 
@@ -567,13 +411,22 @@ class ScheduleController extends Controller
 
     public function show(): View
     {
-        if (!in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (!in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+        }
+
+        $roleSpv = Auth::user()->role;
+        $rolePorter = null;
+
+        if ($roleSpv === 'SPV Bge') {
+            $rolePorter = 'Porter Bge';
+        } elseif ($roleSpv === 'SPV Apron') {
+            $rolePorter = 'Porter Apron';
         }
 
         $search = request('search');
 
-        $user = user::where('role', '=', "PORTER")->when($search, function ($query, $search) {
+        $user = user::where('role', 'like', "%{$rolePorter}%")->when($search, function ($query, $search) {
             return $query->where('fullname', 'like', "%{$search}%")
                 ->orWhere('id', 'like', "%{$search}%");
         })
@@ -581,10 +434,56 @@ class ScheduleController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-
         return view('schedule.show', [
             'user' => $user,
         ]);
+    }
+
+    public function freelances(): View
+    {
+        $search = request('search');
+
+        $freelance = Freelance::where('role', '=', 'Freelance')->when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('id', 'like', "%{$search}%");
+        })
+            ->orderBy('name', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+
+        return view('schedule.freelance.freelances', [
+            'user' => $freelance,
+        ]);
+    }
+
+    public function freelanceCreate(): View
+    {
+        return view('schedule.freelance.create');
+    }
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'fullname' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+        ]);
+
+        try {
+            $freelance = new Freelance();
+            $freelance->name = $request->fullname;
+            $freelance->email = $request->email;
+            $freelance->role = 'Freelance';
+
+            $freelance->save();
+
+            Alert::success('Success', 'User berhasil ditambahkan.');
+            return redirect()->route('schedule.freelances');
+        } catch (\Exception $e) {
+            Alert::error('Gagal', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->withInput();
+        }
     }
 
     public function edit(Request $request, $id)

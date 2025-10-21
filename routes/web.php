@@ -66,7 +66,10 @@ Route::get('/flights/{id}/details', [FlightController::class, 'getDetails'])->na
 
 Route::post('/schedule/auto-create', [ScheduleController::class, 'autoCreate'])->name('schedule.autoCreate');
 Route::get('/schedule-now', [ScheduleController::class, 'now'])->name('schedule.now');
-Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.show');
+Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.view');
+Route::get('/schedule-freelances', [ScheduleController::class, 'freelances'])->name('schedule.freelances');
+Route::get('/schedule-freelance-create', [ScheduleController::class, 'freelanceCreate'])->name('freelance.create');
+Route::post('/schedule-freelance-create', [ScheduleController::class, 'store'])->name('freelance.store');
 Route::get('/schedule/edit/{id}', [ScheduleController::class, 'edit'])->name('schedule.edit');
 Route::post('/schedule/update/{userId}/{date}', [ScheduleController::class, 'update'])->name('schedule.update');
 Route::post('/schedules/update-active', [ScheduleController::class, 'updateActive']);
@@ -100,7 +103,7 @@ Route::post('admin/training/certificates', [AdminTrainingCertificateController::
 Route::get('admin/training/certificates/create', [AdminTrainingCertificateController::class, 'create'])->name('admin.training.certificates.create');
 Route::put('admin/training/certificates/{certificate}', [AdminTrainingCertificateController::class, 'update'])
     ->name('admin.training.certificates.update');
-    
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::post('/attendance/check-in', [AttendanceController::class, 'checkIn'])->name('attendance.checkIn');

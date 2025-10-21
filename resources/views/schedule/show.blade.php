@@ -7,28 +7,28 @@
     .table-fixed {
         table-layout: fixed;
     }
-    
+
     .table-fixed th:nth-child(1),
     .table-fixed td:nth-child(1) {
         width: 120px;
     }
-    
+
     .table-fixed th:nth-child(2),
     .table-fixed td:nth-child(2) {
         width: 250px;
     }
-    
+
     .table-fixed th:nth-child(3),
     .table-fixed td:nth-child(3) {
         width: 150px;
     }
-    
+
     .table-fixed th:nth-child(4),
     .table-fixed td:nth-child(4) {
         width: 100px;
         text-align: center;
     }
-    
+
     .action-btn {
         display: inline-flex;
         align-items: center;
@@ -41,17 +41,17 @@
         text-decoration: none;
         transition: all 0.2s ease;
     }
-    
+
     .action-btn:hover {
         background: #5a6fd8;
         transform: translateY(-1px);
         color: white;
     }
-    
+
     .search-box {
         max-width: 300px;
     }
-    
+
     .stats-card {
         background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
         color: white;
@@ -59,18 +59,18 @@
         padding: 1.5rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .stats-number {
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
     }
-    
+
     .stats-label {
         opacity: 0.9;
         font-size: 0.875rem;
     }
-    
+
     .auto-create-btn {
         background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         border: none;
@@ -80,12 +80,12 @@
         font-weight: 600;
         transition: all 0.2s ease;
     }
-    
+
     .auto-create-btn:hover {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
     }
-    
+
     .user-avatar {
         width: 32px;
         height: 32px;
@@ -93,32 +93,32 @@
         object-fit: cover;
         margin-right: 0.75rem;
     }
-    
+
     .user-info {
         display: flex;
         align-items: center;
     }
-    
+
     .role-badge {
         font-size: 0.75rem;
         padding: 0.25rem 0.5rem;
     }
-    
+
     @media (max-width: 768px) {
         .table-responsive {
             font-size: 0.875rem;
         }
-        
+
         .user-info {
             flex-direction: column;
             align-items: flex-start;
         }
-        
+
         .user-avatar {
             margin-right: 0;
             margin-bottom: 0.5rem;
         }
-        
+
         .search-box {
             max-width: 100%;
         }
@@ -167,7 +167,7 @@
             </form>
         </div>
         <div class="col-md-6">
-            <form action="{{ route('schedule.show') }}" method="GET">
+            <form action="{{ route('schedule.view') }}" method="GET">
                 <div class="input-group search-box">
                     <input type="text" name="search" class="form-control" placeholder="Cari NIP atau Nama..." value="{{ request('search') }}">
                     <button type="submit" class="btn btn-primary">
@@ -206,9 +206,9 @@
                                     </td>
                                     <td>
                                         <div class="user-info">
-                                            <img src="{{ $users->profile_picture ? asset('storage/photo/' . $users->profile_picture) : asset('storage/photo/user.jpg') }}" 
-                                                 alt="{{ $users->fullname }}" 
-                                                 class="user-avatar">
+                                            <img src="{{ $users->profile_picture ? asset('storage/photo/' . $users->profile_picture) : asset('storage/photo/user.jpg') }}"
+                                                alt="{{ $users->fullname }}"
+                                                class="user-avatar">
                                             <span>{{ $users->fullname }}</span>
                                         </div>
                                     </td>
@@ -216,62 +216,62 @@
                                         <span class="badge bg-label-primary role-badge">{{ $users->role }}</span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('schedule.edit', ['id' => $users->id, 'page' => request('page')]) }}" 
-                                           class="action-btn"
-                                           title="Edit Schedule">
+                                        <a href="{{ route('schedule.edit', ['schedule' => $users->id, 'page' => request('page')]) }}"
+                                            class="action-btn" title="Edit Schedule">
                                             <i class="bx bx-edit"></i>
                                         </a>
+
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                    
+
                     <!-- Pagination -->
                     <div class="d-flex justify-content-between align-items-center mt-4">
                         <div class="text-muted">
                             Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
                         </div>
                         <nav>
-                        <nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-        <!-- Previous Page Link -->
-        @if ($user->onFirstPage())
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-        @else
-            <li class="page-item">
-                <a class="page-link" href="{{ $user->previousPageUrl() }}" rel="prev">Previous</a>
-            </li>
-        @endif
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">
+                                    <!-- Previous Page Link -->
+                                    @if ($user->onFirstPage())
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Previous</span>
+                                    </li>
+                                    @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $user->previousPageUrl() }}" rel="prev">Previous</a>
+                                    </li>
+                                    @endif
 
-        <!-- Pagination Elements -->
-        @foreach ($user->getUrlRange(1, $user->lastPage()) as $page => $url)
-            @if ($page == $user->currentPage())
-                <li class="page-item active">
-                    <span class="page-link">{{ $page }}</span>
-                </li>
-            @else
-                <li class="page-item">
-                    <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                </li>
-            @endif
-        @endforeach
+                                    <!-- Pagination Elements -->
+                                    @foreach ($user->getUrlRange(1, $user->lastPage()) as $page => $url)
+                                    @if ($page == $user->currentPage())
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ $page }}</span>
+                                    </li>
+                                    @else
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                    </li>
+                                    @endif
+                                    @endforeach
 
-        <!-- Next Page Link -->
-        @if ($user->hasMorePages())
-            <li class="page-item">
-                <a class="page-link" href="{{ $user->nextPageUrl() }}" rel="next">Next</a>
-            </li>
-        @else
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-        @endif
-    </ul>
-</nav>
+                                    <!-- Next Page Link -->
+                                    @if ($user->hasMorePages())
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ $user->nextPageUrl() }}" rel="next">Next</a>
+                                    </li>
+                                    @else
+                                    <li class="page-item disabled">
+                                        <span class="page-link">Next</span>
+                                    </li>
+                                    @endif
+                                </ul>
+                            </nav>
                         </nav>
                     </div>
                 </div>
@@ -356,7 +356,7 @@
                 this.style.backgroundColor = '#f8f9fa';
                 this.style.transform = 'translateX(2px)';
             });
-            
+
             row.addEventListener('mouseleave', function() {
                 this.style.backgroundColor = '';
                 this.style.transform = 'translateX(0)';
@@ -370,7 +370,7 @@
                 const originalHtml = this.innerHTML;
                 this.innerHTML = '<i class="bx bx-loader bx-spin"></i>';
                 this.style.pointerEvents = 'none';
-                
+
                 setTimeout(() => {
                     this.innerHTML = originalHtml;
                     this.style.pointerEvents = 'auto';
@@ -394,7 +394,8 @@
     document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             title: 'Pencarian',
-            text: 'Menampilkan hasil untuk: "{{ request('search') }}"',
+            text: 'Menampilkan hasil untuk: "{{ request('
+            search ') }}"',
             icon: 'info',
             timer: 3000,
             showConfirmButton: false
