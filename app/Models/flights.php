@@ -27,6 +27,6 @@ class flights extends Model
 
     public function details()
     {
-        return $this->hasMany(flight_details::class, 'flight_id', 'id');
+        return $this->hasMany(Flight_details::class, 'flight_id', 'id');
     }
 }

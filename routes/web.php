@@ -6,7 +6,7 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\shiftController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\AdminTrainingCertificateController;
@@ -19,18 +19,22 @@ Route::resource('users', UserController::class)->middleware('auth');
 Route::resource('user-aprons', UserController::class)->middleware('auth');
 Route::resource('flights', FlightController::class)->middleware('auth');
 Route::resource('schedule', scheduleController::class)->middleware('auth');
-Route::resource('shift', shiftController::class)->middleware('auth');
+Route::resource('shift', ShiftController::class)->middleware('auth');
 
 // API
 Route::get('/', [LoginController::class, 'login'])->name('login');
 Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/verify-otp', [LoginController::class, 'showOtpForm'])->name('verify.otp.form');
+Route::post('/verify-otp', [LoginController::class, 'verifyOtp'])->name('verify.otp');
+
 
 Route::get('/forgot-password', [LoginController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
 Route::post('/forgot-password', [LoginController::class, 'sendForgotPassword'])->name('forgot.password.send');
 Route::post('/forgot-password/verify', [LoginController::class, 'verifyForgotPassword'])->name('forgot.password.verify');
 Route::get('/forgot-password/change', [LoginController::class, 'showChangePasswordForm'])->name('change.password.form');
 Route::post('/forgot-password/change', [LoginController::class, 'changePassword'])->name('change.password');
+Route::post('/resend-otp', [LoginController::class, 'resendOtp'])->name('resend.otp');
 
 Route::get('home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('document', [HomeController::class, 'document'])->name('document')->middleware('auth');
@@ -88,15 +92,6 @@ Route::prefix('admin/training')->name('admin.training.')->middleware(['auth', 'a
 });
 Route::get('/training', [AdminTrainingCertificateController::class, 'index'])->name('training.index');
 Route::get('/training/create', [AdminTrainingCertificateController::class, 'create'])->name('training.create');
-Route::get('/training/edit/{certificate}', [AdminTrainingCertificateController::class, 'edit'])->name('training.edit');
-Route::delete('/training/destroy/{certificate}', [AdminTrainingCertificateController::class, 'destroy'])->name('training.destroy');
-
-Route::get('admin/training/certificates', [AdminTrainingCertificateController::class, 'index'])->name('admin.training.certificates.index');
-Route::post('admin/training/certificates', [AdminTrainingCertificateController::class, 'store'])->name('admin.training.certificates.store');
-Route::get('admin/training/certificates/create', [AdminTrainingCertificateController::class, 'create'])->name('admin.training.certificates.create');
-Route::put('admin/training/certificates/{certificate}', [AdminTrainingCertificateController::class, 'update'])
-    ->name('admin.training.certificates.update');
-
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');

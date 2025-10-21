@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\flights; // Pastikan nama model 'flights' sudah benar (biasanya 'Flight' singular)
+use App\Models\Flights; // Pastikan nama model 'flights' sudah benar (biasanya 'Flight' singular)
 use App\Models\User;
 use App\Models\Leave; // Asumsi Anda punya model 'Leave' untuk data cuti/sakit
 use Illuminate\View\View;
