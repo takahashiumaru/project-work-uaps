@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layout.admin')
 
 @section('title', 'Halaman Training')
 @section('content')

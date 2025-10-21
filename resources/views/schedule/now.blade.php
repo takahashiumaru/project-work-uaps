@@ -220,7 +220,7 @@
                             </div>
                         </div>
                         
-                        @if(auth()->user()->role == 'Leader Apron' || in_array(auth()->user()->role, ['SPV']))
+                        @if(auth()->user()->role == 'Leader Apron' || in_array(auth()->user()->role, ['SPV Bge','SPV Apron']))
                         <label class="switch">
                             <input type="checkbox"
                                 class="attendance-toggle"
@@ -269,6 +269,9 @@
                     console.log(res.message);
                     // Show success feedback
                     showNotification('Status berhasil diupdate', 'success');
+
+                    // Reload data directly
+                    location.reload();
                 },
                 error: function(err) {
                     console.error('Gagal update status:', err);
