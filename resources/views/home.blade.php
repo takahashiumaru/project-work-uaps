@@ -235,7 +235,7 @@
                         <span class="text-muted fw-light">Dashboard /</span> Overview
                     </h4>
                     <div class="text-right">
-                        @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Leader']))
+                        @if (in_array(Auth::user()->role, ['Admin', 'SPV Apron', 'SPV Bge']))
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#addFlightModal">
                                 <i class="bx bx-plus-circle me-2"></i> Tambah Penerbangan
