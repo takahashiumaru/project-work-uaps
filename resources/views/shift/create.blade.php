@@ -12,7 +12,7 @@
         max-width: 600px;
         margin: 0 auto;
     }
-    
+
     .form-header {
         background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
         color: white;
@@ -20,22 +20,22 @@
         border-radius: 0.75rem 0.75rem 0 0;
         text-align: center;
     }
-    
+
     .form-body {
         padding: 2rem;
     }
-    
+
     .form-group {
         margin-bottom: 1.5rem;
     }
-    
+
     .form-label {
         font-weight: 600;
         color: #566a7f;
         margin-bottom: 0.5rem;
         display: block;
     }
-    
+
     .form-control {
         width: 100%;
         padding: 0.75rem 1rem;
@@ -44,20 +44,20 @@
         font-size: 0.9375rem;
         transition: all 0.2s ease;
     }
-    
+
     .form-control:focus {
         border-color: #667eea;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         outline: none;
     }
-    
+
     .btn-group {
         display: flex;
         gap: 1rem;
         justify-content: flex-end;
         margin-top: 2rem;
     }
-    
+
     .btn-submit {
         background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
         border: none;
@@ -67,12 +67,12 @@
         font-weight: 600;
         transition: all 0.2s ease;
     }
-    
+
     .btn-submit:hover {
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
     }
-    
+
     .btn-back {
         background: #6c757d;
         border: none;
@@ -86,13 +86,13 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .btn-back:hover {
         background: #5a6268;
         transform: translateY(-1px);
         color: white;
     }
-    
+
     .alert-danger {
         background: #f8d7da;
         border: 1px solid #f5c6cb;
@@ -101,32 +101,32 @@
         border-radius: 0.5rem;
         margin-bottom: 1.5rem;
     }
-    
+
     .time-input-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
     }
-    
+
     .form-hint {
         font-size: 0.875rem;
         color: #697a8d;
         margin-top: 0.25rem;
     }
-    
+
     @media (max-width: 768px) {
         .form-body {
             padding: 1.5rem;
         }
-        
+
         .time-input-group {
             grid-template-columns: 1fr;
         }
-        
+
         .btn-group {
             flex-direction: column-reverse;
         }
-        
+
         .btn-submit, .btn-back {
             width: 100%;
             justify-content: center;
@@ -164,7 +164,7 @@
                     </h4>
                     <p class="mb-0 opacity-75">Tambahkan shift baru ke dalam sistem</p>
                 </div>
-                
+
                 <div class="form-body">
                     <!-- Error Messages -->
                     @if ($errors->any())
@@ -180,11 +180,11 @@
 
                     <form action="{{ route('shift.store') }}" method="POST" id="shiftForm">
                         @csrf
-                        
+
                         <div class="form-group">
                             <label class="form-label" for="id">Shift ID *</label>
-                            <input type="text" class="form-control" name="id" id="id" 
-                                   placeholder="Contoh: S1, S2, S3" 
+                            <input type="text" class="form-control" name="id" id="id"
+                                   placeholder="Contoh: S1, S2, S3"
                                    value="{{ old('id') }}"
                                    required>
                             <div class="form-hint">ID unik untuk shift (huruf dan angka)</div>
@@ -192,17 +192,19 @@
 
                         <div class="form-group">
                             <label class="form-label" for="name">Nama Shift *</label>
-                            <input type="text" class="form-control" name="name" id="name" 
-                                   placeholder="Contoh: Shift Pagi, Shift Siang, Shift Malam" 
-                                   value="{{ old('name') }}"
-                                   required>
+                            <select class="form-select" name="name" id="name" required>
+                                <option value="">Pilih shift</option>
+                                <option value="Pagi">Pagi</option>
+                                <option value="Siang">Siang</option>
+                                <option value="Malam">Malam</option>
+                            </select>
                             <div class="form-hint">Nama deskriptif untuk shift</div>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label" for="description">Deskripsi</label>
-                            <input type="text" class="form-control" name="description" id="description" 
-                                   placeholder="Contoh: Shift operasional pagi hari" 
+                            <input type="text" class="form-control" name="description" id="description"
+                                   placeholder="Contoh: Shift operasional pagi hari"
                                    value="{{ old('description') }}">
                             <div class="form-hint">Penjelasan tambahan tentang shift</div>
                         </div>
@@ -212,12 +214,12 @@
                             <div class="time-input-group">
                                 <div>
                                     <label class="form-label" for="start_time">Jam Mulai</label>
-                                    <input type="time" class="form-control" name="start_time" id="start_time" 
+                                    <input type="time" class="form-control" name="start_time" id="start_time"
                                            value="{{ old('start_time') }}" required>
                                 </div>
                                 <div>
                                     <label class="form-label" for="end_time">Jam Berakhir</label>
-                                    <input type="time" class="form-control" name="end_time" id="end_time" 
+                                    <input type="time" class="form-control" name="end_time" id="end_time"
                                            value="{{ old('end_time') }}" required>
                                 </div>
                             </div>
@@ -226,8 +228,8 @@
 
                         <div class="form-group">
                             <label class="form-label" for="use_manpower">Tenaga Kerja *</label>
-                            <input type="number" class="form-control" name="use_manpower" id="use_manpower" 
-                                   placeholder="Contoh: 5" 
+                            <input type="number" class="form-control" name="use_manpower" id="use_manpower"
+                                   placeholder="Contoh: 5"
                                    value="{{ old('use_manpower') }}"
                                    min="1" max="50" required>
                             <div class="form-hint">Jumlah staff yang dibutuhkan per shift</div>
@@ -315,11 +317,11 @@
         form.addEventListener('submit', function(e) {
             // Validate time before submission
             validateTime();
-            
+
             if (!form.checkValidity()) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 // Show error message
                 Swal.fire({
                     title: 'Validation Error',
@@ -334,7 +336,7 @@
                 const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="bx bx-loader bx-spin me-2"></i> Creating...';
                 submitBtn.disabled = true;
-                
+
                 // Re-enable after 3 seconds if still processing
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
@@ -359,7 +361,7 @@
                     this.style.borderColor = '#48bb78';
                 }
             });
-            
+
             input.addEventListener('focus', function() {
                 this.style.borderColor = '#667eea';
             });

@@ -237,10 +237,6 @@
                                                     title="Edit Shift">
                                                     <i class="bx bx-edit"></i>
                                                 </a>
-                                                <button type="submit" class="action-btn border-0" title="Delete Shift"
-                                                    style="background: red;">
-                                                    <i class="bx bx-trash"></i>
-                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
