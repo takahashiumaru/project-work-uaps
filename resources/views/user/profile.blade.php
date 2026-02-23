@@ -221,90 +221,143 @@
                             </span>
                         </div>
                         @endif
+                         @if($user->no_hp)
+                        <div class="profile-info-item">
+                            <span class="info-label">Kontak</span>
+                            <span class="info-value" >{{ $user->no_hp ?? 'N/A' }}</span>
+                            </span>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-8 col-md-7">
-            <div class="card profile-card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bx bx-user me-2"></i> Personal Data
-                    </h5>
-                </div>
-                <div class="card-body">
+    <div class="card profile-card">
+        <div class="card-header bg-transparent border-bottom-0">
+            <ul class="nav nav-tabs card-header-tabs" id="profileTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="employment-tab" data-bs-toggle="tab" data-bs-target="#employment" type="button" role="tab" aria-controls="employment" aria-selected="true">
+                        <i class="bx bx-briefcase me-2"></i> Employment Data
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="biodata-tab" data-bs-toggle="tab" data-bs-target="#biodata" type="button" role="tab" aria-controls="biodata" aria-selected="false">
+                        <i class="bx bx-user me-2"></i> Biodata Staff
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <div class="tab-content" id="profileTabContent">
+
+                <div class="tab-pane fade show active" id="employment" role="tabpanel" aria-labelledby="employment-tab">
                     <form class="personal-data-form">
-                        <div class="form-group">
+                        <div class="row">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="staffId">NIP</label>
                             <input type="text" class="form-control" id="staffId" value="{{ $user->id }}" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label for="firstName">Full Name</label>
-                            <input type="text" class="form-control" id="firstName" value="{{ $user->fullname }}" disabled>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="text" class="form-control" id="email" value="{{ $user->email }}" disabled>
-                        </div>
-
-                        <div class="form-group">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="station">Station</label>
                             <input type="text" class="form-control" id="station" value="{{ $user->station }}" disabled>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="jobTitle">Job Title</label>
                             <input type="text" class="form-control" id="jobTitle" value="{{ $user->job_title ?? 'N/A' }}" disabled>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="cluster">Cluster</label>
                             <input type="text" class="form-control" id="cluster" value="{{ $user->cluster ?? 'N/A' }}" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label for="unit">Unit</label>
-                            <input type="text" class="form-control" id="unit" value="{{ $user->unit ?? 'N/A' }}" disabled>
-                        </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="unit">Unit</label>
+                                <input type="text" class="form-control" id="unit" value="{{ $user->unit ?? 'N/A' }}" disabled>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="subUnit">Sub Unit</label>
+                                <input type="text" class="form-control" id="subUnit" value="{{ $user->sub_unit ?? 'N/A' }}" disabled>
+                            </div>
+                        
 
-                        <div class="form-group">
-                            <label for="subUnit">Sub Unit</label>
-                            <input type="text" class="form-control" id="subUnit" value="{{ $user->sub_unit ?? 'N/A' }}" disabled>
-                        </div>
-
-                        <div class="form-group">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="manager">Manager</label>
                             <input type="text" class="form-control" id="manager" value="{{ $user->manager ?? 'N/A' }}" disabled>
                         </div>
 
-                        <div class="form-group">
+                        <div class="col-md-6 form-group mb-3">
                             <label for="seniorManager">Senior Manager</label>
                             <input type="text" class="form-control" id="seniorManager" value="{{ $user->senior_manager ?? 'N/A' }}" disabled>
                         </div>
-
-                        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
-                        <div class="form-group">
-                            <label for="contractStart">Contract Start</label>
-                            <input type="text" class="form-control" id="contractStart" value="{{ $user->contract_start ?? 'N/A' }}" disabled>
                         </div>
 
-                        <div class="form-group">
-                            <label for="contractEnd">Contract End</label>
-                            <input type="text" class="form-control" id="contractEnd" value="{{ $user->contract_end ?? 'N/A' }}" disabled>
+                        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="contractStart">Contract Start</label>
+                                <input type="text" class="form-control" id="contractStart" value="{{ $user->contract_start ?? 'N/A' }}" disabled>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="contractEnd">Contract End</label>
+                                <input type="text" class="form-control" id="contractEnd" value="{{ $user->contract_end ?? 'N/A' }}" disabled>
+                            </div>
                         </div>
                         @endif
 
                         @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader', 'Finance']))
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="salary">Salary</label>
                             <input type="text" class="form-control" id="salary" value="Rp {{ $user->salary ? number_format((float)$user->salary, 0, ',', '.') : 'N/A' }}" disabled>
                         </div>
                         @endif
                     </form>
                 </div>
+
+                <div class="tab-pane fade" id="biodata" role="tabpanel" aria-labelledby="biodata-tab">
+                    <form class="personal-data-form">
+                        <div class="row">
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName">NIK</label>
+                            <input type="text" class="form-control" id="NIK" value="{{ $user->nik }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="email">KK</label>
+                            <input type="text" class="form-control" id="KK" value="{{ $user->kk }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName">BPJS Kesehatan</label>
+                            <input type="text" class="form-control" id="bpjs_kesehatan" value="{{ $user->bpjs_kesehatan }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="email">BPJS TK</label>
+                            <input type="text" class="form-control" id="bpjs_tk" value="{{ $user->bpjs_tk }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName">Pendidikan</label>
+                            <input type="text" class="form-control" id="pendidikan" value="{{ $user->pendidikan }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="email">Domisili</label>
+                            <input type="text" class="form-control" id="domisili" value="{{ $user->domisili }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName">Alamat</label>
+                            <input type="text" class="form-control" id="alamat" value="{{ $user->alamat }}" disabled>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label for="firstName">NPWP</label>
+                            <input type="text" class="form-control" id="npwp" value="{{ $user->npwp }}" disnpwpabled>
+                        </div>
+                        </div>
+                        </form>
+                </div>
+
             </div>
         </div>
     </div>

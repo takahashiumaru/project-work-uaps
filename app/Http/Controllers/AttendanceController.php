@@ -43,52 +43,124 @@ class AttendanceController extends Controller
         $request->validate([
             'photo' => 'required|string',
             'type' => 'required|in:in,out',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         $user = Auth::user();
+        $now = Carbon::now();
+        $today = $now->format('Y-m-d');
 
-        // Simpan foto base64 jadi file
-        $photoData = $request->photo;
-        $photoData = str_replace('data:image/png;base64,', '', $photoData);
-        $photoData = str_replace(' ', '+', $photoData);
-        $fileName = 'attendance_'.$user->id.'_'.time().'.png';
-        Storage::disk('public')->put('attendance/'.$fileName, base64_decode($photoData));
+        /*
+    |--------------------------------------------------------------------------
+    | 1️⃣ VALIDASI GEOFENCING
+    |--------------------------------------------------------------------------
+    */
 
-        // Simpan ke database
-        if ($request->type === 'in') {
-            Attendance::create([
-                'user_id' => $user->id,
-                'check_in_time' => now(),
-                'check_in_photo' => $fileName,
-            ]);
-        } else {
-            $attendance = Attendance::where('user_id', $user->id)
-                ->whereDate('check_in_time', today())
-                ->first();
+        $userStation = strtoupper(trim($user->station));
+        $stationsConfig = config('locations.stations');
 
-            if ($attendance) {
-                $attendance->update([
-                    'check_out_time' => now(),
-                    'check_out_photo' => $fileName,
-                ]);
-            }
+        if (!array_key_exists($userStation, $stationsConfig)) {
+            return back()->with('error', 'Station belum diatur di config.');
         }
 
-        return redirect()->route('attendance.index')->with('success', 'Absensi berhasil!');
+        $target = $stationsConfig[$userStation];
+
+        $distance = $this->calculateDistance(
+            $request->latitude,
+            $request->longitude,
+            $target['latitude'],
+            $target['longitude']
+        );
+
+        $allowedRadius = config('locations.radius', 20);
+
+        if ($distance > $allowedRadius) {
+            return back()->with(
+                'error',
+                "Anda berada di luar radius {$target['name']}. Jarak: "
+                    . round($distance) . " meter (Max {$allowedRadius}m)"
+            );
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | 2️⃣ SIMPAN FOTO
+    |--------------------------------------------------------------------------
+    */
+
+        $photoData = str_replace('data:image/png;base64,', '', $request->photo);
+        $photoData = str_replace(' ', '+', $photoData);
+
+        $fileName = 'attendance_' . $user->id . '_' . time() . '.png';
+
+        Storage::disk('public')->put(
+            'attendance/' . $fileName,
+            base64_decode($photoData)
+        );
+
+        /*
+    |--------------------------------------------------------------------------
+    | 3️⃣ CHECK IN / CHECK OUT
+    |--------------------------------------------------------------------------
+    */
+
+        if ($request->type === 'in') {
+
+            $existing = Attendance::where('user_id', $user->id)
+                ->whereDate('check_in_time', $today)
+                ->first();
+
+            if ($existing) {
+                return back()->with('error', 'Anda sudah check-in hari ini.');
+            }
+
+            Attendance::create([
+                'user_id' => $user->id,
+                'check_in_time' => $now,
+                'check_in_photo' => $fileName,
+                'check_in_latitude' => $request->latitude,
+                'check_in_longitude' => $request->longitude,
+            ]);
+        } else {
+
+            $attendance = Attendance::where('user_id', $user->id)
+                ->whereDate('check_in_time', $today)
+                ->first();
+
+            if (!$attendance) {
+                return back()->with('error', 'Belum check-in hari ini.');
+            }
+
+            if ($attendance->check_out_time) {
+                return back()->with('error', 'Anda sudah check-out hari ini.');
+            }
+
+            $attendance->update([
+                'check_out_time' => $now,
+                'check_out_photo' => $fileName,
+            ]);
+        }
+
+        return redirect()->route('attendance.index')
+            ->with('success', 'Absensi berhasil!');
     }
 
+    // =========================================================================
+    // BAGIAN INI YANG SAYA PERBAIKI AGAR GPS AKURAT & SESUAI STATION USER
+    // =========================================================================
     public function checkIn(Request $request)
     {
-
         $request->validate([
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
 
         $user = Auth::user();
-        $today = Carbon::today();
         $now = Carbon::now();
+        $today = $now->format('Y-m-d');
 
+        // 1. Cek apakah sudah absen hari ini
         $existingCheckIn = Attendance::where('user_id', $user->id)
             ->whereDate('check_in_time', $today)
             ->first();
@@ -97,41 +169,58 @@ class AttendanceController extends Controller
             return response()->json(['success' => false, 'message' => 'Anda sudah melakukan Check-in hari ini.']);
         }
 
-        $schedule = Schedule::with('shift')
-            ->where('user_id', $user->id)
-            ->where('date', $today->toDateString())
-            ->first();
+        // 2. Ambil Nama Station User & Jadikan HURUF BESAR (UPPERCASE)
+        // Agar cocok dengan config (contoh: "Cgk" -> "CGK")
+        $userStation = strtoupper(trim($user->station));
 
-        if (! $schedule || ! $schedule->shift) {
-            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki jadwal shift untuk hari ini.']);
-        }
+        // 3. Ambil Konfigurasi Lokasi
+        $stationsConfig = config('locations.stations');
 
-        $stationName = $user->station;
-        $targetLocation = config("locations.stations.{$stationName}");
-
-        if (! $targetLocation) {
-            return response()->json(['success' => false, 'message' => "Lokasi untuk stasiun '{$stationName}' tidak ditemukan dalam konfigurasi."]);
-        }
-
-        $userLat = $request->latitude;
-        $userLon = $request->longitude;
-        $targetLat = $targetLocation['latitude'];
-        $targetLon = $targetLocation['longitude'];
-
-        $distance = $this->calculateDistance($userLat, $userLon, $targetLat, $targetLon);
-        $allowedRadius = config('locations.radius');
-
-        if ($distance > $allowedRadius) {
+        // Cek apakah station user terdaftar di Config
+        if (!array_key_exists($userStation, $stationsConfig)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Absensi Gagal. Anda berada '.round($distance)." meter dari lokasi yang ditentukan ({$allowedRadius} meter).",
+                'message' => "Lokasi untuk station '{$user->station}' belum diatur di sistem (Config)."
             ]);
         }
 
-        $shiftStartTime = Carbon::parse($schedule->date.' '.$schedule->shift->start_time);
+        // Ambil Koordinat Target (Kantor)
+        $targetLocation = $stationsConfig[$userStation];
+        $targetLat = $targetLocation['latitude'];
+        $targetLon = $targetLocation['longitude'];
+        $locationName = $targetLocation['name'] ?? $userStation;
 
+        // 4. Hitung Jarak (GPS HP User vs GPS Kantor)
+        $userLat = $request->latitude;
+        $userLon = $request->longitude;
+
+        $distance = $this->calculateDistance($userLat, $userLon, $targetLat, $targetLon);
+
+        // Ambil radius toleransi dari config (Default 20 meter jika tidak diatur)
+        $allowedRadius = config('locations.radius', 20);
+
+        // 5. Validasi Radius (Geofencing)
+        if ($distance > $allowedRadius) {
+            return response()->json([
+                'success' => false,
+                'message' => "Absensi Gagal! Anda berada di luar radius {$locationName}. Jarak: " . round($distance) . " meter (Maks: {$allowedRadius}m).",
+            ]);
+        }
+
+        // 6. Cek Jadwal Shift
+        $schedule = Schedule::with('shift')
+            ->where('user_id', $user->id)
+            ->where('date', $today)
+            ->first();
+
+        if (!$schedule || !$schedule->shift) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki jadwal shift untuk hari ini.']);
+        }
+
+        $shiftStartTime = Carbon::parse($schedule->date . ' ' . $schedule->shift->start_time);
         $status = ($now->isAfter($shiftStartTime)) ? 'Terlambat' : 'Tepat Waktu';
 
+        // 7. Simpan Data Absensi dengan Koordinat
         try {
             Attendance::create([
                 'user_id' => $user->id,
@@ -144,11 +233,10 @@ class AttendanceController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => "Check-in berhasil! Status: {$status}.",
+                'message' => "Check-in berhasil di {$locationName}! Status: {$status}.",
             ]);
         } catch (\Exception $e) {
-
-            return response()->json(['success' => false, 'message' => 'Gagal menyimpan data. Pastikan kolom "status" ada di tabel attendances.']);
+            return response()->json(['success' => false, 'message' => 'Gagal menyimpan data ke database.']);
         }
     }
 
@@ -157,7 +245,7 @@ class AttendanceController extends Controller
      */
     private function calculateDistance($lat1, $lon1, $lat2, $lon2)
     {
-        $earthRadius = 6371000;
+        $earthRadius = 6371000; // Radius Bumi (Meter)
 
         $dLat = deg2rad($lat2 - $lat1);
         $dLon = deg2rad($lon2 - $lon1);
@@ -170,6 +258,10 @@ class AttendanceController extends Controller
 
         return $earthRadius * $c;
     }
+
+    // =========================================================================
+    // FUNGSI DI BAWAH INI TIDAK SAYA UBAH (SAMA SEPERTI ASLINYA)
+    // =========================================================================
 
     public function history(Request $request)
     {
@@ -187,13 +279,13 @@ class AttendanceController extends Controller
             ->selectRaw('schedules.*, shifts.description as shift_description, shifts.start_time, shifts.end_time')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->get()
-            ->keyBy(fn ($item) => Carbon::parse($item->date)->toDateString()); // keyBy tanggal YYYY-MM-DD
+            ->keyBy(fn($item) => Carbon::parse($item->date)->toDateString()); // keyBy tanggal YYYY-MM-DD
 
         // Ambil semua absensi user untuk sebulan
         $attendanceData = Attendance::where('user_id', $user->id)
-            ->whereBetween('check_in_time', [$startDate->toDateString().' 00:00:00', $endDate->toDateString().' 23:59:59'])
+            ->whereBetween('check_in_time', [$startDate->toDateString() . ' 00:00:00', $endDate->toDateString() . ' 23:59:59'])
             ->get()
-            ->keyBy(fn ($item) => Carbon::parse($item->check_in_time)->toDateString()); // keyBy tanggal YYYY-MM-DD
+            ->keyBy(fn($item) => Carbon::parse($item->check_in_time)->toDateString()); // keyBy tanggal YYYY-MM-DD
 
         // Siapkan data per hari untuk Blade
         $daysInMonth = [];
@@ -225,7 +317,7 @@ class AttendanceController extends Controller
             $endDate = $period->copy()->endOfMonth();
             try {
                 $monthInput = substr($request->month, 0, 7); // ambil YYYY-MM
-                $period = \Carbon\Carbon::parse($monthInput.'-01'); // pakai parse, bukan createFromFormat
+                $period = \Carbon\Carbon::parse($monthInput . '-01'); // pakai parse, bukan createFromFormat
                 $startDate = $period->copy()->startOfMonth();
                 $endDate = $period->copy()->endOfMonth();
             } catch (\Exception $e) {
@@ -244,7 +336,7 @@ class AttendanceController extends Controller
                 $attData = \App\Models\Attendance::where('user_id', $user->id)
                     ->whereBetween('check_in_time', [$startDate->startOfDay(), $endDate->endOfDay()])
                     ->get()
-                    ->groupBy(fn ($att) => Carbon::parse($att->check_in_time)->toDateString());
+                    ->groupBy(fn($att) => Carbon::parse($att->check_in_time)->toDateString());
 
                 // Ambil semua schedule untuk bulan itu, group by tanggal
                 $scheduleData = \App\Models\Schedule::where('user_id', $user->id)
@@ -252,7 +344,7 @@ class AttendanceController extends Controller
                     ->join('shifts', 'shifts.id', '=', 'schedules.shift_id')
                     ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
                     ->get()
-                    ->groupBy(fn ($item) => Carbon::parse($item->date)->toDateString());
+                    ->groupBy(fn($item) => Carbon::parse($item->date)->toDateString());
 
                 // Generate rows: satu row per schedule. Jika tidak ada schedule => satu row "libur"
                 $cursor = $startDate->copy();
@@ -287,8 +379,8 @@ class AttendanceController extends Controller
                 }
             }
             // } catch (\Exception $e) {
-            //     // opsional: log error -> \Log::error($e);
-            //     $message = 'Format periode tidak valid.';
+            //    // opsional: log error -> \Log::error($e);
+            //    $message = 'Format periode tidak valid.';
             // }
         }
 
@@ -318,14 +410,14 @@ class AttendanceController extends Controller
         $attData = \App\Models\Attendance::where('user_id', $user->id)
             ->whereBetween('check_in_time', [$startDate->startOfDay(), $endDate->endOfDay()])
             ->get()
-            ->groupBy(fn ($att) => \Carbon\Carbon::parse($att->check_in_time)->toDateString());
+            ->groupBy(fn($att) => \Carbon\Carbon::parse($att->check_in_time)->toDateString());
 
         $scheduleData = \App\Models\Schedule::where('user_id', $user->id)
             ->selectRaw('schedules.*, shifts.description as shift_description, shifts.start_time, shifts.end_time')
             ->join('shifts', 'shifts.id', '=', 'schedules.shift_id')
             ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
             ->get()
-            ->groupBy(fn ($item) => \Carbon\Carbon::parse($item->date)->toDateString());
+            ->groupBy(fn($item) => \Carbon\Carbon::parse($item->date)->toDateString());
 
         // Generate rows
         $attendances = collect();
@@ -355,7 +447,7 @@ class AttendanceController extends Controller
             $cursor->addDay();
         }
 
-        $fileName = 'Laporan_Absensi_'.$user->fullname.'_'.$request->month.'.xlsx';
+        $fileName = 'Laporan_Absensi_' . $user->fullname . '_' . $request->month . '.xlsx';
 
         return Excel::download(new AttendanceReportExport($attendances), $fileName);
     }

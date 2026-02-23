@@ -2,163 +2,41 @@
 
 @section('title', 'Manajemen Kontrak Karyawan')
 
-@section('content')
 @section('styles')
     <style>
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            overflow-x: auto;
-            /* kalau halaman terlalu banyak, bisa digeser horizontal */
-            -webkit-overflow-scrolling: touch;
-        }
+        /* --- STYLE ASLI ANDA --- */
+        .pagination-wrapper { display: flex; justify-content: center; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .pagination { display: flex; flex-wrap: wrap; gap: 4px; }
+        .pagination .page-item { flex: 0 0 auto; }
+        .pagination .page-link { min-width: 38px; text-align: center; }
+        .table-responsive { border-radius: 0.75rem; overflow: hidden; overflow-x: auto; }
+        .kontrak-table { width: 100%; table-layout: auto; }
+        .kontrak-table th { background: #f8f9fa; font-weight: 600; color: #566a7f; padding: 1rem; border-bottom: 2px solid #e9ecef; }
+        .kontrak-table td { padding: 1rem; vertical-align: middle; border-bottom: 1px solid #e9ecef; }
+        /* .kontrak-table tr:hover { background-color: #f8f9fa; }  <-- Hapus ini agar warna merah/kuning tidak tertutup saat hover */
+        .action-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 6px; background: #667eea; color: white; text-decoration: none; transition: all 0.2s ease; }
+        .action-btn:hover { background: #5a6fd8; transform: translateY(-1px); color: white; }
 
-        .pagination {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
+        /* --- STYLE BARU (TAB & WARNA ROW) --- */
+        .nav-scroller { position: relative; z-index: 2; height: 2.75rem; overflow-y: hidden; margin-bottom: 1rem; }
+        .nav-scroller .nav { display: flex; flex-wrap: nowrap; padding-bottom: 1rem; margin-top: -1px; overflow-x: auto; text-align: center; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .nav-scroller .nav::-webkit-scrollbar { height: 4px; }
+        .nav-scroller .nav::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .nav-tabs .nav-link { color: #697a8d; border: none; font-weight: 600; padding: 0.7rem 1.5rem; }
+        .nav-tabs .nav-link.active { color: #696cff; border-bottom: 3px solid #696cff; background: transparent; }
 
-        .pagination .page-item {
-            flex: 0 0 auto;
-        }
-
-        .pagination .page-link {
-            min-width: 38px;
-            text-align: center;
-        }
-
-        .table-responsive {
-            border-radius: 0.75rem;
-            overflow: hidden;
-            overflow-x: auto;
-        }
-
-        .kontrak-table {
-            width: 100%;
-            table-layout: auto;
-        }
-
-        .kontrak-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #566a7f;
-            padding: 1rem;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .kontrak-table td {
-            padding: 1rem;
-            vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .kontrak-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background: #5a6fd8;
-            transform: translateY(-1px);
-            color: white;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
-            color: white;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stats-number {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .stats-label {
-            opacity: 0.9;
-            font-size: 0.875rem;
-        }
-
-        .create-btn {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            color: white;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .create-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
-            color: white;
-        }
-
-        .badge-shift {
-            background: #667eea;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .time-badge {
-            background: #e9ecef;
-            color: #566a7f;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-        }
-
-        .manpower-badge {
-            background: #ffeaa7;
-            color: #2d3436;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-        }
-
+        /* Warna Baris Tabel */
+        .row-critical { background-color: #ffe0db !important; } /* Merah Muda */
+        .row-warning { background-color: #fff2cc !important; } /* Kuning Muda */
+        
         @media (max-width: 768px) {
-            .table-responsive {
-                font-size: 0.875rem;
-            }
-
-            .kontrak-table th,
-            .kontrak-table td {
-                padding: 0.75rem 0.5rem;
-            }
-
-            .create-btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .table-responsive { font-size: 0.875rem; }
+            .kontrak-table th, .kontrak-table td { padding: 0.75rem 0.5rem; }
         }
     </style>
 @endsection
 
+@section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="py-4">
 
@@ -180,256 +58,163 @@
                 <h5 class="card-title mb-0 text-white">
                     <i class="bx bx-calendar me-2"></i>Data Kontrak Karyawan
                 </h5>
-                <p class="mb-0 mt-1 small opacity-75">Informasi masa kontrak pegawai PT. Angkasa Pratama Sejahtera</p>
+                <p class="mb-0 mt-1 small opacity-75">Monitoring masa kontrak pegawai (Merah: < 30 Hari, Kuning: < 60 Hari)</p>
             </div>
-            <div class="card-body">
-                <div class="p-3">
-                    {{-- Form Pencarian --}}
-                    <div class="row mb-2">
-                        <div class="col-md-6">
-                            <form action="{{ route('users.kontrak') }}" method="GET">
-                                <div class="input-group">
-                                    <input type="text" name="search" class="form-control"
-                                        placeholder="Cari berdasarkan NIP atau Nama" value="{{ request('search') }}">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bx bx-search me-1"></i>Cari
-                                    </button>
-                                </div>
-                            </form>
+            
+            <div class="card-body pt-0">
+                
+                {{-- TAB FILTER STATION (BARU) --}}
+                <div class="border-bottom mb-3">
+                    <div class="nav-scroller pt-2">
+                        <div class="nav nav-tabs">
+                            <a class="nav-link {{ request('station') == null ? 'active' : '' }}" href="{{ route('users.kontrak') }}">
+                                <i class="fas fa-globe me-2"></i> GLOBAL
+                            </a>
+                            @foreach($stations as $st)
+                            <a class="nav-link {{ request('station') == $st->code ? 'active' : '' }}" href="{{ route('users.kontrak', ['station' => $st->code]) }}">
+                                <i class="fas fa-plane-departure me-2"></i> {{ $st->code }}
+                            </a>
+                            @endforeach
                         </div>
+                    </div>
+                </div>
+
+                {{-- Form Pencarian --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <form action="{{ route('users.kontrak') }}" method="GET">
+                            {{-- Simpan station saat searching --}}
+                            @if(request('station'))
+                                <input type="hidden" name="station" value="{{ request('station') }}">
+                            @endif
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan NIP atau Nama" value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bx bx-search me-1"></i>Cari
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
                 {{-- Tabel Kontrak --}}
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover kontrak-table">
-                                        <thead>
-                                            <tr>
-                                                <th width="15%">NIP</th>
-                                                <th width="20%">Nama Lengkap</th>
-                                                <th width="15%">Kontrak Mulai</th>
-                                                <th width="15%">Kontrak Berakhir</th>
-                                                <th width="15%">Status</th>
-                                                <th width="10%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($user as $users)
-                                                @php
-                                                    $now = strtotime(date('Y-m-d'));
-                                                    $expired = strtotime($users->contract_end);
-                                                    $diff = $expired - $now;
-                                                    $months = floor($diff / (30 * 60 * 60 * 24));
-
-                                                    $statusClass = '';
-                                                    $statusText = '';
-                                                    $statusIcon = '';
-
-                                                    if ($months <= 2 && $months >= 0) {
-                                                        $statusClass = 'warning';
-                                                        $statusText = 'Akan Berakhir';
-                                                        $statusIcon = 'bx-time-five';
-                                                    } elseif ($months < 0) {
-                                                        $statusClass = 'danger';
-                                                        $statusText = 'Kadaluarsa';
-                                                        $statusIcon = 'bx-x-circle';
-                                                    } else {
-                                                        $statusClass = 'success';
-                                                        $statusText = 'Aktif';
-                                                        $statusIcon = 'bx-check-circle';
-                                                    }
-                                                @endphp
-                                                <tr>
-                                                    <td><strong>{{ $users->id }}</strong></td>
-                                                    <td>{{ $users->fullname }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($users->contract_start)->translatedFormat('d M Y') }}
-                                                    </td>
-                                                    <td>{{ \Carbon\Carbon::parse($users->contract_end)->translatedFormat('d M Y') }}
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge bg-{{ $statusClass }}">
-                                                            <i
-                                                                class="bx {{ $statusIcon }} me-1"></i>{{ $statusText }}
-                                                        </span>
-                                                        @if ($months <= 2 && $months >= 0)
-                                                            <small class="d-block text-muted mt-1">Sisa:
-                                                                {{ $months }} bulan</small>
-                                                        @endif
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="{{ route('users.KontrakEdit', ['id' => $users->id, 'page' => request('page')]) }}"
-                                                            class="action-btn" title="Edit Kontrak">
-                                                            <i class="bx bx-edit"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Empty State -->
-                                {{-- @if ($shifts->isEmpty())
-                    <div class="text-center py-5">
-                        <i class="bx bx-time bx-lg text-muted mb-3" style="font-size: 4rem;"></i>
-                        <h5 class="text-muted">Belum ada shift</h5>
-                        <p class="text-muted">Mulai dengan membuat shift pertama Anda</p>
-                        <a href="{{ route('shift.create') }}" class="create-btn mt-3">
-                            <i class="bx bx-plus-circle"></i> Create First Shift
-                        </a>
-                    </div>
-                    @endif --}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- <div class="table-responsive" style="overflow-x: auto;">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead class="table-light">
+                <div class="table-responsive">
+                    <table class="table kontrak-table">
+                        <thead>
                             <tr>
                                 <th width="15%">NIP</th>
                                 <th width="20%">Nama Lengkap</th>
+                                <th width="10%">Station</th>
                                 <th width="15%">Kontrak Mulai</th>
                                 <th width="15%">Kontrak Berakhir</th>
                                 <th width="15%">Status</th>
-                                <th width="10%">Aksi</th>
+                                <th width="10%" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($user as $users)
-                            @php
-                            $now = strtotime(date('Y-m-d'));
-                            $expired = strtotime($users->contract_end);
-                            $diff = $expired - $now;
-                            $months = floor($diff / (30 * 60 * 60 * 24));
-                            
-                            $statusClass = '';
-                            $statusText = '';
-                            $statusIcon = '';
-                            
-                            if ($months <= 2 && $months >= 0) {
-                                $statusClass = 'warning';
-                                $statusText = 'Akan Berakhir';
-                                $statusIcon = 'bx-time-five';
-                            } elseif ($months < 0) {
-                                $statusClass = 'danger';
-                                $statusText = 'Kadaluarsa';
-                                $statusIcon = 'bx-x-circle';
-                            } else {
-                                $statusClass = 'success';
-                                $statusText = 'Aktif';
-                                $statusIcon = 'bx-check-circle';
-                            }
-                            @endphp
-                            <tr>
-                                <td><strong>{{ $users->id }}</strong></td>
-                                <td>{{ $users->fullname }}</td>
-                                <td>{{ \Carbon\Carbon::parse($users->contract_start)->translatedFormat('d M Y') }}</td>
-                                <td>{{ \Carbon\Carbon::parse($users->contract_end)->translatedFormat('d M Y') }}</td>
-                                <td>
-                                    <span class="badge bg-{{ $statusClass }}">
-                                        <i class="bx {{ $statusIcon }} me-1"></i>{{ $statusText }}
-                                    </span>
-                                    @if ($months <= 2 && $months >= 0)
-                                    <small class="d-block text-muted mt-1">Sisa: {{ $months }} bulan</small>
-                                    @endif
-                                </td>
-                                <td class="text-center">
-                                    <a href="{{ route('users.KontrakEdit', ['id' => $users->id, 'page' => request('page')]) }}" 
-                                       class="btn btn-sm btn-outline-primary" 
-                                       title="Edit Kontrak">
-                                        <i class="bx bx-edit"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
+                            @forelse ($users as $user) {{-- Pakai variabel $users dari Controller baru --}}
+                                @php
+                                    $end = \Carbon\Carbon::parse($user->contract_end);
+                                    $now = \Carbon\Carbon::now();
+                                    $daysLeft = $now->diffInDays($end, false);
+                                    
+                                    // LOGIKA WARNA BARU
+                                    $rowClass = '';
+                                    $statusBadge = '';
+
+                                    if ($daysLeft < 0) {
+                                        $rowClass = 'row-critical'; // Merah
+                                        $statusBadge = '<span class="badge bg-dark"><i class="bx bx-x-circle me-1"></i>Expired</span>';
+                                    } elseif ($daysLeft <= 30) {
+                                        $rowClass = 'row-critical'; // Merah
+                                        $statusBadge = '<span class="badge bg-danger"><i class="bx bx-error me-1"></i>Critical</span>';
+                                    } elseif ($daysLeft <= 60) {
+                                        $rowClass = 'row-warning'; // Kuning
+                                        $statusBadge = '<span class="badge bg-warning text-dark"><i class="bx bx-time-five me-1"></i>Warning</span>';
+                                    } else {
+                                        $statusBadge = '<span class="badge bg-success"><i class="bx bx-check-circle me-1"></i>Active</span>';
+                                    }
+                                @endphp
+
+                                <tr class="{{ $rowClass }}">
+                                    <td><strong>{{ $user->id }}</strong></td>
+                                    <td>
+                                        {{ $user->fullname }}
+                                        <div class="small text-muted">{{ $user->role }}</div>
+                                    </td>
+                                    <td><span class="badge bg-label-primary">{{ $user->station }}</span></td>
+                                    <td>{{ \Carbon\Carbon::parse($user->contract_start)->translatedFormat('d M Y') }}</td>
+                                    <td class="fw-bold">{{ \Carbon\Carbon::parse($user->contract_end)->translatedFormat('d M Y') }}</td>
+                                    <td>
+                                        {!! $statusBadge !!}
+                                        @if ($daysLeft >= 0 && $daysLeft <= 60)
+                                            <small class="d-block text-muted mt-1 fw-bold">{{ intval($daysLeft) }} Hari Lagi</small>
+                                        @elseif($daysLeft < 0)
+                                            <small class="d-block text-danger mt-1">Lewat {{ abs(intval($daysLeft)) }} hari</small>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ route('users.KontrakEdit', ['id' => $user->id, 'page' => request('page')]) }}" 
+                                           class="action-btn" title="Edit Kontrak">
+                                            <i class="bx bx-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">Tidak ada data ditemukan.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
-                </div> --}}
+                </div>
 
                 {{-- Pagination --}}
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 gap-2">
                     <div class="text-muted small text-center text-md-start">
-                        Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
+                        Menampilkan {{ $users->firstItem() }} - {{ $users->lastItem() }} dari {{ $users->total() }} data
                     </div>
                     <nav class="pagination-container">
-                        {{ $user->onEachSide(1)->links('pagination::bootstrap-5') }}
+                        {{-- Gunakan appends agar filter station tidak hilang saat ganti halaman --}}
+                        {{ $users->appends(['station' => request('station'), 'search' => request('search')])->links('pagination::bootstrap-5') }}
                     </nav>
                 </div>
-                {{-- Pagination --}}
-
 
                 {{-- Legend Status --}}
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <small class="d-block mb-2 fw-semibold">Keterangan Status:</small>
+                <div class="card mt-4 bg-light border-0">
+                    <div class="card-body p-3">
+                        <small class="d-block mb-2 fw-bold text-uppercase text-muted">Legenda Warna:</small>
                         <div class="row small">
-                            <div class="col-md-4">
-                                <span class="badge bg-success me-2"><i class="bx bx-check-circle"></i></span>
-                                Aktif = Kontrak masih berlaku (lebih dari 2 bulan)
+                            <div class="col-md-4 mb-2">
+                                <span class="badge bg-danger me-2">Merah</span>
+                                Sisa < 30 Hari (Harus segera diperpanjang)
                             </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-warning me-2"><i class="bx bx-time-five"></i></span>
-                                Akan Berakhir = Kontrak berakhir dalam 2 bulan atau kurang
+                            <div class="col-md-4 mb-2">
+                                <span class="badge bg-warning text-dark me-2">Kuning</span>
+                                Sisa < 60 Hari (Persiapan Perpanjangan)
                             </div>
-                            <div class="col-md-4">
-                                <span class="badge bg-danger me-2"><i class="bx bx-x-circle"></i></span>
-                                Kadaluarsa = Kontrak sudah berakhir
+                            <div class="col-md-4 mb-2">
+                                <span class="badge bg-success me-2">Putih/Hijau</span>
+                                Aman (> 60 Hari)
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 @endsection
 
-@section('styles')
-<style>
-    .table td,
-    .table th {
-        vertical-align: middle;
-    }
-
-    .badge {
-        font-size: 0.75rem;
-    }
-
-    .pagination {
-        margin-bottom: 0;
-    }
-</style>
-@endsection
-
 @section('scripts')
 <script>
-    // SweetAlert untuk konfirmasi jika ada
     document.addEventListener('DOMContentLoaded', function() {
-        // Jika ada pesan sukses dari controller
         @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: '{{ session('success') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
+            Swal.fire({ icon: 'success', title: 'Berhasil', text: '{{ session('success') }}', timer: 3000, showConfirmButton: false });
         @endif
-
         @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: '{{ session('error') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
+            Swal.fire({ icon: 'error', title: 'Gagal', text: '{{ session('error') }}', timer: 3000, showConfirmButton: false });
         @endif
     });
 </script>

@@ -40,6 +40,15 @@
         </a>
 
         <div id="userDropdownMain" class="collapse ml-3">
+            {{-- ======================================================= --}}
+            {{-- MENU BARU: SHORTCUT KE DATA STAFF PER STATION --}}
+            {{-- Mengarah ke halaman tabel dengan Tab/Filter Station --}}
+            {{-- ======================================================= --}}
+            <a href="{{ route('staff.index') }}" style="padding-left: 30px; color: #f1c40f; font-weight: 600;">
+                <i class="fas fa-map-marked-alt"></i> Monitor Station (Staff)
+            </a>
+            {{-- ======================================================= --}}
+
             <a href="{{ route('users.kontrak') }}" style="padding-left: 30px;">Kontrak</a>
             <a href="{{ route('users.pas') }}" style="padding-left: 30px;">PAS Tahunan</a>
 

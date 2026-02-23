@@ -60,6 +60,11 @@
                                 <label class="form-label">Nama Lengkap</label>
                                 <input type="text" class="form-control" name="fullname" value="{{ $user->fullname }}" readonly>
                             </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" name="station" value="{{ $user->station }}" readonly>
+                            </div>
                             
                             <div class="mb-3">
                                 <label class="form-label">PAS Terdaftar</label>

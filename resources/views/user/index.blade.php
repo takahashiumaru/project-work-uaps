@@ -144,6 +144,58 @@
             @yield('konten')
         </div>
     </div>
+    <div class="modal fade" id="banModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white">
+                    <i class="bx bx-error-alt me-2"></i> Blacklist Staff (PHK & Ban)
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('blacklist.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="alert alert-warning text-start">
+                        <strong>PERINGATAN:</strong><br>
+                        Tindakan ini akan <b>menonaktifkan akun</b> staff dan mencatat namanya ke dalam daftar hitam perusahaan selamanya (berdasarkan NIP/KTP).
+                    </div>
+                    
+                    {{-- ID User yang akan di-ban --}}
+                    <input type="hidden" name="user_id" id="ban_user_id">
+                    
+                    <div class="mb-3 text-start">
+                        <label class="form-label">Nama Staff</label>
+                        <input type="text" class="form-control" id="ban_user_name" readonly style="background-color: #f5f5f5;">
+                    </div>
+
+                    <div class="mb-3 text-start">
+                        <label class="form-label fw-bold text-danger">Alasan Pelanggaran (Wajib Diisi)</label>
+                        <textarea name="reason" class="form-control" rows="4" required 
+                                  placeholder="Contoh: Terbukti melakukan pencurian aset kabel di Station CGK pada tanggal..."></textarea>
+                        <div class="form-text">Jelaskan kasusnya secara detail untuk rekam jejak HRD.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Konfirmasi Blacklist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openBanModal(id, name) {
+    // Isi data ke dalam form modal
+    document.getElementById('ban_user_id').value = id;
+    document.getElementById('ban_user_name').value = name;
+    
+    // Tampilkan Modal
+    var myModal = new bootstrap.Modal(document.getElementById('banModal'));
+    myModal.show();
+}
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

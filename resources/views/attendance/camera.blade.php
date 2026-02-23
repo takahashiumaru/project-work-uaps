@@ -22,7 +22,6 @@
         align-items: center;
         justify-content: center;
         background: rgba(0, 123, 255, 0.85);
-        /* biru transparan */
         color: white;
         font-size: 18px;
         font-weight: bold;
@@ -41,7 +40,6 @@
         left: 20px;
         z-index: 10;
         font-size: 24px;
-        font-weight: normal;
     }
 
     .btn-action {
@@ -54,71 +52,114 @@
 </style>
 
 <div class="position-relative">
-    {{-- Video Kamera Full Screen --}}
+
     <video id="video" autoplay playsinline></video>
     <canvas id="canvas" class="d-none"></canvas>
 
-    {{-- Tombol Back --}}
     <a href="{{ route('attendance.index') }}" class="btn-circle btn-back">
         ←
     </a>
 
-    {{-- Form Absensi --}}
-    <form id="attendanceForm" method="POST" action="{{ route('attendance.process') }}" class="btn-action">
+    <form id="attendanceForm"
+        method="POST"
+        action="{{ route('attendance.process') }}"
+        class="btn-action">
         @csrf
+
         <input type="hidden" name="photo" id="photoInput">
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
         <input type="hidden" name="type" value="{{ $type }}">
+
         <button type="submit" id="btnSubmit" class="btn-circle">
             {{ strtoupper($type) }}
         </button>
     </form>
+
 </div>
+
+{{-- SweetAlert CDN --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Flash Message --}}
+@if(session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal Absensi',
+        text: "{{ session('error') }}",
+        confirmButtonColor: '#d33'
+    });
+</script>
+@endif
+
+@if(session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success') }}",
+        confirmButtonColor: '#3085d6'
+    });
+</script>
+@endif
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
         const video = document.getElementById("video");
         const canvas = document.getElementById("canvas");
         const btnSubmit = document.getElementById("btnSubmit");
         const photoInput = document.getElementById("photoInput");
 
-        // Buka kamera (gunakan kamera depan di HP)
+        // Aktifkan kamera depan
         navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: "user", // kamera depan
-                    width: {
-                        ideal: 1280
-                    },
-                    height: {
-                        ideal: 720
-                    },
-                    brightness: {
-                        ideal: 150
-                    },
-                    contrast: {
-                        ideal: 150
-                    },
-                    exposureMode: "continuous"
+            video: {
+                facingMode: "user",
+                width: {
+                    ideal: 1280
+                },
+                height: {
+                    ideal: 720
                 }
-            })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => alert("Tidak bisa membuka kamera: " + err));
+            }
+        }).then(stream => {
+            video.srcObject = stream;
+        }).catch(err => {
+            Swal.fire("Error", "Tidak bisa membuka kamera", "error");
+        });
 
-
-        // Ambil gambar saat tombol ditekan
         btnSubmit.addEventListener("click", function(e) {
             e.preventDefault();
-            const context = canvas.getContext("2d");
 
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            Swal.fire({
+                title: 'Mengambil lokasi...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-            const dataURL = canvas.toDataURL("image/png");
-            photoInput.value = dataURL;
+            navigator.geolocation.getCurrentPosition(function(position) {
 
-            document.getElementById("attendanceForm").submit();
+                // Ambil foto
+                const context = canvas.getContext("2d");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                photoInput.value = canvas.toDataURL("image/png");
+
+                document.getElementById("latitude").value = position.coords.latitude;
+                document.getElementById("longitude").value = position.coords.longitude;
+
+                document.getElementById("attendanceForm").submit();
+
+            }, function(error) {
+                Swal.fire("Error", "Tidak bisa mengambil lokasi GPS!", "error");
+            });
         });
+
     });
 </script>

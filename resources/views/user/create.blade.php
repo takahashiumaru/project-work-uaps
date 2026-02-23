@@ -6,18 +6,6 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="py-4">
 
-        {{-- Header dengan Breadcrumb --}}
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Tambah User Baru</h4>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:void(0);">User Management</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('users.apron') }}">Daftar User</a></li>
-                    <li class="breadcrumb-item active">Tambah User</li>
-                </ol>
-            </nav>
-        </div>
 
         {{-- Card Form Create --}}
         <div class="row">
@@ -44,41 +32,41 @@
 
                         <form action="{{ route('users.store') }}" method="POST" id="createUserForm">
                             @csrf
-                            
+
                             <div class="row">
                                 {{-- Kolom Kiri --}}
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="form-label">NIP <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="id" 
-                                               placeholder="Masukkan NIP" value="{{ old('id') }}" required>
+                                        <input type="text" class="form-control" name="id"
+                                            placeholder="Auto Generate" value="{{ old('id') }}" disabled>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="fullname" 
-                                               placeholder="Masukkan nama lengkap" value="{{ old('fullname') }}" required>
+                                        <input type="text" class="form-control" name="fullname"
+                                            placeholder="Masukkan nama lengkap" value="{{ old('fullname') }}" required>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" name="email" 
-                                               placeholder="Masukkan email" value="{{ old('email') }}" required>
+                                        <input type="email" class="form-control" name="email"
+                                            placeholder="Masukkan email" value="{{ old('email') }}" required>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Station <span class="text-danger">*</span></label>
                                         <select name="station" class="form-select" required>
                                             <option value="">-- Pilih Station --</option>
-                                            <option value="Office-CGK" {{ old('station') == 'Office-CGK' ? 'selected' : '' }}>Office CGK</option>
-                                            <option value="CGK" {{ old('station') == 'CGK' ? 'selected' : '' }}>CGK</option>
-                                            <option value="DPS" {{ old('station') == 'DPS' ? 'selected' : '' }}>DPS</option>
-                                            <option value="KNO" {{ old('station') == 'KNO' ? 'selected' : '' }}>KNO</option>
-                                            <option value="UPG" {{ old('station') == 'UPG' ? 'selected' : '' }}>UPG</option>
-                                            <option value="SRG" {{ old('station') == 'SRG' ? 'selected' : '' }}>SRG</option>
+                                            @foreach($stations as $station)
+                                            <option value="{{ $station->code }}"
+                                                {{ old('station', $staff->station ?? '') == $station->code ? 'selected' : '' }}>
+                                                {{ $station->code ?? $station->code }}
+                                            </option>
+                                            @endforeach
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Job Title <span class="text-danger">*</span></label>
                                         <select name="JobTitle" class="form-select" required>
@@ -92,7 +80,7 @@
                                             <option value="OFFICE / ADMINISTRATION" {{ old('JobTitle') == 'OFFICE / ADMINISTRATION' ? 'selected' : '' }}>OFFICE / ADMINISTRATION</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Cluster <span class="text-danger">*</span></label>
                                         <select name="Cluster" class="form-select" required>
@@ -100,7 +88,7 @@
                                             <option value="OFFICE" {{ old('Cluster') == 'OFFICE' ? 'selected' : '' }}>OFFICE</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                                         <select name="gender" class="form-select" required>
@@ -125,7 +113,7 @@
                                             <option value="SUPPORTING / MANAGEMENT" {{ old('Unit') == 'SUPPORTING / MANAGEMENT' ? 'selected' : '' }}>SUPPORTING / MANAGEMENT</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Sub Unit <span class="text-danger">*</span></label>
                                         <select name="SubUnit" class="form-select" required>
@@ -146,7 +134,7 @@
                                             <option value="HEAD STATION" {{ old('SubUnit') == 'HEAD STATION' ? 'selected' : '' }}>HEAD STATION</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Role <span class="text-danger">*</span></label>
                                         <select name="role" class="form-select" required>
@@ -161,7 +149,7 @@
                                             <option value="PORTER" {{ old('role') == 'PORTER' ? 'selected' : '' }}>PORTER</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Manager <span class="text-danger">*</span></label>
                                         <select name="Manager" class="form-select" required>
@@ -174,7 +162,7 @@
                                             <option value="JUNAIDI" {{ old('Manager') == 'JUNAIDI' ? 'selected' : '' }}>JUNAIDI (102240006)</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Senior Manager</label>
                                         <select name="SeniorManager" class="form-select">
@@ -183,7 +171,7 @@
                                             <option value="ADE IRWAN EFFENDI" {{ old('SeniorManager') == 'ADE IRWAN EFFENDI' ? 'selected' : '' }}>ADE IRWAN EFFENDI (102240243)</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Qantas</label>
                                         <select name="is_qantas" class="form-select">
@@ -192,16 +180,16 @@
                                             <option value="0" {{ old('is_qantas') == '0' ? 'selected' : '' }}>Tidak</option>
                                         </select>
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Join Date</label>
                                         <input type="date" class="form-control" name="join_date" value="{{ old('join_date') }}">
                                     </div>
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Gaji</label>
-                                        <input type="text" class="form-control" name="salary_display" id="salary_display" 
-                                               placeholder="Masukkan gaji" value="{{ old('salary_display') }}">
+                                        <input type="text" class="form-control" name="salary_display" id="salary_display"
+                                            placeholder="Masukkan gaji" value="{{ old('salary_display') }}">
                                         <input type="hidden" name="salary" id="salary">
                                         <small class="text-muted">Format: 5.000.000</small>
                                     </div>
@@ -212,7 +200,7 @@
                                 <button type="submit" class="btn btn-info">
                                     <i class="bx bx-save me-1"></i>CREATE USER
                                 </button>
-                                <a href="{{ route('users.apron') }}" class="btn btn-warning">
+                                <a href="{{ route('staff.index') }}" class="btn btn-warning">
                                     <i class="bx bx-arrow-back me-1"></i>KEMBALI
                                 </a>
                             </div>
@@ -231,7 +219,7 @@
         // Format currency untuk gaji
         const salaryDisplay = document.getElementById('salary_display');
         const salaryHidden = document.getElementById('salary');
-        
+
         if (salaryDisplay) {
             salaryDisplay.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
@@ -239,7 +227,7 @@
                 e.target.value = formattedValue;
                 salaryHidden.value = value;
             });
-            
+
             // Format initial value jika ada
             if (salaryDisplay.value) {
                 let value = salaryDisplay.value.replace(/\D/g, '');
@@ -247,18 +235,18 @@
                 salaryHidden.value = value;
             }
         }
-        
+
         function formatRupiah(value) {
             if (!value) return '';
             return new Intl.NumberFormat('id-ID').format(value);
         }
-        
+
         // Validasi form sebelum submit
         const form = document.getElementById('createUserForm');
         form.addEventListener('submit', function(e) {
             const requiredFields = form.querySelectorAll('[required]');
             let isValid = true;
-            
+
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
@@ -267,7 +255,7 @@
                     field.classList.remove('is-invalid');
                 }
             });
-            
+
             if (!isValid) {
                 e.preventDefault();
                 Swal.fire({
@@ -296,7 +284,7 @@
                 });
             }
         });
-        
+
         // Auto-hide alerts after 5 seconds
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
@@ -305,25 +293,27 @@
                 bootstrapAlert.close();
             });
         }, 5000);
-        
+
         @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: '{{ session('success') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: '{{ session('
+            success ') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
         @endif
-        
+
         @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: '{{ session('error') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: '{{ session('
+            error ') }}',
+            timer: 3000,
+            showConfirmButton: false
+        });
         @endif
     });
 </script>
@@ -334,11 +324,11 @@
     .is-invalid {
         border-color: #dc3545;
     }
-    
+
     .form-label {
         font-weight: 500;
     }
-    
+
     .text-danger {
         color: #dc3545;
     }
