@@ -25,9 +25,9 @@ class CheckStationStatus
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return redirect()->route('login')->withErrors([
-                    'email' => 'Akun Anda dinonaktifkan sementara oleh Admin. Silakan hubungi HRD/Pusat.'
-                ]);
+                // return redirect()->route('login')->withErrors([
+                //     'email' => 'Akun Anda dinonaktifkan sementara oleh Admin. Silakan hubungi HRD/Pusat.'
+                // ]);
             }
 
             // 2. CEK STATUS STATION (GLOBAL)

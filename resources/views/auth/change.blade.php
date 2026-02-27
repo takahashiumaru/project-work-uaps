@@ -53,6 +53,10 @@
               @endif
               <form method="POST" action="/forgot-password/change">
                 @csrf
+
+                {{-- kirim id yang sudah didapat dari controller/showChangePasswordForm (?id=...) --}}
+                <input type="hidden" name="id" value="{{ old('id', $id ?? request()->query('id')) }}">
+
                 <div class="mb-3">
                   <label for="password" class="form-label">Password Baru</label>
                   <input type="password" class="form-control" name="password" required autofocus>

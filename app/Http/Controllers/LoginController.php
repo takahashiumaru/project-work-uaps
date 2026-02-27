@@ -7,41 +7,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
-
 
 class LoginController extends Controller
 {
     public function login()
     {
         if (Auth::check()) {
-            return redirect('home');
-        } else {
-            return view('auth.login');
+            return redirect()->route('home');
         }
+
+        return view('auth.login');
     }
 
     public function actionlogin(Request $request)
     {
         $request->validate([
-            'id' => 'required|numeric',
+            'id'       => 'required|numeric',
             'password' => 'required|min:6',
         ]);
 
         $credentials = $request->only('id', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            if (Hash::check('password123', $user->password)) {
-                return redirect()->route('change.password')->with('info', 'Harap ubah password default Anda.');
-            }
-
-            return redirect()->route('home');
+        if (! Auth::attempt($credentials)) {
+            return back()->with('error', 'NIP atau password salah');
         }
 
-        return back()->with('error', 'NIP atau password salah');
+        $user = Auth::user();
+
+        // paksa ganti jika masih default
+        if ($user && Hash::check('password123', $user->password)) {
+            return redirect()
+                ->route('change.password.form', ['id' => $user->id])
+                ->with('info', 'Harap ubah password default Anda.');
+        }
+
+        return redirect()->route('home');
     }
 
     public function showForgotPasswordForm()
@@ -52,29 +53,35 @@ class LoginController extends Controller
     public function sendForgotPassword(Request $request)
     {
         $request->validate(['id' => 'required|numeric']);
+
         $user = User::find($request->id);
         if (! $user) {
             return back()->with('error', 'NIP tidak ditemukan');
         }
 
         $otp = rand(100000, 999999);
-        session(['reset_otp_user_id' => $user->id, 'reset_otp_code' => $otp]);
+        session([
+            'reset_otp_user_id' => $user->id,
+            'reset_otp_code'    => $otp,
+        ]);
 
         try {
             Mail::send('auth.mail-message', ['user' => $user, 'otp' => $otp], function ($message) use ($user) {
-                // paksa from untuk memastikan konsisten
                 $message->from(config('mail.from.address'), config('mail.from.name'));
-                $message->to($user->email)
-                    ->subject('APSone - Kode OTP Reset Password Anda');
+                $message->to($user->email)->subject('APSone - Kode OTP Reset Password Anda');
             });
-            Log::info('Email HTML dikirim ke: '.$user->email);
-        } catch (\Exception $e) {
-            Log::error('Gagal kirim email HTML: '.$e->getMessage());
 
-            return back()->with('error', 'Gagal mengirim email. Silakan coba lagi.')->withInput();
+            Log::info('Email HTML dikirim ke: ' . $user->email);
+        } catch (\Exception $e) {
+            Log::error('Gagal kirim email HTML: ' . $e->getMessage());
+
+            return back()
+                ->with('error', 'Gagal mengirim email. Silakan coba lagi.')
+                ->withInput();
         }
 
-        return redirect()->route('forgot.password.form')
+        return redirect()
+            ->route('forgot.password.form')
             ->with('otp_sent', true)
             ->withInput(['id' => $user->id]);
     }
@@ -82,51 +89,82 @@ class LoginController extends Controller
     public function verifyForgotPassword(Request $request)
     {
         $request->validate([
-            'id' => 'required|numeric',
+            'id'  => 'required|numeric',
             'otp' => 'required',
         ]);
 
-        // Default OTP
         $defaultOtp = 666666;
 
-        // Cek OTP
-        if (
-            session('reset_otp_user_id') == $request->id &&
-            session('reset_otp_code') == $request->otp ||
-            $request->otp == $defaultOtp
-        ) {
-            // OTP benar, arahkan ke halaman ganti password
-            // Simpan id user di session untuk proses reset password
-            session(['reset_password_user_id' => $request->id]);
-            // Hapus OTP dari session
-            session()->forget(['reset_otp_user_id', 'reset_otp_code']);
+        $validBySession = session('reset_otp_user_id') == $request->id
+            && session('reset_otp_code') == $request->otp;
 
-            return redirect()->route('change.password.form')->with('success', 'OTP benar. Silakan buat password baru.');
+        $validByDefault = ((string) $request->otp === (string) $defaultOtp);
+
+        if (! ($validBySession || $validByDefault)) {
+            return back()
+                ->with('error', 'OTP salah')
+                ->with('otp_sent', true)
+                ->withInput(['id' => $request->id]);
         }
 
-        return back()->with('error', 'OTP salah')->with('otp_sent', true)->withInput(['id' => $request->id]);
+        // OTP benar -> hapus OTP agar tidak bisa dipakai ulang
+        session()->forget(['reset_otp_user_id', 'reset_otp_code', 'reset_password_user_id']);
+
+        return redirect()
+            ->route('change.password.form', ['id' => $request->id])
+            ->with('success', 'OTP benar. Silakan buat password baru.');
     }
 
+    public function showChangePasswordForm(Request $request)
+    {
+        return view('auth.change', [
+            'pageTitle' => 'Change Password',
+            'id'        => $request->query('id'),
+        ]);
+    }
+
+    // Reset password via OTP (menggunakan id dari form, bukan session)
     public function changePassword(Request $request)
+    {
+        $request->validate([
+            'id'       => 'required|numeric',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = User::find($request->id);
+        if (! $user) {
+            return back()->withErrors(['error' => 'User tidak ditemukan. Silakan coba lagi.']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        // bersihkan session reset (kalau ada)
+        session()->forget(['reset_password_user_id', 'reset_otp_user_id', 'reset_otp_code']);
+
+        return redirect()
+            ->route('login')
+            ->with('success', 'Password berhasil diubah, silakan login.');
+    }
+
+    // Ganti password saat user sudah login
+    public function updatePassword(Request $request)
     {
         $request->validate([
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // Ambil user id dari session proses reset password
-        $userId = session('reset_password_user_id');
-        $user = User::find($userId);
-
-        if ($user) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-            // Hapus session reset password
-            session()->forget('reset_password_user_id');
-
-            return redirect()->route('login')->with('success', 'Password berhasil diubah, silakan login.');
+        $user = Auth::user();
+        if (! $user instanceof User) {
+            return back()->withErrors(['error' => 'User tidak ditemukan']);
         }
 
-        return back()->withErrors(['error' => 'User tidak ditemukan']);
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()
+            ->route('home')
+            ->with('success', 'Password berhasil diubah');
     }
 
     public function logout(Request $request)
@@ -139,33 +177,9 @@ class LoginController extends Controller
         return redirect('/');
     }
 
-    public function showChangePasswordForm()
-    {
-        return view('auth.change', ['pageTitle' => 'Change Password']);
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        $user = Auth::user();
-
-        if ($user instanceof User) {
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            return redirect()->route('home')->with('success', 'Password berhasil diubah');
-        }
-
-        return back()->withErrors(['error' => 'User tidak ditemukan']);
-    }
-
     public function actionlogout()
     {
         Auth::logout();
-
         return redirect('/');
     }
 }
