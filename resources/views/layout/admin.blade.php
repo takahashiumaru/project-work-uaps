@@ -260,7 +260,7 @@
                                     <div data-i18n="Pengajuan">Pengajuan Leave</div>
                                 </a>
                             </li>
-                            @if (in_array(Auth::user()->role, ['Leader', 'Ass Leader', 'Admin', 'SPV']))
+                            @if (in_array(Auth::user()->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service']))
                             <li class="menu-item">
                                 <a href="{{ route('leaves.index') }}" class="menu-link">
                                     <div data-i18n="Approval">Approval Leave</div>

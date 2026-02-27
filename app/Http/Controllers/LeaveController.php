@@ -27,12 +27,12 @@ class LeaveController extends Controller
             ->where('users.station', $user->station)
             ->latest(); // Eager load relasi user
 
-        if (!in_array($user->role, ['SPV', 'ASS LEADER', 'CHIEF', 'LEADER', 'Admin'])) {
+        if (!in_array($user->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         // Jika bukan admin/atasan, hanya tampilkan data miliknya
-        if (!in_array($user->role, ['SPV', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (!in_array($user->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service'])) {
             $query->where('user_id', $user->id);
         }
         if ($user->station == 'Ho') {
@@ -64,10 +64,10 @@ class LeaveController extends Controller
             ->latest(); // Eager load relasi user
 
         // Jika bukan admin/atasan, hanya tampilkan data miliknya
-        if (!in_array($user->role, ['SPV', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (!in_array($user->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV',  'Head Of Airport Service'])) {
             $query->where('user_id', $user->id);
         }
-        if ($user->station == 'Ho') {
+        if ($user->role == 'Head Of Airport Service') {
             $query->orWhere('leaves.status', 'pending');
         }
 
@@ -208,9 +208,9 @@ class LeaveController extends Controller
 
         $status = '';
 
-        if ($user->station === 'Bge') {
+        if ($user->role === 'Porter Bge') {
             $status = 'pending Bge';
-        } else if ($user->station === 'Apron') {
+        } else if ($user->role === 'Porter Apron') {
             $status = 'pending Apron';
         } else {
             $status = 'approved';
@@ -263,7 +263,7 @@ class LeaveController extends Controller
      */
     public function updateStatus(Request $request, Leave $leave)
     {
-        $validStatuses = ['approved', 'rejected_by_ho', 'pending', 'rejected_by_pic'];
+        $validStatuses = ['approved', 'rejected by ho', 'pending', 'rejected by leader'];
 
         $request->validate([
             'status' => ['required', Rule::in($validStatuses)]
