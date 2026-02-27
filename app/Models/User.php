@@ -11,10 +11,10 @@ use App\Models\Certificate; // <--- PASTIKAN BARIS INI ADA!
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    
+
     use HasFactory, Notifiable;
 
- 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,37 +22,44 @@ class User extends Authenticatable
      */
     // GABUNGKAN SEMUA KOLOM DISINI (JANGAN ADA DUA FILLABLE)
     protected $fillable = [
-        // Identitas Utama
-        'id',               // NIP atau NIK (Penting agar bisa diinput manual)
+        'id',
         'fullname',
         'email',
-        'phone',
         'password',
+        'is_active',
         'gender',
-        'profile_picture',
-        
-        // Pekerjaan & Status
-        'role',             // Admin, Leader, Porter Apron, dll
-        'station',          // CGK, SUB, dll
+        'job_title',
+        'role',
+        'station',
+        'cluster',
+        'unit',
+        'sub_unit',
+        'status',
+        'manager',
+        'senior_manager',
+        'is_qantas',
         'join_date',
         'salary',
-        'is_qantas',
-        'is_active',        // Fitur Manpower Control / Banned
-        'pic_id',           // ID Atasan (Leader)
-
-        // Data Kontrak
         'contract_start',
         'contract_end',
-
-        // Data PAS Bandara
+        'phone',
+        'pendidikan',
+        'tanggal_lahir',
+        'tempat_lahir',
+        'domisili',
+        'alamat',
+        'no_nik',
+        'no_kk',
+        'npwp',
         'no_pas',
         'pas_registered',
         'pas_expired',
-
-        // Data TIM (Tanda Izin Mengemudi) - BARU
+        'bpjs_kesehatan',
+        'bpjs_tk',
         'tim_number',
         'tim_registered',
         'tim_expired',
+        'profile_picture',
     ];
 
     /**
@@ -75,7 +82,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            
+
             // Casting Tanggal (Penting agar tidak error saat format tanggal di View)
             'join_date' => 'date',
             'contract_start' => 'date',
@@ -83,7 +90,7 @@ class User extends Authenticatable
             'pas_registered' => 'date',
             'pas_expired' => 'date',
             'tim_expired' => 'date', // TIM
-            
+
             // Boolean
             'is_qantas' => 'boolean',
             'is_active' => 'boolean',
@@ -105,7 +112,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Certificate::class);
     }
-    
+
     // Relasi: User ini punya satu atasan (PIC)
     public function pic()
     {
@@ -129,4 +136,3 @@ class User extends Authenticatable
         return $this->hasMany(Overtime::class);
     }
 }
-

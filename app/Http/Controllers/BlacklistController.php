@@ -17,7 +17,7 @@ class BlacklistController extends Controller
         if (Auth::user()->role !== 'Admin') { abort(403); }
 
         $query = Blacklist::query();
-        
+
         if ($request->has('search')) {
             $query->where('fullname', 'like', '%'.$request->search.'%')
                   ->orWhere('nik', 'like', '%'.$request->search.'%');
@@ -41,7 +41,7 @@ class BlacklistController extends Controller
 
         // 1. Simpan ke Tabel Blacklist
         Blacklist::create([
-            'nik'       => $user->id, // Asumsi ID User adalah NIK/NIP
+            'nik'       => $user->no_nik, // Asumsi ID User adalah NIK/NIP
             'fullname'  => $user->fullname,
             'reason'    => $request->reason,
             'station'   => $user->station,
@@ -53,17 +53,17 @@ class BlacklistController extends Controller
         $user->save();
 
         // Opsional: Hapus user permanen jika tidak ingin menuh-menuhin tabel users
-        // $user->delete(); 
+        // $user->delete();
 
         Alert::success('Sanksi Tegas', 'Staff berhasil di-blacklist dan akun dinonaktifkan.');
         return back();
     }
-    
+
     // Hapus dari Blacklist (Jika ternyata salah paham/banding diterima)
     public function destroy($id)
     {
         if (Auth::user()->role !== 'Admin') { abort(403); }
-        
+
         Blacklist::destroy($id);
         Alert::success('Berhasil', 'Data dihapus dari daftar hitam.');
         return back();
