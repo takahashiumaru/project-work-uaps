@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class flights extends Model
+class Flights extends Model
 {
     use HasFactory;
 
     protected $table = 'flights';
+
 
     /**
      * fillable
@@ -27,6 +28,7 @@ class flights extends Model
 
     public function details()
     {
-        return $this->hasMany(Flight_details::class, 'flight_id', 'id');
+        return $this->hasMany(FlightDetails::class, 'flight_id', 'id');
     }
+
 }

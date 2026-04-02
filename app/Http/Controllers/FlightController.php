@@ -5,20 +5,23 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Flights;
-use App\Models\schedule;
-use App\Models\shift;
-use App\Models\flight_details;
-use App\Models\user;
+use App\Models\Schedule;
+use App\Models\Shift;
+use App\Models\FlightDetails;
+use App\Models\User;
+
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
-class flightController extends Controller
+class FlightController extends Controller
+
 {
     public function index(): View
     {
-        $flights = flights::orderBy('arrival_time', 'asc')->paginate(30);
+        $flights = Flights::orderBy('arrival_time', 'asc')->paginate(30);
+
 
         return view('flight.index', compact('flights'));
     }
@@ -26,7 +29,8 @@ class flightController extends Controller
     public function store(Request $request)
     {
         try {
-            $flight = new flights();
+            $flight = new Flights();
+
             $flight->airline = $request->airline;
             $flight->flight_number = $request->flight_number;
             $flight->registasi = $request->registasi;
@@ -51,7 +55,8 @@ class flightController extends Controller
             $today = $now->format('Y-m-d');
             $currentTime = $now->format('H:i:s');
 
-            $activeShifts = shift::where('start_time', '<=', $currentTime)
+            $activeShifts = Shift::where('start_time', '<=', $currentTime)
+
                 ->where('end_time', '>=', $currentTime)
                 ->get();
 
@@ -60,7 +65,8 @@ class flightController extends Controller
                 return redirect()->route('home');
             }
 
-            $schedules = schedule::where('date', $today)
+            $schedules = Schedule::where('date', $today)
+
                 ->whereIn('shift_id', $activeShifts->pluck('id'))
                 ->get();
 
@@ -69,12 +75,14 @@ class flightController extends Controller
             foreach ($schedules as $schedule) {
                 if ($assigned >= $requiredPeople) break;
 
-                $user = user::find($schedule->user_id);
+                $user = User::find($schedule->user_id);
+
                 if (!$user) continue;
 
                 if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
 
-                flight_details::create([
+                FlightDetails::create([
+
                     'flight_id' => $flight->id,
                     'schedule_id' => $schedule->id,
                 ]);
@@ -90,7 +98,8 @@ class flightController extends Controller
             foreach ($schedules as $schedule) {
                 if (count($assignedUsers) >= $requiredPeople) break;
 
-                $user = user::find($schedule->user_id);
+                $user = User::find($schedule->user_id);
+
                 if (!$user) continue;
 
                 if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
@@ -128,7 +137,8 @@ class flightController extends Controller
     }
 
 
-    public function update(flights $flight)
+    public function update(Flights $flight)
+
     {
         try {
             $flight->update(['status' => true]);

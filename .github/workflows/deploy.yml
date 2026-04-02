@@ -51,18 +51,37 @@ jobs:
             
             # 7. Jalankan Migrasi dan Storage Link
             echo "Menjalankan migrasi database..."
-            # Gunakan --force untuk menjalankan migrasi di environment production/tanpa konfirmasi
-            php artisan migrate --force || echo "Migrasi gagal. Cek koneksi database Anda di .env"
+            # Coba jalankan migrasi, jika gagal coba ganti 127.0.0.1 ke localhost (Unix Socket)
+            if ! php artisan migrate --force; then
+              echo "Koneksi database gagal dengan 127.0.0.1. Mencoba beralih ke 'localhost' di .env..."
+              sed -i 's/DB_HOST=127.0.0.1/DB_HOST=localhost/g' .env
+              if php artisan migrate --force; then
+                echo "Migrasi berhasil setelah menggunakan DB_HOST=localhost!"
+              else
+                echo "DATABASE ERROR: Masih tidak bisa terhubung ke database."
+                echo "Pesan: Connection Refused biasanya berarti MySQL tidak jalan atau .env salah."
+                echo "Silakan cek: 1. sudo systemctl status mysql, 2. Database 'aps' sudah dibuat."
+              fi
+            fi
             php artisan storage:link || true
             
             # 8. Matikan proses serve yang lama
             echo "Mematikan server lama..."
-            # pkill lebih efisien dan tidak butuh sudo jika dijalankan oleh user yang sama
+            # Matikan semua process php artisan serve milik user ini
             pkill -f "php artisan serve" || fuser -k 8000/tcp || true
             
             # 9. Jalankan server baru di background
             echo "Menjalankan server Laravel..."
+            # Pastikan port 8000 bersih sebelum jalan
             nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
+            
+            # Berikan waktu sejenak agar server up
+            sleep 2
+            if curl -s http://localhost:8000 > /dev/null; then
+              echo "Server Laravel berhasil dijalankan di port 8000!"
+            else
+              echo "PERINGATAN: Server mungkin gagal jalan. Cek log jika perlu."
+            fi
             
             echo "Deployment Laravel Selesai!"
 
