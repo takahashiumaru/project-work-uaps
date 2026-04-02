@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web-laravel
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./.env:/app/.env
+      - ./storage:/app/storage
+    # Ini jurus rahasia agar Docker bisa melihat 'localhost' milik VPS
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
