@@ -17,9 +17,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 26088 # Pastikan port ini sesuai dengan port SSH VPS Anda
           script: |
+            # Tentukan direktori kerja di VPS
             cd /home/ubuntu
             
-            # 1. Cek & Clone Repositori
+            # 1. Cek & Clone Repositori (Jika belum ada)
             if [ ! -d "project-work-uaps" ]; then
               echo "Melakukan git clone..."
               git clone https://github.com/takahashiumaru/project-work-uaps.git project-work-uaps
@@ -27,38 +28,28 @@ jobs:
             
             cd project-work-uaps
             
-            # 2. Tarik update terbaru
+            # 2. Tarik update terbaru dari repositori
             git pull origin main
             
-            # 3. Siapkan file .env di host VPS (Bukan di dalam image agar aman)
+            # 3. Siapkan file .env jika belum ada (gunakan .env di host)
             if [ ! -f .env ]; then
               cp .env.example .env
-              echo ".env file berhasil dibuat."
+              echo ".env file berhasil disiapkan dari template (.env.example)."
+              echo "WAJIB: Segera edit .env di VPS jika menggunakan database berbeda."
             fi
             
-            # 4. Build Docker Image
-            echo "Membangun Docker Image..."
-            docker build -t laravel-app .
+            # 4. Build dan Jalankan Container menggunakan Docker Compose
+            # --build: Membangun ulang image jika ada perubahan kode (PENTING!)
+            # -d: Run in background mode
+            echo "Membangun dan menjalankan container baru via Docker Compose..."
+            docker compose down -v || true
+            docker compose up -d --build
             
-            # 5. Hapus container lama jika ada
-            echo "Menghapus container lama..."
-            docker rm -f web-laravel || true
+            # 5. Optimasi Laravel di dalam container yang sedang berjalan
+            echo "Menjalankan optimasi Laravel (Key, Migrate, Storage Link)..."
+            # -T: Disable allocation of a pseudo-TTY (untuk workflow otomatis)
+            docker compose exec -T app php artisan key:generate --force
+            docker compose exec -T app php artisan migrate --force
+            docker compose exec -T app php artisan storage:link
             
-            # 6. Jalankan Container Baru
-            # Kita me-mount .env dan folder storage agar data tidak hilang saat container direstart
-            echo "Menjalankan container baru..."
-            docker run -d \
-              --name web-laravel \
-              -p 8000:8000 \
-              -v $(pwd)/.env:/app/.env \
-              -v $(pwd)/storage:/app/storage \
-              --restart unless-stopped \
-              laravel-app
-              
-            # 7. Generate Key, Migrate, dan Storage Link di DALAM container yang sedang berjalan
-            echo "Menjalankan optimasi Laravel di dalam container..."
-            docker exec web-laravel php artisan key:generate --force
-            docker exec web-laravel php artisan migrate
-            docker exec web-laravel php artisan storage:link
-            
-            echo "Deployment Docker Selesai! Aplikasi berjalan di port 8000."
+            echo "Deployment Docker Selesai! Aplikasi berjalan di port 8000 (VPS IP:8000)."

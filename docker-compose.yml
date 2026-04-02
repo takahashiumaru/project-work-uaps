@@ -8,10 +8,13 @@ services:
     container_name: web-laravel
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      # Memetakan port 8000 di VPS ke port 80 (Apache) di container
+      - "8000:80"
     volumes:
-      - ./.env:/app/.env
-      - ./storage:/app/storage
-    # Ini jurus rahasia agar Docker bisa melihat 'localhost' milik VPS
+      # Mount folder storage agar file upload tidak hilang saat container dihapus
+      - ./storage:/var/www/html/storage
+      # Mount file .env agar rahasia konfigurasi di host tetap terjaga
+      - ./.env:/var/www/html/.env
+    # Extra hosts: Mengizinkan container mengakses database yang ada di host VPS via 'host.docker.internal'
     extra_hosts:
       - "host.docker.internal:host-gateway"
