@@ -1,51 +1,62 @@
-name: Production
+name: Deploy Laravel Application
 
 on:
   push:
-    branches: [ "main" ] # Ganti sesuai branch utama Anda
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to Server via SSH
+      - name: Eksekusi Perintah Deploy di VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT || 22 }}
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
           script: |
-            # Masuk ke direktori project
-            cd /var/www/html/your-project-folder
+            # 1. Masuk ke folder home utama Anda (asumsi user-nya adalah ubuntu)
+            cd /home/ubuntu
             
-            # 1. Sinkronisasi kode terbaru
-            git pull origin main
-            
-            # 2. Urusan file .env
-            # Jika .env belum ada, salin dari .env.example
-            if [ ! -f .env ]; then
-                cp .env.example .env
-                echo ".env file created from .env.example"
-                # Anda mungkin perlu menjalankan php artisan key:generate jika ini instalasi pertama
-                php artisan key:generate
+            # 2. Cek apakah folder project sudah ada. Jika belum, lakukan git clone!
+            # PENTING: Ganti 'project-work-uaps' dan URL GitHub di bawah ini dengan milik Anda
+            if [ ! -d "project-work-uaps" ]; then
+              echo "Folder belum ada. Melakukan git clone..."
+              git clone https://github.com/takahashiumaru/project-work-uaps.git project-work-uaps
+            else
+              echo "Folder sudah ada. Lanjut ke proses pull."
             fi
             
-            # 3. Jalankan perintah Laravel
-            # Opsional: composer install --no-dev --optimize-autoloader
+            # 3. Masuk ke dalam folder project
+            cd project-work-uaps
             
-            php artisan migrate --force
+            # 4. Tarik kode terbaru dari GitHub branch main
+            git pull origin main
+            
+            # 5. Install dependensi PHP (Composer)
+            echo "Menginstall dependensi Composer..."
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            
+            # 6. Urusan file .env (Copy dan Generate Key jika ini clone pertama kali)
+            if [ ! -f .env ]; then
+              echo "File .env belum ada. Mengcopy dari .env.example..."
+              cp .env.example .env
+              php artisan key:generate
+            fi
+            
+            # 7. Jalankan Migrasi dan Storage Link
+            echo "Menjalankan migrasi database..."
+            php artisan migrate
             php artisan storage:link
             
-            # 4. Refresh port & Restart Server
-            # Mencari proses di port 8000 dan mematikannya
+            # 8. Matikan proses serve yang lama (abaikan error jika belum ada)
+            echo "Mematikan server lama..."
             sudo fuser -k 8000/tcp || true
             
-            # Jalankan serve di background
+            # 9. Jalankan server baru di background
+            echo "Menjalankan server Laravel..."
             nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
             
-            echo "Deployment successful!"
+            echo "Deployment Laravel Selesai!"
