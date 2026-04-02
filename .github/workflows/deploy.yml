@@ -1,0 +1,51 @@
+name: Production
+
+on:
+  push:
+    branches: [ "main" ] # Ganti sesuai branch utama Anda
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT || 22 }}
+          script: |
+            # Masuk ke direktori project
+            cd /var/www/html/your-project-folder
+            
+            # 1. Sinkronisasi kode terbaru
+            git pull origin main
+            
+            # 2. Urusan file .env
+            # Jika .env belum ada, salin dari .env.example
+            if [ ! -f .env ]; then
+                cp .env.example .env
+                echo ".env file created from .env.example"
+                # Anda mungkin perlu menjalankan php artisan key:generate jika ini instalasi pertama
+                php artisan key:generate
+            fi
+            
+            # 3. Jalankan perintah Laravel
+            # Opsional: composer install --no-dev --optimize-autoloader
+            
+            php artisan migrate --force
+            php artisan storage:link
+            
+            # 4. Refresh port & Restart Server
+            # Mencari proses di port 8000 dan mematikannya
+            sudo fuser -k 8000/tcp || true
+            
+            # Jalankan serve di background
+            nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
+            
+            echo "Deployment successful!"
