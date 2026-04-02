@@ -1,4 +1,4 @@
-name: Deploy Laravel via Docker
+name: Deploy Laravel Application
 
 on:
   push:
@@ -15,47 +15,48 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 26088 # Pastikan port ini sesuai dengan port SSH VPS Anda
+          port: 26088 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
           script: |
-            # Tentukan direktori kerja di VPS
+            # 1. Masuk ke folder home utama Anda (asumsi user-nya adalah ubuntu)
             cd /home/ubuntu
             
-            # 1. Cek & Clone Repositori (Jika belum ada)
+            # 2. Cek apakah folder project sudah ada. Jika belum, lakukan git clone!
+            # PENTING: Ganti 'project-work-uaps' dan URL GitHub di bawah ini dengan milik Anda
             if [ ! -d "project-work-uaps" ]; then
-              echo "Melakukan git clone..."
+              echo "Folder belum ada. Melakukan git clone..."
               git clone https://github.com/takahashiumaru/project-work-uaps.git project-work-uaps
+            else
+              echo "Folder sudah ada. Lanjut ke proses pull."
             fi
             
+            # 3. Masuk ke dalam folder project
             cd project-work-uaps
             
-            # 2. Tarik update terbaru dari repositori
+            # 4. Tarik kode terbaru dari GitHub branch main
             git pull origin main
             
-            # 3. Siapkan file .env jika belum ada (gunakan .env di host)
+            # 5. Install dependensi PHP (Composer)
+            echo "Menginstall dependensi Composer..."
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            
+            # 6. Urusan file .env (Copy dan Generate Key jika ini clone pertama kali)
             if [ ! -f .env ]; then
+              echo "File .env belum ada. Mengcopy dari .env.example..."
               cp .env.example .env
-              echo ".env file berhasil disiapkan dari template (.env.example)."
-              echo "WAJIB: Segera edit .env di VPS jika menggunakan database berbeda."
+              php artisan key:generate
             fi
             
-            # 4. Deteksi apakah menggunakan 'docker compose' (V2) atau 'docker-compose' (V1)
-            if docker compose version > /dev/null 2>&1; then
-              DOCKER_COMPOSE="docker compose"
-            else
-              DOCKER_COMPOSE="docker-compose"
-            fi
+            # 7. Jalankan Migrasi dan Storage Link
+            echo "Menjalankan migrasi database..."
+            php artisan migrate
+            php artisan storage:link
             
-            echo "Menggunakan command: $DOCKER_COMPOSE"
-
-            # 5. Build dan Jalankan Container
-            echo "Membangun dan menjalankan container baru..."
-            $DOCKER_COMPOSE down -v || true
-            $DOCKER_COMPOSE up -d --build
+            # 8. Matikan proses serve yang lama (abaikan error jika belum ada)
+            echo "Mematikan server lama..."
+            sudo fuser -k 8000/tcp || true
             
-            # 6. Optimasi Laravel di dalam container yang sedang berjalan
-            echo "Menjalankan optimasi Laravel (Key, Migrate, Storage Link)..."
-            $DOCKER_COMPOSE exec -T app php artisan key:generate --force
-            $DOCKER_COMPOSE exec -T app php artisan migrate --force
-            $DOCKER_COMPOSE exec -T app php artisan storage:link
+            # 9. Jalankan server baru di background
+            echo "Menjalankan server Laravel..."
+            nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
             
-            echo "Deployment Docker Selesai! Aplikasi berjalan di port 8000 (VPS IP:8000)."
+            echo "Deployment Laravel Selesai!"
