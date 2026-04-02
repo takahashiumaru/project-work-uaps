@@ -38,18 +38,24 @@ jobs:
               echo "WAJIB: Segera edit .env di VPS jika menggunakan database berbeda."
             fi
             
-            # 4. Build dan Jalankan Container menggunakan Docker Compose
-            # --build: Membangun ulang image jika ada perubahan kode (PENTING!)
-            # -d: Run in background mode
-            echo "Membangun dan menjalankan container baru via Docker Compose..."
-            docker compose down -v || true
-            docker compose up -d --build
+            # 4. Deteksi apakah menggunakan 'docker compose' (V2) atau 'docker-compose' (V1)
+            if docker compose version > /dev/null 2>&1; then
+              DOCKER_COMPOSE="docker compose"
+            else
+              DOCKER_COMPOSE="docker-compose"
+            fi
             
-            # 5. Optimasi Laravel di dalam container yang sedang berjalan
+            echo "Menggunakan command: $DOCKER_COMPOSE"
+
+            # 5. Build dan Jalankan Container
+            echo "Membangun dan menjalankan container baru..."
+            $DOCKER_COMPOSE down -v || true
+            $DOCKER_COMPOSE up -d --build
+            
+            # 6. Optimasi Laravel di dalam container yang sedang berjalan
             echo "Menjalankan optimasi Laravel (Key, Migrate, Storage Link)..."
-            # -T: Disable allocation of a pseudo-TTY (untuk workflow otomatis)
-            docker compose exec -T app php artisan key:generate --force
-            docker compose exec -T app php artisan migrate --force
-            docker compose exec -T app php artisan storage:link
+            $DOCKER_COMPOSE exec -T app php artisan key:generate --force
+            $DOCKER_COMPOSE exec -T app php artisan migrate --force
+            $DOCKER_COMPOSE exec -T app php artisan storage:link
             
             echo "Deployment Docker Selesai! Aplikasi berjalan di port 8000 (VPS IP:8000)."
