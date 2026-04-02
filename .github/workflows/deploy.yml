@@ -17,11 +17,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 26088 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
           script: |
-            # 1. Masuk ke folder home utama Anda (asumsi user-nya adalah ubuntu)
+            # 1. Masuk ke folder home utama Anda
             cd /home/ubuntu
             
             # 2. Cek apakah folder project sudah ada. Jika belum, lakukan git clone!
-            # PENTING: Ganti 'project-work-uaps' dan URL GitHub di bawah ini dengan milik Anda
             if [ ! -d "project-work-uaps" ]; then
               echo "Folder belum ada. Melakukan git clone..."
               git clone https://github.com/takahashiumaru/project-work-uaps.git project-work-uaps
@@ -32,31 +31,38 @@ jobs:
             # 3. Masuk ke dalam folder project
             cd project-work-uaps
             
-            # 4. Tarik kode terbaru dari GitHub branch main
-            git pull origin main
+            # 4. Tarik kode terbaru dari GitHub branch main (lebih aman dengan Fetch & Reset)
+            git fetch --all
+            git reset --hard origin/main
+
             
             # 5. Install dependensi PHP (Composer)
             echo "Menginstall dependensi Composer..."
-            composer install --no-interaction --prefer-dist --optimize-autoloader
+            # Gunakan --ignore-platform-reqs jika VPS tidak memiliki ekstensi PHP lengkap (seperti GD atau sockets)
+            composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
             
-            # 6. Urusan file .env (Copy dan Generate Key jika ini clone pertama kali)
+            # 6. Urusan file .env
             if [ ! -f .env ]; then
               echo "File .env belum ada. Mengcopy dari .env.example..."
               cp .env.example .env
               php artisan key:generate
+              echo "PENTING: Pastikan Anda telah mengonfigurasi database di file .env pada VPS!"
             fi
             
             # 7. Jalankan Migrasi dan Storage Link
             echo "Menjalankan migrasi database..."
-            php artisan migrate
-            php artisan storage:link
+            # Gunakan --force untuk menjalankan migrasi di environment production/tanpa konfirmasi
+            php artisan migrate --force || echo "Migrasi gagal. Cek koneksi database Anda di .env"
+            php artisan storage:link || true
             
-            # 8. Matikan proses serve yang lama (abaikan error jika belum ada)
+            # 8. Matikan proses serve yang lama
             echo "Mematikan server lama..."
-            sudo fuser -k 8000/tcp || true
+            # pkill lebih efisien dan tidak butuh sudo jika dijalankan oleh user yang sama
+            pkill -f "php artisan serve" || fuser -k 8000/tcp || true
             
             # 9. Jalankan server baru di background
             echo "Menjalankan server Laravel..."
             nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
             
             echo "Deployment Laravel Selesai!"
+
