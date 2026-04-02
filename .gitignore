@@ -2,8 +2,8 @@
 /node_modules
 /public/build
 /public/hot
-/storage/*.key
-/storage/pail
+# /storage/*.key
+# /storage/pail
 .env
 .env.backup
 .env.production
