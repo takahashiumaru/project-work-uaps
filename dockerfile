@@ -1,24 +1,17 @@
 # Menggunakan base image PHP 8.2
 FROM php:8.2-cli
 
-# Install dependencies sistem yang dibutuhkan Laravel
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
+# 1. Download script pintar untuk install ekstensi PHP
+ADD https://github.com/mlocati/php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-# Bersihkan cache apt
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# 2. Install sistem dependencies, ekstensi PHP, dan Composer sekaligus!
+# Script ini akan otomatis mencari dependency (seperti libpng, libonig) tanpa perlu kita ketik manual
+RUN chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions pdo_mysql mbstring exif pcntl bcmath gd @composer zip
 
-# Install ekstensi PHP
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Copy Composer dari image resminya
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 3. Install git dan unzip (dibutuhkan oleh Composer)
+RUN apt-get update && apt-get install -y git unzip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set direktori kerja di dalam container
 WORKDIR /app
