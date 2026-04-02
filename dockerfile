@@ -1,15 +1,14 @@
 # Menggunakan base image PHP 8.2
 FROM php:8.2-cli
 
-# 1. Download script pintar untuk install ekstensi PHP
-ADD https://github.com/mlocati/php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# 1. Ambil script installer dari image resminya
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-# 2. Install sistem dependencies, ekstensi PHP, dan Composer sekaligus!
-# Script ini akan otomatis mencari dependency (seperti libpng, libonig) tanpa perlu kita ketik manual
+# 2. Install ekstensi PHP dan Composer
 RUN chmod +x /usr/local/bin/install-php-extensions && \
     install-php-extensions pdo_mysql mbstring exif pcntl bcmath gd @composer zip
 
-# 3. Install git dan unzip (dibutuhkan oleh Composer)
+# 3. Install git dan unzip (wajib untuk Composer)
 RUN apt-get update && apt-get install -y git unzip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
