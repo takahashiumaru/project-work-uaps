@@ -29,11 +29,10 @@ jobs:
                   mysql:8.2
             fi
 
-            # 2. BIKIN DOCKERFILE LANGSUNG DI VPS (Anti Gagal Curl & Lebih Stabil)
+            # 2. BIKIN DOCKERFILE LANGSUNG DI VPS
             cat << 'EOF' > Dockerfile
             FROM php:8.2-fpm-alpine
             
-            # Install library OS (Lengkap untuk Gambar & PDF)
             RUN apk add --no-cache git curl bash libpng-dev libxml2-dev icu-dev oniguruma-dev zlib-dev libzip-dev
             COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
             RUN install-php-extensions pdo_mysql mbstring gd intl zip bcmath
@@ -41,11 +40,12 @@ jobs:
             
             WORKDIR /var/www/html
             
-            # Otomatisasi: Clone -> Env -> Permission -> Migrate -> Storage Link -> Serve
+            # Script Cleanup & Setup: Pastikan link storage bersih dan permission tepat
             CMD bash -c "if [ ! -f artisan ]; then git clone https://github.com/takahashiumaru/project-work-uaps.git .; fi && \
                 composer install --no-interaction --prefer-dist && \
                 [ ! -f .env ] && cp .env.example .env && \
                 php artisan key:generate --force && \
+                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}|' .env && \
                 chown -R www-data:www-data storage bootstrap/cache public && \
                 chmod -R 775 storage bootstrap/cache public && \
                 rm -rf public/storage && \
@@ -63,8 +63,13 @@ jobs:
             docker stop uaps-app || true
             docker rm uaps-app || true
 
-            # 5. Build & Run
+            # 5. Build & Run (Gunakan port 80 agar bisa diakses langsung)
             docker build -t image-uaps .
             
-            # Menjalankan container dengan port 8000 di VPS
-            docker run -d --name uaps-app --restart unless-stopped -p 8000:80 --link mysql_db:db image-uaps
+            # Jika running di port 80 gagal karena 'address already in use', ubah 80:80 menjadi 8000:80
+            docker run -d --name uaps-app \
+              --restart unless-stopped \
+              -p 80:80 \
+              -e MY_VPS_IP=${{ secrets.VPS_IP }} \
+              --link mysql_db:db \
+              image-uaps
