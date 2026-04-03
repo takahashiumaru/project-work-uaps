@@ -45,7 +45,7 @@ jobs:
                 composer install --no-interaction --prefer-dist && \
                 [ ! -f .env ] && cp .env.example .env && \
                 php artisan key:generate --force && \
-                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}|' .env && \
+                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}:8000|' .env && \
                 chown -R www-data:www-data storage bootstrap/cache public && \
                 chmod -R 775 storage bootstrap/cache public && \
                 rm -rf public/storage && \
@@ -63,13 +63,12 @@ jobs:
             docker stop uaps-app || true
             docker rm uaps-app || true
 
-            # 5. Build & Run (Gunakan port 80 agar bisa diakses langsung)
+            # 5. Build & Run (Menggunakan port 8000 karena port 80 VPS Anda sudah terpakai)
             docker build -t image-uaps .
             
-            # Jika running di port 80 gagal karena 'address already in use', ubah 80:80 menjadi 8000:80
             docker run -d --name uaps-app \
               --restart unless-stopped \
-              -p 80:80 \
+              -p 8000:80 \
               -e MY_VPS_IP=${{ secrets.VPS_IP }} \
               --link mysql_db:db \
               image-uaps
