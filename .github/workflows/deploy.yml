@@ -1,4 +1,4 @@
-name: Deploy Laravel
+name: Deploy Laravel to VPS
 
 on:
   push:
@@ -51,9 +51,6 @@ jobs:
                 rm -rf public/storage && \
                 php artisan storage:link && \
                 echo 'Menunggu MySQL...' && sleep 5 && \
-                php artisan config:cache && \
-                php artisan route:cache && \
-                php artisan view:cache && \
                 php artisan migrate --force && \
                 php artisan optimize:clear && \
                 php artisan serve --host=0.0.0.0 --port=80"

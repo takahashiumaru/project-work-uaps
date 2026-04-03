@@ -25,9 +25,5 @@ CMD bash -c "if [ ! -f artisan ]; then git clone https://github.com/takahashiuma
     chown -R www-data:www-data storage bootstrap/cache && \
     chmod -R 775 storage bootstrap/cache && \
     echo 'Menunggu MySQL stabil...' && sleep 10 && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
     php artisan migrate --force && \
-    php artisan optimize:clear && \
     php artisan serve --host=0.0.0.0 --port=80"
