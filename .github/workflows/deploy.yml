@@ -15,16 +15,21 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             mkdir -p ~/project-work-uaps && cd ~/project-work-uaps
+
             
             # 1. Pastikan MySQL jalan
             if [ ! "$(docker ps -q -f name=mysql_db)" ]; then
+                echo "Starting MySQL..."
                 docker run -d --name mysql_db \
+                  --restart always \
                   -e MYSQL_ROOT_PASSWORD=rootpassword \
                   -e MYSQL_DATABASE=aps \
                   -e MYSQL_USER=umarvps \
                   -e MYSQL_PASSWORD=umarvps \
                   -p 3307:3306 \
                   mysql:8.2
+                echo "Waiting for MySQL to warm up..."
+                sleep 20
             fi
 
             # 2. Ambil Dockerfile terbaru dari repo
@@ -34,12 +39,21 @@ jobs:
             docker builder prune -f
             
             # 4. Rebuild & Run
+            echo "Stopping old container..."
             docker stop uaps-container || true
             docker rm uaps-container || true
             
+            echo "Building new image..."
             docker build -t uaps-app .
             
+            echo "Starting new container..."
             docker run -d --name uaps-container \
+              --restart always \
               -p 80:80 \
               --link mysql_db:db \
+              -e DB_HOST=db \
+              -e DB_PORT=3306 \
+              -e DB_DATABASE=aps \
+              -e DB_USERNAME=umarvps \
+              -e DB_PASSWORD=umarvps \
               uaps-app
