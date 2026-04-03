@@ -1,20 +1,16 @@
-FROM php:8.2-fpm-alpine
+# Menggunakan image yang sudah lengkap ekstensinya (Sangat Ringan & Cepat)
+FROM serversideup/php:8.2-fpm-apache-alpine
 
-# Install tools dasar
-RUN apk add --no-cache git curl bash
+USER root
 
-# Install PHP Extensions dengan cara yang jauh lebih stabil (mencegah error kompilasi mbstring)
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions pdo_mysql mbstring gd intl zip bcmath
+# Install git untuk cloning
+RUN apk add --no-cache git
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+WORKDIR /var/www/html
 
-WORKDIR /var/www
-
-# Script otomatis: Clone -> Install -> Config -> Migrate -> Run
-CMD bash -c "if [ ! -f artisan ]; then git clone https://github.com/takahashiumaru/project-work-uaps.git .; fi && \
+# Script otomatis: Clone -> Config -> Migrate -> Run
+# Port default image ini adalah 8080, kita sesuaikan nanti di docker run
+CMD sh -c "if [ ! -f artisan ]; then git clone https://github.com/takahashiumaru/project-work-uaps.git .; fi && \
     composer install --no-interaction --prefer-dist && \
     if [ ! -f .env ]; then cp .env.example .env; fi && \
     sed -i 's/DB_HOST=127.0.0.1/DB_HOST=db/' .env && \

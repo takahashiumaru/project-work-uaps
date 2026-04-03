@@ -14,26 +14,28 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # 1. Setup Folder
             mkdir -p ~/project-work-uaps && cd ~/project-work-uaps
             
-            # 2. Jalankan MySQL (Jika belum ada)
-            docker run -d --name mysql_db \
-              -e MYSQL_ROOT_PASSWORD=rootpassword \
-              -e MYSQL_DATABASE=aps \
-              -e MYSQL_USER=umarvps \
-              -e MYSQL_PASSWORD=umarvps \
-              -p 3307:3306 \
-              mysql:8.2 || true
+            # 1. Pastikan MySQL jalan duluan
+            if [ ! "$(docker ps -q -f name=mysql_db)" ]; then
+                docker run -d --name mysql_db \
+                  -e MYSQL_ROOT_PASSWORD=rootpassword \
+                  -e MYSQL_DATABASE=aps \
+                  -e MYSQL_USER=umarvps \
+                  -e MYSQL_PASSWORD=umarvps \
+                  -p 3307:3306 \
+                  mysql:8.2
+            fi
 
-            # 3. Rebuild & Run App Laravel
-            # Mengambil Dockerfile terbaru dari GitHub (via curl atau copy)
-            curl -o Dockerfile https://raw.githubusercontent.com/takahashiumaru/project-work-uaps/main/Dockerfile
+            # 2. Ambil Dockerfile terbaru
+            curl -sO https://raw.githubusercontent.com/takahashiumaru/project-work-uaps/main/Dockerfile
+            
+            # 3. Build & Run (Hapus yang lama dulu)
+            docker stop uaps-container || true
+            docker rm uaps-container || true
             
             docker build -t uaps-app .
-            docker stop uaps-container || true && docker rm uaps-container || true
             
-            # Jalankan App dan hubungkan ke MySQL
             docker run -d --name uaps-container \
               -p 80:80 \
               --link mysql_db:db \
