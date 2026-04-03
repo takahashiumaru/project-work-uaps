@@ -17,7 +17,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 26088 # Port SSH lu sesuai history sebelumnya
+          port: 22 # Port SSH lu sesuai history sebelumnya
           script: |
             # 1. Setup Folder Project
             PROJECT_DIR=$HOME/project-work-uaps
@@ -86,7 +86,7 @@ jobs:
             CMD php artisan config:cache && \
                 php artisan route:cache && \
                 php artisan view:cache && \
-                php artisan migrate --force && \
+                php artisan migrate && \
                 php artisan serve --host=0.0.0.0 --port=8000
             EOF
 
