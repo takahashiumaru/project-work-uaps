@@ -64,4 +64,4 @@ jobs:
             
             # Catatan: Jika port 80 di VPS masih dipakai aplikasi lain (Error address already in use),
             # ubah angka 80:80 di bawah ini menjadi 8000:80
-            docker run -d --name uaps-app --restart unless-stopped -p 80:80 --link mysql_db:db image-uaps
+            docker run -d --name uaps-app --restart unless-stopped -p 8000:80 --link mysql_db:db image-uaps
