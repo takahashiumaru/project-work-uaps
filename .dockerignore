@@ -1,0 +1,15 @@
+.git
+vendor
+node_modules
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+.env
+Dockerfile
+.dockerignore
+.github
+tests
+phpunit.xml
+composer.lock
+package-lock.json

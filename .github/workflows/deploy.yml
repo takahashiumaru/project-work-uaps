@@ -15,10 +15,18 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            # 1. Bersihkan dan Siapkan Workspace
             mkdir -p ~/project-work-uaps
             cd ~/project-work-uaps
 
-            # 1. Pastikan MySQL Nyala
+            # 2. Update Code di Host VPS (Bukan di dalam container)
+            if [ ! -d .git ]; then
+                git clone https://github.com/takahashiumaru/project-work-uaps.git .
+            else
+                git pull origin main
+            fi
+
+            # 3. Pastikan Database berjalan
             if [ ! "$(docker ps -aq -f name=mysql_db)" ]; then
                 docker run -d --name mysql_db --restart unless-stopped \
                   -e MYSQL_ROOT_PASSWORD=rootpassword \
@@ -29,46 +37,23 @@ jobs:
                   mysql:8.2
             fi
 
-            # 2. BIKIN DOCKERFILE LANGSUNG DI VPS
-            cat << 'EOF' > Dockerfile
-            FROM php:8.2-fpm-alpine
-            
-            RUN apk add --no-cache git curl bash libpng-dev libxml2-dev icu-dev oniguruma-dev zlib-dev libzip-dev
-            COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-            RUN install-php-extensions pdo_mysql mbstring gd intl zip bcmath
-            COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-            
-            WORKDIR /var/www/html
-            
-            # Script Cleanup & Setup: Pastikan link storage bersih dan permission tepat
-            CMD bash -c "if [ ! -f artisan ]; then git clone https://github.com/takahashiumaru/project-work-uaps.git .; fi && \
-                composer install --no-interaction --prefer-dist && \
-                [ ! -f .env ] && cp .env.example .env && \
-                php artisan key:generate --force && \
-                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}|' .env && \
-                chown -R www-data:www-data storage bootstrap/cache public && \
-                chmod -R 775 storage bootstrap/cache public && \
-                rm -rf public/storage && \
-                php artisan storage:link && \
-                echo 'Menunggu MySQL...' && sleep 5 && \
-                php artisan migrate --force && \
-                php artisan optimize:clear && \
-                php artisan serve --host=0.0.0.0 --port=80"
-            EOF
+            # 4. Build Image (Menggunakan Dockerfile dari repo yang sudah di-pull)
+            docker build --pull -t image-uaps .
 
-            # 3. Bersihkan RAM
-            docker builder prune -f
-
-            # 4. Hapus aplikasi lama
+            # 5. Restart Container dengan image baru yang sudah teroptimasi
             docker stop uaps-app || true
             docker rm uaps-app || true
 
-            # 5. Build & Run (Menggunakan port 8000 karena port 80 VPS Anda sudah terpakai)
-            docker build -t image-uaps .
-            
             docker run -d --name uaps-app \
               --restart unless-stopped \
               -p 8000:80 \
-              -e MY_VPS_IP=${{ secrets.VPS_IP }} \
               --link mysql_db:db \
+              -e APP_KEY=${{ secrets.APP_KEY }} \
+              -e DB_HOST=db \
+              -e DB_DATABASE=aps \
+              -e DB_USERNAME=umarvps \
+              -e DB_PASSWORD=umarvps \
               image-uaps
+
+            # 6. Bersihkan resource Docker yang tidak terpakai
+            docker image prune -f
