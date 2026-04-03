@@ -17,9 +17,12 @@ jobs:
             mkdir -p ~/project-work-uaps && cd ~/project-work-uaps
 
             
-            # 1. Pastikan MySQL jalan
-            if [ ! "$(docker ps -q -f name=mysql_db)" ]; then
-                echo "Starting MySQL..."
+            # 1. Pastikan MySQL jalan (Start jika sudah ada, Run jika belum)
+            if [ "$(docker ps -aq -f name=mysql_db)" ]; then
+                echo "Starting existing MySQL container..."
+                docker start mysql_db
+            else
+                echo "Creating new MySQL container..."
                 docker run -d --name mysql_db \
                   --restart always \
                   -e MYSQL_ROOT_PASSWORD=rootpassword \
@@ -28,9 +31,9 @@ jobs:
                   -e MYSQL_PASSWORD=umarvps \
                   -p 3307:3306 \
                   mysql:8.2
-                echo "Waiting for MySQL to warm up..."
-                sleep 20
             fi
+            echo "Waiting for MySQL to be ready..."
+            sleep 15
 
             # 2. Ambil Dockerfile terbaru dari repo
             curl -sO https://raw.githubusercontent.com/takahashiumaru/project-work-uaps/main/Dockerfile
@@ -44,7 +47,8 @@ jobs:
             docker rm uaps-container || true
             
             echo "Building new image..."
-            docker build -t uaps-app .
+            docker build --build-arg CACHEBUST=$(date +%s) -t uaps-app .
+
             
             echo "Starting new container..."
             docker run -d --name uaps-container \
