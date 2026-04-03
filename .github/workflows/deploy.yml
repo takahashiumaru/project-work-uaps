@@ -1,87 +1,40 @@
-name: Deploy Laravel Application
-
+name: Deploy Minimalist Docker
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Eksekusi Perintah Deploy di VPS via SSH
+      - name: SSH Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
           script: |
-            # 1. Masuk ke folder home utama Anda
-            cd /home/ubuntu
+            # 1. Setup Folder
+            mkdir -p ~/project-work-uaps && cd ~/project-work-uaps
             
-            # 2. Cek apakah folder project sudah ada. Jika belum, lakukan git clone!
-            if [ ! -d "project-work-uaps" ]; then
-              echo "Folder belum ada. Melakukan git clone..."
-              git clone https://github.com/takahashiumaru/project-work-uaps.git project-work-uaps
-            else
-              echo "Folder sudah ada. Lanjut ke proses pull."
-            fi
-            
-            # 3. Masuk ke dalam folder project
-            cd project-work-uaps
-            
-            # 4. Tarik kode terbaru dari GitHub branch main (lebih aman dengan Fetch & Reset)
-            git fetch --all
-            git reset --hard origin/main
+            # 2. Jalankan MySQL (Jika belum ada)
+            docker run -d --name mysql_db \
+              -e MYSQL_ROOT_PASSWORD=rootpassword \
+              -e MYSQL_DATABASE=aps \
+              -e MYSQL_USER=umarvps \
+              -e MYSQL_PASSWORD=umarvps \
+              -p 3307:3306 \
+              mysql:8.2 || true
 
+            # 3. Rebuild & Run App Laravel
+            # Mengambil Dockerfile terbaru dari GitHub (via curl atau copy)
+            curl -o Dockerfile https://raw.githubusercontent.com/takahashiumaru/project-work-uaps/main/Dockerfile
             
-            # 5. Install dependensi PHP (Composer)
-            echo "Menginstall dependensi Composer..."
-            # Gunakan --ignore-platform-reqs jika VPS tidak memiliki ekstensi PHP lengkap (seperti GD atau sockets)
-            composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
+            docker build -t uaps-app .
+            docker stop uaps-container || true && docker rm uaps-container || true
             
-            # 6. Urusan file .env
-            if [ ! -f .env ]; then
-              echo "File .env belum ada. Mengcopy dari .env.example..."
-              cp .env.example .env
-              php artisan key:generate
-              echo "PENTING: Pastikan Anda telah mengonfigurasi database di file .env pada VPS!"
-            fi
-            
-            # 7. Jalankan Migrasi dan Storage Link
-            echo "Menjalankan migrasi database..."
-            # Coba jalankan migrasi, jika gagal coba ganti 127.0.0.1 ke localhost (Unix Socket)
-            if ! php artisan migrate --force; then
-              echo "Koneksi database gagal dengan 127.0.0.1. Mencoba beralih ke 'localhost' di .env..."
-              sed -i 's/DB_HOST=127.0.0.1/DB_HOST=localhost/g' .env
-              if php artisan migrate --force; then
-                echo "Migrasi berhasil setelah menggunakan DB_HOST=localhost!"
-              else
-                echo "DATABASE ERROR: Masih tidak bisa terhubung ke database."
-                echo "Pesan: Connection Refused biasanya berarti MySQL tidak jalan atau .env salah."
-                echo "Silakan cek: 1. sudo systemctl status mysql, 2. Database 'aps' sudah dibuat."
-              fi
-            fi
-            php artisan storage:link || true
-            
-            # 8. Matikan proses serve yang lama
-            echo "Mematikan server lama..."
-            # Matikan semua process php artisan serve milik user ini
-            pkill -f "php artisan serve" || fuser -k 8000/tcp || true
-            
-            # 9. Jalankan server baru di background
-            echo "Menjalankan server Laravel..."
-            # Pastikan port 8000 bersih sebelum jalan
-            nohup php artisan serve --host=0.0.0.0 --port=8000 > /dev/null 2>&1 &
-            
-            # Berikan waktu sejenak agar server up
-            sleep 2
-            if curl -s http://localhost:8000 > /dev/null; then
-              echo "Server Laravel berhasil dijalankan di port 8000!"
-            else
-              echo "PERINGATAN: Server mungkin gagal jalan. Cek log jika perlu."
-            fi
-            
-            echo "Deployment Laravel Selesai!"
-
+            # Jalankan App dan hubungkan ke MySQL
+            docker run -d --name uaps-container \
+              -p 80:80 \
+              --link mysql_db:db \
+              uaps-app
