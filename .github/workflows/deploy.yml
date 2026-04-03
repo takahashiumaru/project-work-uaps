@@ -15,7 +15,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 26088 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
+          port: 22 # Ubah ke 26088 jika port SSH VPS Anda 26088 seperti di contoh sebelumnya
           script: |
             # 1. Masuk ke folder home utama Anda
             cd /home/ubuntu
