@@ -45,7 +45,7 @@ jobs:
                 composer install --no-interaction --prefer-dist && \
                 [ ! -f .env ] && cp .env.example .env && \
                 php artisan key:generate --force && \
-                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}:8000|' .env && \
+                sed -i 's|APP_URL=.*|APP_URL=http://\${MY_VPS_IP}|' .env && \
                 chown -R www-data:www-data storage bootstrap/cache public && \
                 chmod -R 775 storage bootstrap/cache public && \
                 rm -rf public/storage && \
