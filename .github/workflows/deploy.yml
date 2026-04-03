@@ -16,7 +16,7 @@ jobs:
           script: |
             mkdir -p ~/project-work-uaps && cd ~/project-work-uaps
             
-            # 1. Pastikan MySQL jalan duluan
+            # 1. Pastikan MySQL jalan
             if [ ! "$(docker ps -q -f name=mysql_db)" ]; then
                 docker run -d --name mysql_db \
                   -e MYSQL_ROOT_PASSWORD=rootpassword \
@@ -27,10 +27,13 @@ jobs:
                   mysql:8.2
             fi
 
-            # 2. Ambil Dockerfile terbaru
+            # 2. Ambil Dockerfile terbaru dari repo
             curl -sO https://raw.githubusercontent.com/takahashiumaru/project-work-uaps/main/Dockerfile
             
-            # 3. Build & Run (Hapus yang lama dulu)
+            # 3. Bersihkan cache build lama agar RAM lega
+            docker builder prune -f
+            
+            # 4. Rebuild & Run
             docker stop uaps-container || true
             docker rm uaps-container || true
             
