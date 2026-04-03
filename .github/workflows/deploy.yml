@@ -17,7 +17,7 @@ jobs:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: 26088 # Sesuai port SSH VPS lu
+          port: 22 # Sesuai port SSH VPS lu
           script: |
             PROJECT_DIR=$HOME/project-work-uaps
             mkdir -p $PROJECT_DIR
