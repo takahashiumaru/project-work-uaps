@@ -26,30 +26,37 @@ jobs:
                 git pull origin main
             fi
 
-            # 3. Pastikan Database berjalan
+            # 3. Buat Network (Agar lebih stabil dibanding --link)
+            docker network create uaps-network 2>/dev/null || true
+
+            # 4. Pastikan Database berjalan
             if [ ! "$(docker ps -aq -f name=mysql_db)" ]; then
                 docker run -d --name mysql_db --restart unless-stopped \
+                  --network uaps-network \
                   -e MYSQL_ROOT_PASSWORD=rootpassword \
                   -e MYSQL_DATABASE=aps \
                   -e MYSQL_USER=umarvps \
                   -e MYSQL_PASSWORD=umarvps \
                   -p 3306:3306 \
                   mysql:8.2
+            else
+                # Pastikan container yang sudah ada terhubung ke network
+                docker network connect uaps-network mysql_db 2>/dev/null || true
             fi
 
-            # 4. Build Image (Menggunakan Dockerfile dari repo yang sudah di-pull)
+            # 5. Build Image (Menggunakan Dockerfile dari repo yang sudah di-pull)
             docker build --pull -t image-uaps .
 
-            # 5. Restart Container dengan image baru yang sudah teroptimasi
+            # 6. Restart Container dengan network baru
             docker stop uaps-app || true
             docker rm uaps-app || true
 
             docker run -d --name uaps-app \
               --restart unless-stopped \
+              --network uaps-network \
               -p 8000:80 \
-              --link mysql_db:db \
               -e APP_KEY=${{ secrets.APP_KEY }} \
-              -e DB_HOST=db \
+              -e DB_HOST=mysql_db \
               -e DB_DATABASE=aps \
               -e DB_USERNAME=umarvps \
               -e DB_PASSWORD=umarvps \
