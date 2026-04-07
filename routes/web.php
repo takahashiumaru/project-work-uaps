@@ -58,14 +58,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
 
     // Change Password & Profile Picture
-    Route::get('/change-password', [LoginController::class, 'showChangePasswordForm'])->name('change.password');
+    Route::get('/change-password', [LoginController::class, 'showChangePasswordForm'])->name('profile.change.password');
     Route::post('/update-password', [LoginController::class, 'updatePassword'])->name('update.password');
     Route::post('/update-photo/{userId}', [UserController::class, 'updatePhoto'])->name('user.updatePhoto');
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('users.profile');
 
     // --- USER MANAGEMENT (CRUD) ---
     Route::resource('users', UserController::class);
-    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::put('/reset-password/{id}', [UserController::class, 'resetPassword'])->name('user.resetPassword');
 
     // Kontrak User
@@ -85,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/staff/import', [StaffController::class, 'import'])->name('staff.import');
     Route::get('/staff/template', [StaffController::class, 'template'])->name('staff.template');
 
-    Route::get('/blacklist-data', [BlacklistController::class, 'index'])->name('blacklist.index');
+    Route::get('/blacklist-data', [BlacklistController::class, 'index'])->name('blacklist.data');
 
     // switch on off staff
     Route::post('/staff/toggle/{id}', [StaffController::class, 'toggleStatus'])->name('staff.toggle');
@@ -98,7 +97,6 @@ Route::middleware(['auth'])->group(function () {
 
     // --- FLIGHTS ---
     Route::resource('flights', FlightController::class);
-    Route::post('/flights', [FlightController::class, 'store'])->name('flights.store'); // Override resource store if needed?
     Route::get('/flights/{id}/details', [FlightController::class, 'getDetails'])->name('flights.details');
     Route::get('/flight/{id}/users', [HomeController::class, 'getFlightUsers']);
 
@@ -107,8 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/schedule-now', [ScheduleController::class, 'now'])->name('schedule.now');
     Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.view'); // Hati-hati conflict dgn resource show
     Route::post('/schedule/auto-create', [ScheduleController::class, 'autoCreate'])->name('schedule.autoCreate');
-    Route::get('/schedule/edit/{id}', [ScheduleController::class, 'edit'])->name('schedule.edit');
-    Route::post('/schedule/update/{userId}/{date}', [ScheduleController::class, 'update'])->name('schedule.update');
+    Route::post('/schedule/update/{userId}/{date}', [ScheduleController::class, 'update'])->name('schedule.update.userdate');
     Route::post('/schedules/update-active', [ScheduleController::class, 'updateActive']);
 
     // Freelance Schedule
@@ -118,7 +115,7 @@ Route::middleware(['auth'])->group(function () {
 
     // --- SHIFTS ---
     Route::resource('shift', ShiftController::class);
-    Route::put('/shifts/{shift}', [ShiftController::class, 'update'])->name('shift.update');
+    Route::put('/shifts/{shift}', [ShiftController::class, 'update'])->name('shift.update.plural');
 
     // --- ATTENDANCE (ABSENSI) ---
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
