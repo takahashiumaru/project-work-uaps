@@ -26,7 +26,7 @@ jobs:
                 git pull origin main
             fi
 
-            # 3. Buat Network (Agar lebih stabil dibanding --link)
+            # 3. Buat Network (Agar bisa saling ngobrol dengan nama container)
             docker network create uaps-network 2>/dev/null || true
 
             # 4. Pastikan Database berjalan
@@ -40,21 +40,22 @@ jobs:
                   -p 3306:3306 \
                   mysql:8.2
             else
-                # Pastikan container yang sudah ada terhubung ke network
+                # Pastikan container database terhubung ke network yang sama
                 docker network connect uaps-network mysql_db 2>/dev/null || true
             fi
 
-            # 5. Build Image (Menggunakan Dockerfile dari repo yang sudah di-pull)
+            # 5. Build Image Laravel dari kode terbaru
             docker build --pull -t image-uaps .
 
-            # 6. Restart Container dengan network baru
+            # 6. Restart Container Aplikasi dengan port 8080
             docker stop uaps-app || true
             docker rm uaps-app || true
 
+            # REVISI ADA DI SINI: -p 8080:80
             docker run -d --name uaps-app \
               --restart unless-stopped \
               --network uaps-network \
-              -p 8000:80 \
+              -p 8080:80 \
               -e APP_KEY=${{ secrets.APP_KEY }} \
               -e DB_HOST=mysql_db \
               -e DB_DATABASE=aps \
@@ -62,5 +63,5 @@ jobs:
               -e DB_PASSWORD=umarvps \
               image-uaps
 
-            # 6. Bersihkan resource Docker yang tidak terpakai
+            # 7. Bersihkan resource Docker (sampah image lama) yang tidak terpakai
             docker image prune -f
