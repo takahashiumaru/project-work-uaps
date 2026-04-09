@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Schedule;
-use App\Models\schedule_detail;
+use App\Models\ScheduleDetail;
 use App\Models\User;
 
 class AutoCreateScheduleDetails extends Command
@@ -20,7 +20,7 @@ class AutoCreateScheduleDetails extends Command
         $schedules = Schedule::all();
 
         foreach ($schedules as $schedule) {
-            $existingUserIds = schedule_detail::where('schedule_id', $schedule->id)->pluck('user_id')->toArray();
+            $existingUserIds = ScheduleDetail::where('schedule_id', $schedule->id)->pluck('user_id')->toArray();
             $existingCount = count($existingUserIds);
 
             $needed = $schedule->use - $existingCount;
@@ -28,7 +28,7 @@ class AutoCreateScheduleDetails extends Command
             for ($i = 0; $i < $needed && $userIndex < count($allUsers); $i++) {
                 $user = $allUsers[$userIndex];
 
-                schedule_detail::firstOrCreate([
+                ScheduleDetail::firstOrCreate([
                     'schedule_id' => $schedule->id,
                     'user_id' => $user->id
                 ]);

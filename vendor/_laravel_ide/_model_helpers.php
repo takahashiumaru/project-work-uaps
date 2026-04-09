@@ -20,7 +20,7 @@ namespace App\Models {
      * @property string|null $check_out_time
      * @property string|null $status
      * @property string|null $check_in_time
-     * @property int $user_id
+     * @property string $user_id
      * @property int $id
      * @property-read \App\Models\User $user
      * @method static \Illuminate\Database\Eloquent\Builder<Attendance>|Attendance whereId($value)
@@ -680,7 +680,7 @@ namespace App\Models {
      * @property string|null $human_factors_registered
      * @property string|null $safety_management_system_expired
      * @property string|null $safety_management_system_registered
-     * @property int $user_id
+     * @property string $user_id
      * @property int $id
      * @property-read mixed $is_expired
      * @property-read mixed $is_expiring_soon
@@ -1975,9 +1975,9 @@ namespace App\Models {
      * App\Models\Leave
      *
      * @property string|null $manager_comment
-     * @property int|null $rejected_by
+     * @property string|null $rejected_by
      * @property string|null $approved_at
-     * @property int|null $approved_by
+     * @property string|null $approved_by
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property string|null $document
@@ -1989,7 +1989,7 @@ namespace App\Models {
      * @property string $end_date
      * @property string $start_date
      * @property string $leave_type
-     * @property int $user_id
+     * @property string $user_id
      * @property int $id
      * @property-read mixed $total_days
      * @property-read \App\Models\User $user
@@ -2946,7 +2946,7 @@ namespace App\Models {
      * @property string $title
      * @property int $duration
      * @property string $date
-     * @property int $user_id
+     * @property string $user_id
      * @property int $id
      * @property-read \App\Models\User $user
      * @method static \Illuminate\Database\Eloquent\Builder<Overtime>|Overtime whereId($value)
@@ -3270,6 +3270,8 @@ namespace App\Models {
      * @property-read \App\Models\Shift $shift
      * @property-read \App\Models\Freelance $freelance
      * @property-read \App\Models\User $user
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ScheduleDetail> $details
+     * @property-read int|null $details_count
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereUserId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereDate($value)
@@ -3576,12 +3578,13 @@ namespace App\Models {
     }
 
     /**
-     * App\Models\schedule_detail
+     * App\Models\ScheduleDetail
      *
      * @property-read \App\Models\Schedule $schedule
-     * @method static \Illuminate\Database\Eloquent\Builder<schedule_detail>|schedule_detail newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<schedule_detail>|schedule_detail newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<schedule_detail>|schedule_detail query()
+     * @property-read \App\Models\User $user
+     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail query()
      * @method static mixed select($columns)
      * @method static mixed selectSub($query, $as)
      * @method static mixed selectRaw($expression, array $bindings)
@@ -3874,7 +3877,7 @@ namespace App\Models {
      * @method static mixed macroCall($method, $parameters)
      * @mixin \Illuminate\Database\Query\Builder
      */
-    class schedule_detail extends \Illuminate\Database\Eloquent\Model
+    class ScheduleDetail extends \Illuminate\Database\Eloquent\Model
     {
         //
     }
@@ -4516,6 +4519,9 @@ namespace App\Models {
     /**
      * App\Models\User
      *
+     * @property string|null $tempat_lahir
+     * @property string|null $no_nik
+     * @property string|null $no_kk
      * @property boolean $is_active
      * @property string|null $bpjs_kesehatan
      * @property string|null $bpjs_tk
@@ -4563,6 +4569,8 @@ namespace App\Models {
      * @property-read int|null $subordinates_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Overtime> $overtimes
      * @property-read int|null $overtimes_count
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ScheduleDetail> $scheduleDetails
+     * @property-read int|null $schedule_details_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)
@@ -4603,6 +4611,9 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereBpjsTk($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereBpjsKesehatan($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsActive($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereNoKk($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereNoNik($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereTempatLahir($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User newModelQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User newQuery()
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User query()
