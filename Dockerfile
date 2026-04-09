@@ -64,6 +64,7 @@ fi\n\
 # Update .env for production speed\n\
 sed -i 's/APP_ENV=local/APP_ENV=production/' .env\n\
 sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env\n\
+sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql_db/' .env\n\
 \n\
 echo 'Setting up database and cache...'\n\
 php artisan optimize:clear\n\
