@@ -66,6 +66,10 @@ sed -i 's/APP_ENV=local/APP_ENV=production/' .env\n\
 sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env\n\
 \n\
 echo 'Setting up database and cache...'\n\
+php artisan optimize:clear\n\
+php artisan session:table || true\n\
+php artisan cache:table || true\n\
+php artisan queue:table || true\n\
 php artisan migrate --force\n\
 php artisan storage:link || true\n\
 php artisan config:cache\n\
