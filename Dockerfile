@@ -25,9 +25,6 @@ WORKDIR /var/www/html
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy configuration files
-# (Note: We'll need to create these files or use sed to configure nginx)
-
 # Copy application source
 COPY . .
 
@@ -54,7 +51,7 @@ RUN printf "server {\n\
     }\n\
 }\n" > /etc/nginx/http.d/default.conf
 
-# Entrypoint script
+# Entrypoint script (Tanpa php artisan migrate)
 RUN printf "#!/bin/bash\n\
 if [ ! -f .env ]; then \n\
     cp .env.example .env && \n\
@@ -66,13 +63,9 @@ sed -i 's/APP_ENV=local/APP_ENV=production/' .env\n\
 sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env\n\
 sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql_db/' .env\n\
 \n\
-echo 'Setting up database and cache...'\n\
+echo 'Setting up cache...'\n\
 php artisan optimize:clear\n\
-php artisan session:table || true\n\
-php artisan cache:table || true\n\
-php artisan queue:table || true\n\
-php artisan migrate --force\n\
-php artisan storage:link || true\n\
+php artisan storage:link --force || true\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
 php artisan view:cache\n\

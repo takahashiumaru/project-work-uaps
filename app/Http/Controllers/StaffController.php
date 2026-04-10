@@ -76,29 +76,33 @@ class StaffController extends Controller
     // =================================================================
     // 3. IMPORT DATA DARI CSV
     // =================================================================
-    public function import(Request $request)
-    {
-        // Cek Keamanan
-        if (Auth::user()->role !== 'Admin') {
-            abort(403);
-        }
-
-        $request->validate([
-            'file' => 'required|mimes:csv,txt,xlsx'
-        ]);
-
-        try {
-            // Proses Import menggunakan Class StaffImport
-            Excel::import(new StaffImport, $request->file('file'));
-
-            Alert::success('Berhasil', 'Data Staff berhasil diimpor!');
-        } catch (\Exception $e) {
-            // Tangkap error jika format CSV salah atau ID duplikat
-            Alert::error('Gagal', 'Gagal impor: ' . $e->getMessage());
-        }
-
-        return back();
+   public function import(Request $request)
+{
+    if (Auth::user()->role !== 'Admin') {
+        abort(403);
     }
+
+    $request->validate([
+        'file' => 'required|mimes:csv,txt,xlsx'
+    ]);
+
+    try {
+        // Import Excel
+        Excel::import(new StaffImport, $request->file('file'));
+
+        Alert::success('Berhasil', 'Data Staff berhasil diimpor!');
+    } catch (\Exception $e) {
+        // Dump semua info error
+        dd([
+            'message' => $e->getMessage(),
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString()
+        ]);
+    }
+
+    return back();
+}
 
     // =================================================================
     // 4. DOWNLOAD TEMPLATE CSV (Agar format upload benar)
@@ -114,6 +118,7 @@ class StaffController extends Controller
             'id_nip',
             'nama_lengkap',
             'email',
+            'no_hp',
             'role',
             'station_code',
             'gender',
@@ -122,7 +127,15 @@ class StaffController extends Controller
             'mulai_kontrak',
             'selesai_kontrak',
             'no_pas',
-            'pas_expired'
+            'pas_registered',
+            'pas_expired',
+            'bpjs_tk',
+            'bpjs_kesehatan',
+            'no_kk',
+            'no_nik',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'job_title'
         ];
 
         // Buat file CSV on-the-fly (langsung download)
@@ -135,6 +148,7 @@ class StaffController extends Controller
                 '12345',
                 'Budi Santoso',
                 'budi@aps.com',
+                '08123456789',
                 'Porter Apron',
                 'CGK',
                 'Male',
@@ -143,7 +157,15 @@ class StaffController extends Controller
                 '2023-01-01',
                 '2024-01-01',
                 'PAS-001',
-                '2024-05-20'
+                '2024-01-01',
+                '2024-05-20',
+                'BPJS-001',
+                'BPJS-002',
+                'KK-001',
+                'NIK-001',
+                'Jakarta',
+                '1990-01-01',
+                'OFFICE / ADMINISTRATION'
             ]);
 
             fclose($file);

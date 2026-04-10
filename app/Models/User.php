@@ -7,8 +7,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Leave;
 use App\Models\Certificate; // <--- PASTIKAN BARIS INI ADA!
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -16,6 +14,8 @@ class User extends Authenticatable
 
     use HasFactory, Notifiable;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -104,46 +104,37 @@ class User extends Authenticatable
     // =================================================================
 
     // Relasi ke Cuti
-    public function leaves(): HasMany
+    public function leaves()
     {
         return $this->hasMany(Leave::class);
     }
 
     // Relasi ke Sertifikat Training
-    public function certificates(): HasMany
+    public function certificates()
     {
         return $this->hasMany(Certificate::class);
     }
 
     // Relasi: User ini punya satu atasan (PIC)
-    public function pic(): BelongsTo
+    public function pic()
     {
         return $this->belongsTo(User::class, 'pic_id');
     }
 
     // Relasi: User ini punya banyak bawahan (Jika dia Leader)
-    public function subordinates(): HasMany
+    public function subordinates()
     {
         return $this->hasMany(User::class, 'pic_id');
     }
 
     // Helper Function
-    public function isAdmin(): bool
+    public function isAdmin()
     {
         return $this->role === 'Admin';
     }
-
     // Relasi ke Lembur
-    public function overtimes(): HasMany
+    public function overtimes()
     {
         return $this->hasMany(Overtime::class);
-    }
-
-    /**
-     * Get the schedule details for the user.
-     */
-    public function scheduleDetails(): HasMany
-    {
-        return $this->hasMany(ScheduleDetail::class, 'user_id');
     }
 }

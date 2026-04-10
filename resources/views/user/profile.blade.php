@@ -102,18 +102,18 @@
             grid-template-columns: 1fr;
             gap: 1rem;
         }
-        
+
         .profile-photo {
             width: 120px;
             height: 120px;
         }
-        
+
         .profile-info-item {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.25rem;
         }
-        
+
         .info-value {
             text-align: left;
         }
@@ -123,7 +123,7 @@
         .container-p-y {
             padding: 1rem !important;
         }
-        
+
         .profile-card {
             margin: 0 -1rem;
             border-radius: 0;
@@ -173,7 +173,7 @@
                     <form id="photoForm" method="POST" enctype="multipart/form-data" action="{{ route('user.updatePhoto', ['userId' => $user->id]) }}">
                         @csrf
                         <input type="file" name="profile_picture" id="fileInput" style="display: none;" onchange="document.getElementById('photoForm').submit();">
-                        
+
                         <div class="profile-header">
                             <label for="fileInput" style="cursor: pointer;">
                                 <img src="{{ $user->profile_picture ? asset('storage/photo/' . $user->profile_picture) : asset('storage/photo/user.jpg') }}"
@@ -284,7 +284,7 @@
                                 <label for="subUnit">Sub Unit</label>
                                 <input type="text" class="form-control" id="subUnit" value="{{ $user->sub_unit ?? 'N/A' }}" disabled>
                             </div>
-                        
+
 
                         <div class="col-md-6 form-group mb-3">
                             <label for="manager">Manager</label>
@@ -324,11 +324,11 @@
                         <div class="row">
                         <div class="col-md-6 form-group mb-3">
                             <label for="firstName">NIK</label>
-                            <input type="text" class="form-control" id="NIK" value="{{ $user->nik }}" disabled>
+                            <input type="text" class="form-control" id="NIK" value="{{ $user->no_nik }}" disabled>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label for="email">KK</label>
-                            <input type="text" class="form-control" id="KK" value="{{ $user->kk }}" disabled>
+                            <input type="text" class="form-control" id="KK" value="{{ $user->no_kk }}" disabled>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label for="firstName">BPJS Kesehatan</label>
@@ -425,7 +425,7 @@
         // Handle photo upload click
         const profilePhoto = document.querySelector('.profile-photo');
         const fileInput = document.getElementById('fileInput');
-        
+
         if (profilePhoto && fileInput) {
             profilePhoto.addEventListener('click', function() {
                 fileInput.click();
@@ -450,7 +450,7 @@
             photo.addEventListener('mouseenter', function() {
                 this.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
             });
-            
+
             photo.addEventListener('mouseleave', function() {
                 this.style.boxShadow = 'none';
             });

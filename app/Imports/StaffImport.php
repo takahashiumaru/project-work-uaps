@@ -3,42 +3,60 @@
 namespace App\Imports;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Concerns\ToCollection;
 
-class StaffImport implements ToModel, WithHeadingRow, WithValidation
+class StaffImport implements ToCollection
 {
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        return new User([
-            'id'             => $row['id_nip'], // Pastikan header di CSV bernama 'id_nip'
-            'fullname'       => $row['nama_lengkap'],
-            'email'          => $row['email'],
-            'password'       => Hash::make('password123'), // Default Password
-            'role'           => $row['role'],
-            'station'        => strtoupper($row['station_code']),
-            'gender'         => $row['gender'],
-            'join_date'      => $row['tanggal_gabung'] ?? date('Y-m-d'),
-            'salary'         => $row['gaji'] ?? 0,
-            'is_qantas'      => 0, // Default
-            
-            // Data Opsional (Kontrak & PAS)
-            'contract_start' => $row['mulai_kontrak'] ?? null,
-            'contract_end'   => $row['selesai_kontrak'] ?? null,
-            'no_pas'         => $row['no_pas'] ?? null,
-            'pas_expired'    => $row['pas_expired'] ?? null,
-        ]);
+        $rows->shift(); // skip header
+
+        foreach ($rows as $row) {
+
+            User::updateOrCreate(
+                [
+                    'id' => $row[0],
+                ],
+                [
+                    'fullname'        => $row[1],
+                    'email'           => $row[2],
+                    'phone'           => $row[3],
+                    'no_hp'           => $row[3],
+                    'role'            => strtoupper($row[4]),
+                    'station'         => $row[5],
+                    'gender'          => $row[6],
+                    'join_date'       => $this->formatDate($row[7]),
+                    'salary'          => $row[8],
+                    'contract_start'  => $this->formatDate($row[9]),
+                    'contract_end'    => $this->formatDate($row[10]),
+                    'no_pas'          => $row[11],
+                    'pas_registered'  => $row[12],
+                    'pas_expired'     => $this->formatDate($row[13]),
+                    'bpjs_tk'         => $row[14],
+                    'bpjs_kesehatan'  => $row[15],
+                    'no_kk'           => $row[16],
+                    'no_nik'          => $row[17],
+                    'tempat_lahir'    => $row[18],
+                    'tanggal_lahir'   => $this->formatDate($row[19]),
+                    'job_title'           => $row[20],
+                    'password'        => Hash::make('password123'),
+
+                ]
+            );
+        }
     }
 
-    public function rules(): array
+    private function formatDate($value)
     {
-        return [
-            'id_nip'       => 'required|unique:users,id',
-            'email'        => 'required|email|unique:users,email',
-            'station_code' => 'required|exists:stations,code', // Wajib ada di tabel stations
-            'role'         => 'required',
-        ];
+        if (!$value) return null;
+
+        try {
+            return Carbon::parse($value)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

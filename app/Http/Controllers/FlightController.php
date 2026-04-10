@@ -7,21 +7,18 @@ use Illuminate\View\View;
 use App\Models\Flights;
 use App\Models\Schedule;
 use App\Models\Shift;
-use App\Models\FlightDetails;
+use App\Models\Flight_details;
 use App\Models\User;
-
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class FlightController extends Controller
-
 {
     public function index(): View
     {
         $flights = Flights::orderBy('arrival_time', 'asc')->paginate(30);
-
 
         return view('flight.index', compact('flights'));
     }
@@ -30,7 +27,6 @@ class FlightController extends Controller
     {
         try {
             $flight = new Flights();
-
             $flight->airline = $request->airline;
             $flight->flight_number = $request->flight_number;
             $flight->registasi = $request->registasi;
@@ -56,7 +52,6 @@ class FlightController extends Controller
             $currentTime = $now->format('H:i:s');
 
             $activeShifts = Shift::where('start_time', '<=', $currentTime)
-
                 ->where('end_time', '>=', $currentTime)
                 ->get();
 
@@ -66,7 +61,6 @@ class FlightController extends Controller
             }
 
             $schedules = Schedule::where('date', $today)
-
                 ->whereIn('shift_id', $activeShifts->pluck('id'))
                 ->get();
 
@@ -76,13 +70,11 @@ class FlightController extends Controller
                 if ($assigned >= $requiredPeople) break;
 
                 $user = User::find($schedule->user_id);
-
                 if (!$user) continue;
 
                 if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
 
-                FlightDetails::create([
-
+                Flight_details::create([
                     'flight_id' => $flight->id,
                     'schedule_id' => $schedule->id,
                 ]);
@@ -99,7 +91,6 @@ class FlightController extends Controller
                 if (count($assignedUsers) >= $requiredPeople) break;
 
                 $user = User::find($schedule->user_id);
-
                 if (!$user) continue;
 
                 if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
@@ -138,7 +129,6 @@ class FlightController extends Controller
 
 
     public function update(Flights $flight)
-
     {
         try {
             $flight->update(['status' => true]);

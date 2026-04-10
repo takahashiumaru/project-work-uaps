@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Freelance;
 use App\Models\User;
-use App\Models\Schedule;
+use App\Models\schedule;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

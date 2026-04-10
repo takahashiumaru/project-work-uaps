@@ -235,9 +235,66 @@
                 </table>
             </div>
 
-            <div class="mt-4 d-flex justify-content-center">
-                {{ $staffs->appends(['station' => request('station')])->links() }}
+            <div class="mt-4 d-flex justify-content-center align-items-center gap-2">
+                @if ($staffs->hasPages())
+                <div class="d-flex align-items-center gap-2">
+                    {{-- Previous --}}
+                    <button class="btn btn-outline-primary" id="prevBtn" {{ $staffs->onFirstPage() ? 'disabled' : '' }}>
+                        &laquo; Previous
+                    </button>
+
+                    {{-- Input halaman --}}
+                    <input type="number" id="pageNumber" min="1" max="{{ $staffs->lastPage() }}" value="{{ $staffs->currentPage() }}" class="form-control text-center" style="width: 70px;">
+
+                    {{-- Next --}}
+                    <button class="btn btn-outline-primary" id="nextBtn" {{ $staffs->hasMorePages() ? '' : 'disabled' }}>
+                        Next &raquo;
+                    </button>
+                </div>
+                @endif
             </div>
+
+            <script>
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+                const pageNumber = document.getElementById('pageNumber');
+                const lastPage = {{ $staffs->lastPage() }};
+
+                // Fungsi lompat halaman
+                function goToPage(page) {
+                    if (page < 1) page = 1;
+                    if (page > lastPage) page = lastPage;
+
+                    // Ambil semua query string saat ini
+                    const urlParams = new URLSearchParams(window.location.search);
+
+                    // Tetap simpan filter/search/station
+                    urlParams.set('page', page);
+
+                    // Redirect ke URL baru
+                    window.location.search = urlParams.toString();
+                }
+
+                // Tombol Previous
+                prevBtn.addEventListener('click', () => {
+                    const current = parseInt(pageNumber.value);
+                    goToPage(current - 1);
+                });
+
+                // Tombol Next
+                nextBtn.addEventListener('click', () => {
+                    const current = parseInt(pageNumber.value);
+                    goToPage(current + 1);
+                });
+
+                // Enter di input
+                pageNumber.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        goToPage(parseInt(pageNumber.value));
+                    }
+                });
+            </script>
         </div>
     </div>
 </div>

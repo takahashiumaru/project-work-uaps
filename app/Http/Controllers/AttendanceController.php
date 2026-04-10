@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AttendanceReportExport;
 use App\Models\Attendance;
-use App\Models\Schedule;
+use App\Models\schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -139,6 +139,8 @@ class AttendanceController extends Controller
             $attendance->update([
                 'check_out_time' => $now,
                 'check_out_photo' => $fileName,
+                'check_out_latitude' => $request->latitude,
+                'check_out_longitude' => $request->longitude,
             ]);
         }
 

@@ -59,7 +59,6 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Simpan Sertifikat</button>
-            <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
 </div>

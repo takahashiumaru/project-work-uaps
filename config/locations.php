@@ -15,10 +15,20 @@ return [
             'latitude' => -6.119188929192533,
             'longitude' => 106.66379443929742,
         ],
+        // 'CGK' => [
+        //     'name' => 'Ruangan CGK',
+        //     'latitude' => -6.337658196962504,
+        //     'longitude' => 106.79491924493006,
+        // ],
+        // 'SUB' => [
+        //     'name' => 'Ruangan SUB',
+        //     'latitude' => -7.3817790,
+        //     'longitude' => 112.7707060,
+        // ],
         'SUB' => [
             'name' => 'Ruangan SUB',
-            'latitude' => -7.3817790,
-            'longitude' => 112.7707060,
+            'latitude' => -7.381947,
+            'longitude' => 112.771782,
         ],
         'KNO' => [
             'name' => 'Ruangan KNO',

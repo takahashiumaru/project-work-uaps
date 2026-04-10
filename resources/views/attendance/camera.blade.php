@@ -15,16 +15,20 @@
     }
 
     .btn-circle {
-        width: 70px;
-        height: 70px;
+        width: clamp(70px, 18vw, 120px);
+        height: clamp(70px, 18vw, 120px);
         border-radius: 50%;
+    
         display: flex;
         align-items: center;
         justify-content: center;
+    
         background: rgba(0, 123, 255, 0.85);
         color: white;
-        font-size: 18px;
+    
+        font-size: clamp(16px, 4vw, 22px);
         font-weight: bold;
+    
         border: none;
         backdrop-filter: blur(5px);
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);

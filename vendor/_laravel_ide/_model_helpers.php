@@ -1008,7 +1008,7 @@ namespace App\Models {
     }
 
     /**
-     * App\Models\FlightDetails
+     * App\Models\Flight_details
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
@@ -1016,14 +1016,14 @@ namespace App\Models {
      * @property int $flight_id
      * @property int $id
      * @property-read \App\Models\Schedule $schedule
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails whereId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails whereFlightId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails whereScheduleId($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails whereCreatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails whereUpdatedAt($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<FlightDetails>|FlightDetails query()
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details whereFlightId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details whereScheduleId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details whereCreatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details whereUpdatedAt($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Flight_details>|Flight_details query()
      * @method static mixed select($columns)
      * @method static mixed selectSub($query, $as)
      * @method static mixed selectRaw($expression, array $bindings)
@@ -1316,7 +1316,7 @@ namespace App\Models {
      * @method static mixed macroCall($method, $parameters)
      * @mixin \Illuminate\Database\Query\Builder
      */
-    class FlightDetails extends \Illuminate\Database\Eloquent\Model
+    class Flight_details extends \Illuminate\Database\Eloquent\Model
     {
         //
     }
@@ -1335,7 +1335,7 @@ namespace App\Models {
      * @property string $airline
      * @property string|null $station
      * @property int $id
-     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\FlightDetails> $details
+     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Flight_details> $details
      * @property-read int|null $details_count
      * @method static \Illuminate\Database\Eloquent\Builder<Flights>|Flights whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Flights>|Flights whereStation($value)
@@ -2314,11 +2314,11 @@ namespace App\Models {
     }
 
     /**
-     * App\Models\Manpower
+     * App\Models\Manpowers
      *
-     * @method static \Illuminate\Database\Eloquent\Builder<Manpower>|Manpower newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<Manpower>|Manpower newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<Manpower>|Manpower query()
+     * @method static \Illuminate\Database\Eloquent\Builder<Manpowers>|Manpowers newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Manpowers>|Manpowers newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Manpowers>|Manpowers query()
      * @method static mixed select($columns)
      * @method static mixed selectSub($query, $as)
      * @method static mixed selectRaw($expression, array $bindings)
@@ -2611,7 +2611,7 @@ namespace App\Models {
      * @method static mixed macroCall($method, $parameters)
      * @mixin \Illuminate\Database\Query\Builder
      */
-    class Manpower extends \Illuminate\Database\Eloquent\Model
+    class Manpowers extends \Illuminate\Database\Eloquent\Model
     {
         //
     }
@@ -3270,8 +3270,6 @@ namespace App\Models {
      * @property-read \App\Models\Shift $shift
      * @property-read \App\Models\Freelance $freelance
      * @property-read \App\Models\User $user
-     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ScheduleDetail> $details
-     * @property-read int|null $details_count
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereUserId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Schedule>|Schedule whereDate($value)
@@ -3578,13 +3576,12 @@ namespace App\Models {
     }
 
     /**
-     * App\Models\ScheduleDetail
+     * App\Models\Schedule_detail
      *
      * @property-read \App\Models\Schedule $schedule
-     * @property-read \App\Models\User $user
-     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail newModelQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail newQuery()
-     * @method static \Illuminate\Database\Eloquent\Builder<ScheduleDetail>|ScheduleDetail query()
+     * @method static \Illuminate\Database\Eloquent\Builder<Schedule_detail>|Schedule_detail newModelQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Schedule_detail>|Schedule_detail newQuery()
+     * @method static \Illuminate\Database\Eloquent\Builder<Schedule_detail>|Schedule_detail query()
      * @method static mixed select($columns)
      * @method static mixed selectSub($query, $as)
      * @method static mixed selectRaw($expression, array $bindings)
@@ -3877,7 +3874,7 @@ namespace App\Models {
      * @method static mixed macroCall($method, $parameters)
      * @mixin \Illuminate\Database\Query\Builder
      */
-    class ScheduleDetail extends \Illuminate\Database\Eloquent\Model
+    class Schedule_detail extends \Illuminate\Database\Eloquent\Model
     {
         //
     }
@@ -4559,7 +4556,7 @@ namespace App\Models {
      * @property string|null $role
      * @property string $job_title
      * @property string $fullname
-     * @property int $id
+     * @property string $id
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Leave> $leaves
      * @property-read int|null $leaves_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Certificate> $certificates
@@ -4569,8 +4566,6 @@ namespace App\Models {
      * @property-read int|null $subordinates_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Overtime> $overtimes
      * @property-read int|null $overtimes_count
-     * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ScheduleDetail> $scheduleDetails
-     * @property-read int|null $schedule_details_count
      * @property-read \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
      * @property-read int|null $notifications_count
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)

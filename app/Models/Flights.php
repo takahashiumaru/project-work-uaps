@@ -11,7 +11,6 @@ class Flights extends Model
 
     protected $table = 'flights';
 
-
     /**
      * fillable
      *
@@ -24,11 +23,11 @@ class Flights extends Model
         'arrival',
         'time_count',
         'status',
+        'created_at'
     ];
 
     public function details()
     {
-        return $this->hasMany(FlightDetails::class, 'flight_id', 'id');
+        return $this->hasMany(Flight_details::class, 'flight_id', 'id');
     }
-
 }

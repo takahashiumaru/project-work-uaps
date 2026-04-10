@@ -1,4 +1,4 @@
-name: Deploy Laravel to VPS
+name: Deploy Laravel to VPS (Port 8081)
 
 on:
   push:
@@ -15,21 +15,21 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # 1. Bersihkan dan Siapkan Workspace
-            mkdir -p ~/project-work-uaps
-            cd ~/project-work-uaps
+            # 1. Tentukan Workspace khusus project ini
+            mkdir -p ~/project-work-8081
+            cd ~/project-work-8081
 
-            # 2. Update Code di Host VPS (Bukan di dalam container)
+            # 2. Update Code
             if [ ! -d .git ]; then
                 git clone https://github.com/takahashiumaru/project-work-uaps.git .
             else
                 git pull origin main
             fi
 
-            # 3. Buat Network (Agar bisa saling ngobrol dengan nama container)
+            # 3. Gunakan Network yang sama atau baru
             docker network create uaps-network 2>/dev/null || true
 
-            # 4. Pastikan Database berjalan
+            # 4. Cek Database (Hanya jalan jika belum ada)
             if [ ! "$(docker ps -aq -f name=mysql_db)" ]; then
                 docker run -d --name mysql_db --restart unless-stopped \
                   --network uaps-network \
@@ -40,28 +40,30 @@ jobs:
                   -p 3306:3306 \
                   mysql:8.2
             else
-                # Pastikan container database terhubung ke network yang sama
                 docker network connect uaps-network mysql_db 2>/dev/null || true
             fi
 
-            # 5. Build Image Laravel dari kode terbaru
-            docker build --pull -t image-uaps .
+            # 5. Build Image dengan NAMA BARU
+            docker build --pull -t image-uaps-8081 .
 
-            # 6. Restart Container Aplikasi dengan port 8080
-            docker stop uaps-app || true
-            docker rm uaps-app || true
+            # 6. Restart Container Aplikasi
+            docker stop uaps-app-8081 || true
+            docker rm uaps-app-8081 || true
 
-            # REVISI ADA DI SINI: -p 8080:80
-            docker run -d --name uaps-app \
+            # MAPPING PORT: 8081 (Host VPS) -> 80 (Container)
+            docker run -d --name uaps-app-8081 \
               --restart unless-stopped \
               --network uaps-network \
-              -p 8080:80 \
+              -p 8081:80 \
               -e APP_KEY=${{ secrets.APP_KEY }} \
               -e DB_HOST=mysql_db \
               -e DB_DATABASE=aps \
               -e DB_USERNAME=umarvps \
               -e DB_PASSWORD=umarvps \
-              image-uaps
+              image-uaps-8081
 
-            # 7. Bersihkan resource Docker (sampah image lama) yang tidak terpakai
+            # 7. Pastikan storage:link berjalan (agar image muncul)
+            docker exec uaps-app-8081 php artisan storage:link --force || true
+
+            # 8. Bersihkan image lama yang tidak terpakai
             docker image prune -f

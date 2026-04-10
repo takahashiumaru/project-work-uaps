@@ -48,7 +48,7 @@
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('storage/aps.jpeg') }}" alt="Logo" width="120">
+                            <img src="{{ asset('storage/aps_light.png') }}" alt="Logo" width="120">
                         </span>
                     </a>
 
