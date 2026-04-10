@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Freelance;
 use App\Models\User;
-use App\Models\schedule;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -426,7 +426,7 @@ class ScheduleController extends Controller
 
         $search = request('search');
 
-        $user = user::where('role', 'like', "%{$rolePorter}%")->when($search, function ($query, $search) {
+        $user = User::where('role', 'like', "%{$rolePorter}%")->when($search, function ($query, $search) {
             return $query->where('fullname', 'like', "%{$search}%")
                 ->orWhere('id', 'like', "%{$search}%");
         })

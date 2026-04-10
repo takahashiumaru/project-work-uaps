@@ -16,7 +16,8 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             # 1. Tentukan Workspace khusus project ini
-            mkdir -p ~/project-work-8081
+            mkdir -p ~/project-work-8081/storage/app/public
+            chmod -R 775 ~/project-work-8081/storage
             cd ~/project-work-8081
 
             # 2. Update Code
@@ -43,7 +44,8 @@ jobs:
                 docker network connect uaps-network mysql_db 2>/dev/null || true
             fi
 
-            # 5. Build Image dengan NAMA BARU
+            # 5. Build Image dengan NAMA BARU (Bersihkan public/storage agar link tidak bermasalah)
+            rm -rf public/storage
             docker build --pull -t image-uaps-8081 .
 
             # 6. Restart Container Aplikasi
@@ -60,6 +62,7 @@ jobs:
               -e DB_DATABASE=aps \
               -e DB_USERNAME=umarvps \
               -e DB_PASSWORD=umarvps \
+              -v ~/project-work-8081/storage/app/public:/var/www/html/storage/app/public \
               image-uaps-8081
 
             # 7. Pastikan storage:link berjalan (agar image muncul)

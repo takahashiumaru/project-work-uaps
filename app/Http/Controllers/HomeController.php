@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\flights; // Pastikan model ini benar
+use App\Models\Flights; // Pastikan model ini benar
 use App\Models\User;
 use App\Models\Leave;
 use App\Models\Station; // Tambahkan Model Station
