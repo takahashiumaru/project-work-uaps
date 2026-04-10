@@ -62,7 +62,7 @@
             <div class="day">
                 <div class="date">{{ $date }}</div>
 
-                <form method="POST" action="{{ route('schedule.update', ['userId' => $userId, 'date' => $tanggal]) }}">
+                <form method="POST" action="{{ route('schedule.update_details', ['userId' => $userId, 'date' => $tanggal]) }}">
                     @csrf
                     <select name="shift_id" class="form-control input-sm" onchange="this.form.submit()">
                         <option value="">-- Pilih Shift --</option>
