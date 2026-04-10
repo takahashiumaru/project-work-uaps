@@ -43,7 +43,7 @@ Route::get('/forgot-password', [LoginController::class, 'showForgotPasswordForm'
 Route::post('/forgot-password', [LoginController::class, 'sendForgotPassword'])->name('forgot.password.send');
 Route::post('/forgot-password/verify', [LoginController::class, 'verifyForgotPassword'])->name('forgot.password.verify');
 Route::get('/forgot-password/change', [LoginController::class, 'showChangePasswordForm'])->name('change.password.form');
-Route::post('/forgot-password/change', [LoginController::class, 'changePassword'])->name('change.password');
+Route::post('/forgot-password/change', [LoginController::class, 'changePassword'])->name('forgot.password.update');
 
 
 // =================================================================
@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
 
     // Change Password & Profile Picture
-    Route::get('/change-password', [LoginController::class, 'showChangePasswordForm'])->name('change.password');
+    Route::get('/change-password', [LoginController::class, 'showChangePasswordForm'])->name('password.change.show');
     Route::post('/update-password', [LoginController::class, 'updatePassword'])->name('update.password');
     Route::post('/update-photo/{userId}', [UserController::class, 'updatePhoto'])->name('user.updatePhoto');
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('users.profile');
