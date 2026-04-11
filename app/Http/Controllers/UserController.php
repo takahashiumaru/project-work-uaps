@@ -132,10 +132,10 @@ class UserController extends Controller
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $stations = Station::where('is_active', 1)
-        ->orderBy('code', 'ASC')
-        ->get();
+            ->orderBy('code', 'ASC')
+            ->get();
 
-    return view('user.create', compact('stations'));
+        return view('user.create', compact('stations'));
     }
 
     // =========================================================================
@@ -428,6 +428,12 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return view('user.profile', compact('user'));
+    }
+
+    public function userProfile($id)
+    {
+        $user = User::findOrFail($id);
+        return view('staff.profile', compact('user'));
     }
 
     public function updatePhoto(Request $request, $userId)

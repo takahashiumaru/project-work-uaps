@@ -206,7 +206,7 @@
                             </td>
                             <td>
                                 {{-- Detail --}}
-                                <a href="{{ route('users.profile', $staff->id) }}"
+                                <a href="{{ route('users.userProfile', $staff->id) }}"
                                     class="btn btn-sm btn-icon btn-outline-secondary"
                                     title="Detail">
                                     <i class="bx bx-show"></i>

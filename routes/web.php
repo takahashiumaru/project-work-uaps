@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update-password', [LoginController::class, 'updatePassword'])->name('update.password');
     Route::post('/update-photo/{userId}', [UserController::class, 'updatePhoto'])->name('user.updatePhoto');
     Route::get('/profile/{id}', [UserController::class, 'profile'])->name('users.profile');
+    Route::get('/user/profile/{id}', [UserController::class, 'userProfile'])->name('users.userProfile');
 
     // --- USER MANAGEMENT (CRUD) ---
     Route::resource('users', UserController::class);
