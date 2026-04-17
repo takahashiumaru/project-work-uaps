@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Station;
 
 class AttendanceController extends Controller
 {
@@ -311,45 +312,149 @@ class AttendanceController extends Controller
         $attendances = collect();
         $message = null;
 
-        if ($request->filled('month')) {
-            // try {
-            $period = Carbon::createFromFormat('Y-m', $request->month);
+        $stations = Station::where('is_active', 1)->get();
 
-            $startDate = $period->copy()->startOfMonth();
-            $endDate = $period->copy()->endOfMonth();
+        if ($request->filled('month')) {
             try {
-                $monthInput = substr($request->month, 0, 7); // ambil YYYY-MM
-                $period = \Carbon\Carbon::parse($monthInput . '-01'); // pakai parse, bukan createFromFormat
+                $period = \Carbon\Carbon::parse($request->month . '-01');
                 $startDate = $period->copy()->startOfMonth();
                 $endDate = $period->copy()->endOfMonth();
+
+                // ===== QUERY USER (GABUNG SEMUA FILTER) =====
+                $queryUser = \App\Models\User::query();
+
+                if ($request->user_name) {
+                    $queryUser->where(function ($q) use ($request) {
+                        $q->where('id', $request->user_name)
+                            ->orWhere('fullname', 'LIKE', "%{$request->user_name}%");
+                    });
+                }
+
+                if ($request->station_id) {
+                    $queryUser->where('station', $request->station_id);
+                }
+
+                $user = $queryUser->first();
+
+                // ===== VALIDASI USER =====
+                if (! $user) {
+                    $message = 'Data karyawan tidak ditemukan sesuai filter.';
+                } else {
+
+                    // ===== ATTENDANCE =====
+                    $attData = \App\Models\Attendance::where('user_id', $user->id)
+                        ->whereBetween('check_in_time', [
+                            $startDate->copy()->startOfDay(),
+                            $endDate->copy()->endOfDay()
+                        ])
+                        ->get()
+                        ->groupBy(fn($att) => \Carbon\Carbon::parse($att->check_in_time)->toDateString());
+
+                    // ===== SCHEDULE =====
+                    $scheduleData = \App\Models\Schedule::where('user_id', $user->id)
+                        ->selectRaw('schedules.*, shifts.description as shift_description, shifts.start_time, shifts.end_time')
+                        ->join('shifts', 'shifts.id', '=', 'schedules.shift_id')
+                        ->whereBetween('date', [
+                            $startDate->toDateString(),
+                            $endDate->toDateString()
+                        ])
+                        ->get()
+                        ->groupBy(fn($item) => \Carbon\Carbon::parse($item->date)->toDateString());
+
+                    // ===== GENERATE DATA =====
+                    $cursor = $startDate->copy();
+
+                    while ($cursor->lte($endDate)) {
+                        $dateStr = $cursor->toDateString();
+
+                        $attendancesForDate = $attData->get($dateStr) ?? collect();
+                        $schedulesForDate = $scheduleData->get($dateStr) ?? collect();
+
+                        if ($schedulesForDate->isEmpty()) {
+                            $attendances->push((object) [
+                                'date' => $dateStr,
+                                'attendance' => $attendancesForDate->first(),
+                                'schedule' => null,
+                                'user' => $user,
+                            ]);
+                        } else {
+                            foreach ($schedulesForDate as $schedule) {
+                                $attendances->push((object) [
+                                    'date' => $dateStr,
+                                    'attendance' => $attendancesForDate->first(),
+                                    'schedule' => $schedule,
+                                    'user' => $user,
+                                ]);
+                            }
+                        }
+
+                        $cursor->addDay();
+                    }
+                }
             } catch (\Exception $e) {
-                $message = "Format periode tidak valid. (value: {$request->month})";
+                $message = "Format periode tidak valid.";
+            }
+        }
+
+        return view('attendance.report', compact('attendances', 'message', 'stations'));
+    }
+
+    public function export(Request $request)
+    {
+        if (! $request->filled('month')) {
+            return redirect()->back()->with('error', 'Pilih periode terlebih dahulu.');
+        }
+
+        try {
+            // ===== PARSE PERIODE =====
+            $period = \Carbon\Carbon::parse($request->month . '-01');
+            $startDate = $period->copy()->startOfMonth();
+            $endDate = $period->copy()->endOfMonth();
+
+            // ===== AMBIL STATION =====
+            $station = \App\Models\Station::where('code', $request->station_id)->first();
+
+            if (!$station) {
+                return redirect()->back()->with('error', 'Station tidak ditemukan.');
             }
 
-            // Cari user by NIP atau nama
-            $user = \App\Models\User::where('id', $request->user_name)
-                ->orWhere('fullname', 'LIKE', "%{$request->user_name}%")
-                ->first();
+            // ===== AMBIL SEMUA USER DI STATION =====
+            $users = \App\Models\User::where('station', $request->station_id)
+                ->orderBy('fullname')
+                ->get();
 
-            if (! $user) {
-                $message = 'Karyawan tidak ditemukan.';
-            } else {
-                // Ambil semua attendance untuk bulan itu, group by tanggal
+            if ($users->isEmpty()) {
+                return redirect()->back()->with('error', 'Tidak ada karyawan di station tersebut.');
+            }
+
+            $attendances = collect();
+
+            // ===== LOOP SEMUA USER =====
+            foreach ($users as $user) {
+
+                // ATTENDANCE
                 $attData = \App\Models\Attendance::where('user_id', $user->id)
-                    ->whereBetween('check_in_time', [$startDate->startOfDay(), $endDate->endOfDay()])
+                    ->whereBetween('check_in_time', [
+                        $startDate->copy()->startOfDay(),
+                        $endDate->copy()->endOfDay()
+                    ])
                     ->get()
-                    ->groupBy(fn($att) => Carbon::parse($att->check_in_time)->toDateString());
+                    ->groupBy(fn($att) => \Carbon\Carbon::parse($att->check_in_time)->toDateString());
 
-                // Ambil semua schedule untuk bulan itu, group by tanggal
+                // SCHEDULE
                 $scheduleData = \App\Models\Schedule::where('user_id', $user->id)
                     ->selectRaw('schedules.*, shifts.description as shift_description, shifts.start_time, shifts.end_time')
                     ->join('shifts', 'shifts.id', '=', 'schedules.shift_id')
-                    ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
+                    ->whereBetween('date', [
+                        $startDate->toDateString(),
+                        $endDate->toDateString()
+                    ])
                     ->get()
-                    ->groupBy(fn($item) => Carbon::parse($item->date)->toDateString());
+                    ->groupBy(fn($item) => \Carbon\Carbon::parse($item->date)->toDateString());
 
-                // Generate rows: satu row per schedule. Jika tidak ada schedule => satu row "libur"
+                // LOOP TANGGAL
                 $cursor = $startDate->copy();
+
                 while ($cursor->lte($endDate)) {
                     $dateStr = $cursor->toDateString();
 
@@ -357,21 +462,18 @@ class AttendanceController extends Controller
                     $schedulesForDate = $scheduleData->get($dateStr) ?? collect();
 
                     if ($schedulesForDate->isEmpty()) {
-                        // Tidak ada schedule = libur (tetap satu row, bisa ada attendance meskipun tidak terjadwal)
                         $attendances->push((object) [
                             'date' => $dateStr,
                             'attendance' => $attendancesForDate->first(),
-                            // 'schedule' => $schedule,
+                            'schedule' => null,
                             'user' => $user,
                         ]);
                     } else {
-                        // Untuk tiap schedule di tanggal tersebut, buat row sendiri
                         foreach ($schedulesForDate as $schedule) {
-                            // Jika mau mapping attendance ke schedule lebih presisi, boleh ditambahkan logika matching di sini.
-                            $attendances->push([
+                            $attendances->push((object) [
                                 'date' => $dateStr,
-                                'attendance' => $attendancesForDate->first(), // tetap first() untuk saat ini
-                                // 'schedule' => $schedule,
+                                'attendance' => $attendancesForDate->first(),
+                                'schedule' => $schedule,
                                 'user' => $user,
                             ]);
                         }
@@ -380,77 +482,22 @@ class AttendanceController extends Controller
                     $cursor->addDay();
                 }
             }
-            // } catch (\Exception $e) {
-            //    // opsional: log error -> \Log::error($e);
-            //    $message = 'Format periode tidak valid.';
-            // }
+
+            // ===== SORTING =====
+            $attendances = $attendances->sortBy([
+                ['user.fullname', 'asc'],
+                ['date', 'asc'],
+            ])->values();
+
+            // ===== FILE NAME =====
+            $fileName = 'Laporan_Absensi_' . $station->name . '_' . $request->month . '.xlsx';
+
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new AttendanceReportExport($attendances),
+                $fileName
+            );
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat export.');
         }
-
-        return view('attendance.report', compact('attendances', 'message'));
-    }
-
-    public function export(Request $request)
-    {
-        if (! $request->filled('month') || ! $request->filled('user_name')) {
-            return redirect()->back()->with('error', 'Pilih periode dan karyawan terlebih dahulu.');
-        }
-
-        // Sama persis dengan method reportsIndex
-        $period = \Carbon\Carbon::createFromFormat('Y-m', $request->month);
-        $startDate = $period->copy()->startOfMonth();
-        $endDate = $period->copy()->endOfMonth();
-
-        $user = \App\Models\User::where('id', $request->user_name)
-            ->orWhere('fullname', 'LIKE', "%{$request->user_name}%")
-            ->first();
-
-        if (! $user) {
-            return redirect()->back()->with('error', 'Karyawan tidak ditemukan.');
-        }
-
-        // Ambil attendance & schedule
-        $attData = \App\Models\Attendance::where('user_id', $user->id)
-            ->whereBetween('check_in_time', [$startDate->startOfDay(), $endDate->endOfDay()])
-            ->get()
-            ->groupBy(fn($att) => \Carbon\Carbon::parse($att->check_in_time)->toDateString());
-
-        $scheduleData = \App\Models\Schedule::where('user_id', $user->id)
-            ->selectRaw('schedules.*, shifts.description as shift_description, shifts.start_time, shifts.end_time')
-            ->join('shifts', 'shifts.id', '=', 'schedules.shift_id')
-            ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
-            ->get()
-            ->groupBy(fn($item) => \Carbon\Carbon::parse($item->date)->toDateString());
-
-        // Generate rows
-        $attendances = collect();
-        $cursor = $startDate->copy();
-        while ($cursor->lte($endDate)) {
-            $dateStr = $cursor->toDateString();
-            $attendancesForDate = $attData->get($dateStr) ?? collect();
-            $schedulesForDate = $scheduleData->get($dateStr) ?? collect();
-
-            if ($schedulesForDate->isEmpty()) {
-                $attendances->push([
-                    'date' => $dateStr,
-                    'attendance' => $attendancesForDate->first(),
-                    'schedule' => null,
-                    'user' => $user,
-                ]);
-            } else {
-                foreach ($schedulesForDate as $schedule) {
-                    $attendances->push([
-                        'date' => $dateStr,
-                        'attendance' => $attendancesForDate->first(),
-                        'schedule' => $schedule,
-                        'user' => $user,
-                    ]);
-                }
-            }
-            $cursor->addDay();
-        }
-
-        $fileName = 'Laporan_Absensi_' . $user->fullname . '_' . $request->month . '.xlsx';
-
-        return Excel::download(new AttendanceReportExport($attendances), $fileName);
     }
 }
