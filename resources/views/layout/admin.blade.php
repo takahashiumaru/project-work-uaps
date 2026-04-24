@@ -38,6 +38,227 @@
     <script src="{{ asset('template/') }}/assets/js/config.js"></script>
 
     @yield('styles')
+    <style>
+        /* --- KUSTOMISASI SIDEBAR SESUAI KRITERIA --- */
+        
+        /* 1. Posisi Tetap (Persistent) & Ukuran Proporsional */
+        #layout-menu {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            margin: 0 !important;
+            height: 100vh !important;
+            width: 260px !important;
+            max-width: 260px !important;
+            z-index: 1099 !important; /* Menutupi navbar di mobile */
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease, transform 0.3s ease !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.05); /* Tambah shadow agar terpisah dengan konten */
+        }
+
+        .layout-page {
+            padding-left: 260px !important;
+            transition: padding-left 0.3s ease !important;
+        }
+
+        /* 4. Menyatukan Konten (Hilangkan Gap) dan Perluas Area Data (Full Width) */
+        .container-xxl {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+        .layout-navbar.navbar-detached {
+            margin: 0 !important; /* Hilangkan gap atas, kiri, kanan */
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important; /* Buat navbar kotak nempel sisi */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+        }
+
+        /* Active Menu State ("Menyala") */
+        .menu-sub .menu-item.active > .menu-link {
+            color: var(--primary-color, #4F46E5) !important;
+            font-weight: 700 !important;
+            background-color: rgba(79, 70, 229, 0.08) !important;
+            border-radius: 8px;
+            margin: 0 10px;
+        }
+        
+        .menu-item.active > .menu-link {
+            background-color: rgba(79, 70, 229, 0.08) !important;
+            color: var(--primary-color, #4F46E5) !important;
+            font-weight: bold;
+            border-radius: 12px;
+        }
+
+        /* 2. State Collapsed (Diringkas) */
+        html.sidebar-collapsed #layout-menu {
+            width: 80px !important;
+            max-width: 80px !important;
+        }
+        html.sidebar-collapsed .layout-page {
+            padding-left: 80px !important;
+        }
+
+        /* Center logo container */
+        html.sidebar-collapsed #layout-menu:not(:hover) .app-brand {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 24px 0 !important; /* Ruang napas vertikal */
+            height: auto !important;
+        }
+        
+        /* Sembunyikan tanda chevron "<" agar logo bisa ke tengah sempurna */
+        html.sidebar-collapsed #layout-menu:not(:hover) #custom-sidebar-close-mobile,
+        html.sidebar-collapsed #layout-menu:not(:hover) .layout-menu-toggle {
+            display: none !important;
+        }
+        html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-link {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100%;
+            margin: 0 !important;
+        }
+        html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-logo {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100%;
+            margin: 0 !important;
+        }
+        html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-logo img {
+            width: 55px !important; /* Ukuran ideal untuk logo mini */
+            height: auto;
+            object-fit: contain;
+            margin: 0 !important;
+            transition: width 0.3s ease;
+        }
+
+        /* Sembunyikan teks saat collapsed agar rapi */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-link div,
+        html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-text {
+            opacity: 0;
+            visibility: hidden;
+            display: none !important;
+        }
+
+        /* Sembunyikan submenu, chevron, dan menu header (divider) saat collapsed */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-sub,
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-toggle::after,
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-header {
+            display: none !important;
+        }
+
+        /* Hapus padding bawaan di container menu */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-inner {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        /* Menengahkan icon saat collapsed */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-link i {
+            margin: 0 !important;
+            font-size: 1.25rem !important; /* Dikecilkan sedikit */
+            width: auto !important;
+            display: block !important;
+        }
+        
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-link {
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 50px !important;
+            height: 50px !important;
+            display: flex !important;
+            border-radius: 12px !important; /* Sudut melengkung rapi */
+        }
+        
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-item {
+            width: 80px !important;
+            padding: 0 !important;
+            margin: 0 0 8px 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        /* Sembunyikan garis biru vertikal bawaan Sneat saat collapsed */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-item.active::before,
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-item.active > .menu-link::before {
+            display: none !important;
+        }
+
+        /* EXPAND ON HOVER BEHAVIOR (Ketika Collapsed lalu di-hover) */
+        html.sidebar-collapsed #layout-menu:hover {
+            width: 260px !important;
+            max-width: 260px !important;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1) !important;
+        }
+        html.sidebar-collapsed #layout-menu:hover .app-brand-logo img {
+            width: 120px !important;
+        }
+
+        /* 3. Responsive Mobile */
+        @media (max-width: 1199.98px) {
+            #layout-menu {
+                transform: translateX(-100%) !important;
+            }
+            #layout-menu .app-brand {
+                display: flex !important; /* Pastikan logo muncul di mobile */
+                height: 64px;
+                padding: 0 1.5rem;
+            }
+            .layout-page {
+                padding-left: 0 !important;
+            }
+            /* Saat dibuka di mobile */
+            html.sidebar-mobile-open #layout-menu {
+                transform: translateX(0) !important;
+            }
+            /* Mencegah scroll body saat sidebar terbuka di mobile */
+            html.sidebar-mobile-open {
+                overflow: hidden;
+            }
+            html.sidebar-collapsed #layout-menu {
+                width: 260px !important; /* Tetap full width di mobile */
+                max-width: 260px !important;
+            }
+        }
+
+        /* Overlay untuk mobile */
+        #custom-layout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1049;
+            display: none;
+        }
+        html.sidebar-mobile-open #custom-layout-overlay {
+            display: block;
+        }
+    </style>
+
+    <!-- 4. State Management (Anti-Refresh/Flicker) -->
+    <script>
+        // Eksekusi LANGSUNG sebelum body dirender
+        (function() {
+            const state = localStorage.getItem('customSidebarState');
+            if (state === 'collapsed') {
+                document.documentElement.classList.add('sidebar-collapsed');
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -48,12 +269,12 @@
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('storage/aps_light.png') }}" alt="Logo" width="120">
+                            <img src="{{ asset('storage/aps_mini.png') }}" alt="Logo" width="100">
                         </span>
                     </a>
 
-                    <a href="javascript:void(0);"
-                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    <a href="javascript:void(0);" id="custom-sidebar-close-mobile"
+                        class="menu-link text-large ms-auto d-block d-xl-none">
                         <i class="bx bx-chevron-left bx-sm align-middle"></i>
                     </a>
                 </div>
@@ -82,18 +303,18 @@
                             <div data-i18n="Schedule">Schedule</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('schedule.now') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.now') }}" class="menu-link">
                                     <div data-i18n="Jadwal Hari Ini">Jadwal Hari Ini</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('schedule.index') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.index') }}" class="menu-link">
                                     <div data-i18n="Data Schedule">Data Schedule</div>
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.index') }}" class="menu-link">
                                     <div data-i18n="Create/Update">Create / Update</div>
                                 </a>
@@ -174,30 +395,30 @@
                         </a>
                     </li>
 
-                    <li class="menu-item {{ request()->is('users*') || request()->is('staff*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('users*') || request()->is('staff*') || request()->is('blacklist*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons fas fa-users"></i>
                             <div data-i18n="User Management">User</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
                                 <a href="{{ route('staff.index') }}" class="menu-link" style="color: #f1c40f !important; font-weight: bold;">
                                     <i class="fas fa-map-marked-alt me-2"></i>
                                     <div data-i18n="Monitor Station">Monitor Station</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('blacklist.*') ? 'active' : '' }}">
                                 <a href="{{ route('blacklist.index') }}" class="menu-link" style="color: #000000ff !important; font-weight: bold;">
                                     <i class="fas fa-address-book"></i>
                                     <div data-i18n="Blacklist"> Blacklist</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('users.kontrak') ? 'active' : '' }}">
                                 <a href="{{ route('users.kontrak') }}" class="menu-link">
                                     <div data-i18n="Kontrak">Kontrak</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('users.pas') ? 'active' : '' }}">
                                 <a href="{{ route('users.pas') }}" class="menu-link">
                                     <div data-i18n="PAS Tahunan">PAS Bandara</div>
                                 </a>
@@ -229,18 +450,18 @@
                         </a>
                         <ul class="menu-sub">
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('training.index') ? 'active' : '' }}">
                                 <a href="{{ route('training.index') }}" class="menu-link">
                                     <div data-i18n="Manajemen">Manajemen Training</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
                                 <a href="{{ route('training.create') }}" class="menu-link">
                                     <div data-i18n="Tambah">Tambah Sertifikat</div>
                                 </a>
                             </li>
                             @else
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('my.certificates') ? 'active' : '' }}">
                                 <a href="{{ route('my.certificates') }}" class="menu-link">
                                     <div data-i18n="Saya">Sertifikat Saya</div>
                                 </a>
@@ -255,18 +476,18 @@
                             <div data-i18n="Leave">Apply Leave</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('leaves.pengajuan') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.pengajuan') }}" class="menu-link">
                                     <div data-i18n="Pengajuan">Pengajuan Leave</div>
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service']))
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.index') }}" class="menu-link">
                                     <div data-i18n="Approval">Approval Leave</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
+                            <li class="menu-item {{ request()->routeIs('leaves.laporan') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.laporan') }}" class="menu-link">
                                     <div data-i18n="Laporan">Laporan Leave</div>
                                 </a>
@@ -286,8 +507,9 @@
             <div class="layout-page">
                 <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
                     id="layout-navbar">
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                    <!-- Tombol Toggle Sidebar (Ditampilkan di semua ukuran layar) -->
+                    <div class="navbar-nav align-items-xl-center me-3 me-xl-0">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="custom-sidebar-toggle">
                             <i class="bx bx-menu bx-sm"></i>
                         </a>
                     </div>
@@ -378,7 +600,7 @@
             </div>
         </div>
 
-        <div class="layout-overlay layout-menu-toggle"></div>
+        <div class="layout-overlay" id="custom-layout-overlay"></div>
     </div>
     <script src="{{ asset('template/') }}/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="{{ asset('template/') }}/assets/vendor/libs/popper/popper.js"></script>
@@ -413,6 +635,53 @@
     </script>
 
     @yield('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('custom-sidebar-toggle');
+            const mobileCloseBtn = document.getElementById('custom-sidebar-close-mobile');
+            const overlay = document.getElementById('custom-layout-overlay');
+            const htmlTag = document.documentElement;
+
+            function toggleSidebar() {
+                const isMobile = window.innerWidth < 1200;
+                
+                if (isMobile) {
+                    // Logika Mobile: Toggle class sidebar-mobile-open
+                    htmlTag.classList.toggle('sidebar-mobile-open');
+                } else {
+                    // Logika Desktop: Toggle class sidebar-collapsed & simpan ke localStorage
+                    htmlTag.classList.toggle('sidebar-collapsed');
+                    
+                    if (htmlTag.classList.contains('sidebar-collapsed')) {
+                        localStorage.setItem('customSidebarState', 'collapsed');
+                    } else {
+                        localStorage.setItem('customSidebarState', 'expanded');
+                    }
+                }
+            }
+
+            if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+            
+            if (mobileCloseBtn) {
+                mobileCloseBtn.addEventListener('click', function() {
+                    htmlTag.classList.remove('sidebar-mobile-open');
+                });
+            }
+            
+            if (overlay) {
+                overlay.addEventListener('click', function() {
+                    htmlTag.classList.remove('sidebar-mobile-open');
+                });
+            }
+
+            // Tangani resize window
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 1200) {
+                    htmlTag.classList.remove('sidebar-mobile-open');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

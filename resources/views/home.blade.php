@@ -43,7 +43,7 @@
     }
 
     .stat-card .card-body {
-        padding: 24px;
+        padding: 20px;
         position: relative;
         z-index: 2;
     }
@@ -61,16 +61,16 @@
     }
 
     .stat-card .stat-title {
-        font-size: 1rem;
+        font-size: 0.85rem;
         font-weight: 600;
         opacity: 0.9;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
 
     .stat-card .stat-value {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
         font-weight: 800;
         margin: 0;
         line-height: 1;
@@ -78,9 +78,9 @@
 
     .stat-card .stat-icon {
         position: absolute;
-        right: -10px;
-        bottom: -20px;
-        font-size: 6rem;
+        right: 0px;
+        bottom: -15px;
+        font-size: 4rem;
         opacity: 0.15;
         transform: rotate(-15deg);
         transition: transform 0.3s ease;
@@ -95,7 +95,7 @@
         background: #ffffff;
         border-radius: 12px;
         border: 1px solid #E5E7EB;
-        padding: 20px;
+        padding: 16px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
@@ -116,19 +116,19 @@
     }
 
     .station-code {
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 800;
         color: var(--text-main);
     }
 
     .station-name {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: var(--text-muted);
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .station-count {
-        font-size: 1.75rem;
+        font-size: 1.4rem;
         font-weight: 800;
         color: var(--primary-color);
         line-height: 1;
@@ -149,16 +149,16 @@
 
     .chart-header {
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: var(--text-main);
-        padding: 20px 24px 0;
+        padding: 16px 20px 0;
         border-bottom: none;
         background: transparent;
     }
 
     .chart-canvas-wrapper {
         position: relative;
-        height: 300px;
+        height: 240px;
         padding: 0 10px;
     }
 
@@ -172,7 +172,7 @@
     .info-item {
         display: flex;
         align-items: center;
-        padding: 12px 0;
+        padding: 10px 0;
         border-bottom: 1px dashed #E5E7EB;
     }
 
@@ -181,14 +181,14 @@
     }
 
     .info-icon-wrapper {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 15px;
-        font-size: 1.2rem;
+        margin-right: 12px;
+        font-size: 1rem;
     }
 
     .icon-blue { background: #EFF6FF; color: #3B82F6; }
@@ -201,13 +201,13 @@
         flex: 1;
         font-weight: 600;
         color: var(--text-muted);
-        font-size: 0.95rem;
+        font-size: 0.85rem;
     }
 
     .info-value {
         font-weight: 800;
         color: var(--text-main);
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     /* --- TABLE STYLES --- */
@@ -223,15 +223,16 @@
         font-size: 0.75rem;
         letter-spacing: 0.5px;
         border-bottom: 2px solid #E5E7EB;
-        padding: 16px;
+        padding: 12px 16px;
     }
 
     .table-custom tbody td {
-        padding: 16px;
+        padding: 12px 16px;
         vertical-align: middle;
         border-bottom: 1px solid #F3F4F6;
         color: var(--text-main);
         font-weight: 500;
+        font-size: 0.85rem;
     }
 
     .clickable-row {
@@ -257,9 +258,37 @@
         background: var(--primary-color);
         border: none;
         border-radius: 8px;
-        padding: 10px 20px;
+        padding: 0 20px;
         font-weight: 600;
         transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 42px; /* Fix height agar sejajar dengan select box */
+        white-space: nowrap;
+    }
+
+    /* KUSTOMISASI MOBILE RESPONSIVE */
+    @media (max-width: 767.98px) {
+        .dashboard-title {
+            font-size: 1.25rem !important;
+            line-height: 1.4;
+        }
+        .action-buttons {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 10px !important;
+        }
+        .action-buttons form, 
+        .action-buttons .btn-primary-custom {
+            width: 100% !important;
+        }
+        .action-buttons .input-group {
+            width: 100% !important;
+        }
+        .action-buttons select {
+            min-width: 0 !important; /* Mencegah select box jebol/overflow di layar kecil */
+        }
     }
 
     .btn-primary-custom:hover {
@@ -289,10 +318,10 @@
                 $hour = date('H');
                 $timeGreeting = ($hour < 12) ? 'Pagi' : (($hour < 18) ? 'Siang' : 'Malam' );
             @endphp
-            <h2 class="fw-bold mb-1 text-dark">
+            <h4 class="fw-bold mb-1 text-dark dashboard-title">
                 Hi {{ Auth::user()->fullname }}, Selamat {{ $timeGreeting }} 👋
-            </h2>
-            <p class="text-muted mb-0" style="font-size: 1.1rem;">
+            </h4>
+            <p class="text-muted mb-0" style="font-size: 0.9rem;">
                 Dashboard Overview &bull; 
                 <span class="fw-semibold text-primary">
                     {{ isset($selectedStation) && $selectedStation !== 'All' ? 'Station ' . $selectedStation : 'Global' }}
@@ -300,10 +329,10 @@
             </p>
         </div>
         <div class="col-md-6 text-md-end mt-3 mt-md-0">
-            <div class="d-flex justify-content-md-end align-items-center gap-3">
+            <div class="d-flex flex-wrap justify-content-md-end align-items-center gap-3 action-buttons">
                 @if(Auth::user()->role == 'Admin')
                 <form action="{{ url()->current() }}" method="GET" id="stationFilterForm" class="m-0">
-                    <div class="input-group shadow-sm" style="border-radius: 8px; overflow: hidden;">
+                    <div class="input-group shadow-sm" style="border-radius: 8px; overflow: hidden; height: 42px;">
                         <span class="input-group-text bg-white border-0 text-primary"><i class="fas fa-filter"></i></span>
                         <select name="station" class="form-select border-0 fw-semibold" onchange="document.getElementById('stationFilterForm').submit()" style="cursor: pointer; min-width: 200px;">
                             <option value="All" {{ isset($selectedStation) && $selectedStation == 'All' ? 'selected' : '' }}>Semua Station (Global)</option>
@@ -335,7 +364,7 @@
             <div class="bg-primary rounded p-2 me-2 text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
                 <i class="fas fa-satellite-dish fa-sm"></i>
             </div>
-            <h5 class="mb-0 fw-bold text-dark">Monitoring Station (Realtime)</h5>
+            <h6 class="mb-0 fw-bold text-dark">Monitoring Station (Realtime)</h6>
         </div>
         
         <div class="row g-3">
@@ -371,10 +400,10 @@
 
             <div class="col-xl-3 col-lg-4 col-md-6">
                 <a href="{{ route('stations.create') }}" class="station-card h-100 d-flex flex-column align-items-center justify-content-center text-decoration-none" style="background: #F8FAFC; border: 2px dashed #CBD5E1;">
-                    <div class="icon-blue rounded-circle d-flex align-items-center justify-content-center mb-2" style="width: 48px; height: 48px;">
-                        <i class="fas fa-plus fa-lg"></i>
+                    <div class="icon-blue rounded-circle d-flex align-items-center justify-content-center mb-2" style="width: 40px; height: 40px;">
+                        <i class="fas fa-plus"></i>
                     </div>
-                    <div class="fw-bold text-primary">Buka Station Baru</div>
+                    <div class="fw-bold text-primary" style="font-size: 0.9rem;">Buka Station Baru</div>
                 </a>
             </div>
         </div>
@@ -493,7 +522,7 @@
                         <div class="bg-primary rounded p-2 me-2 text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
                             <i class="bx bx-list-ul"></i>
                         </div>
-                        <h5 class="mb-0 fw-bold text-dark">Data Penerbangan Hari Ini</h5>
+                        <h6 class="mb-0 fw-bold text-dark">Data Penerbangan Hari Ini</h6>
                     </div>
                 </div>
                 <div class="table-responsive">
