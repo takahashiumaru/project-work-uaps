@@ -69,8 +69,8 @@
         .container-xxl {
             max-width: 100% !important;
             width: 100% !important;
-            padding-left: 2rem !important;
-            padding-right: 2rem !important;
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
         }
         .layout-navbar.navbar-detached {
             margin: 0 !important; /* Hilangkan gap atas, kiri, kanan */
@@ -78,6 +78,17 @@
             max-width: 100% !important;
             border-radius: 0 !important; /* Buat navbar kotak nempel sisi */
             box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+        
+        /* Optimasi Padding di Layar HP agar Lebih Lebar */
+        @media (max-width: 767.98px) {
+            .container-xxl,
+            .layout-navbar.navbar-detached {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
         }
 
         /* Active Menu State ("Menyala") */
