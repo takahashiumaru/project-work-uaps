@@ -59,7 +59,7 @@
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1 mb-4">
         <h4 class="fw-bold py-3 mb-0">
             <span class="text-muted fw-light">Monitoring /</span> Data Staff Global
         </h4>

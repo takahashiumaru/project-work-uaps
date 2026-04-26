@@ -26,6 +26,17 @@ class FlightController extends Controller
     public function store(Request $request)
     {
         try {
+            // Cek apakah flight sudah ada (Pencegahan duplikasi)
+            $arrivalDate = Carbon::parse($request->arrival)->toDateString();
+            $exists = Flights::where('flight_number', $request->flight_number)
+                ->whereDate('arrival', $arrivalDate)
+                ->exists();
+
+            if ($exists) {
+                Alert::warning('Peringatan', 'Nomor penerbangan ' . $request->flight_number . ' sudah terdaftar untuk tanggal tersebut.');
+                return redirect()->route('home');
+            }
+
             $flight = new Flights();
             $flight->airline = $request->airline;
             $flight->flight_number = $request->flight_number;

@@ -60,6 +60,17 @@
             box-shadow: 2px 0 15px rgba(0,0,0,0.05); /* Tambah shadow agar terpisah dengan konten */
         }
 
+        /* --- KUSTOMISASI FONT HEADER SECARA GLOBAL --- */
+        h4, .h4, h4.fw-bold.py-3 {
+            font-size: 1.25rem !important;
+        }
+
+        @media (max-width: 768px) {
+            h4, .h4, h4.fw-bold.py-3 {
+                font-size: 1.1rem !important;
+            }
+        }
+
         .layout-page {
             padding-left: 260px !important;
             transition: padding-left 0.3s ease !important;
@@ -258,6 +269,29 @@
         html.sidebar-mobile-open #custom-layout-overlay {
             display: block;
         }
+        /* Menghilangkan garis pemisah (divider) di menu header sidebar */
+        .menu-header::before {
+            display: none !important;
+        }
+
+        /* Prevent sidebar from closing on click if not mobile */
+        @media (min-width: 1200px) {
+            .layout-menu-toggle {
+                display: block !important;
+            }
+        }
+        
+        .app-brand-logo img {
+            max-width: 100px;
+            height: auto;
+            transition: all 0.3s ease;
+        }
+
+        /* Submenu icon smaller */
+        .menu-sub .menu-icon {
+            font-size: 0.65rem !important;
+            margin-right: 0.5rem !important;
+        }
     </style>
 
     <!-- 4. State Management (Anti-Refresh/Flicker) -->
@@ -280,7 +314,7 @@
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('storage/aps_mini.png') }}" alt="Logo" width="100">
+                            <img src="{{ asset('storage/aps_mini.png') }}" alt="APS" style="width: 100px; height: auto;">
                         </span>
                     </a>
 
@@ -316,17 +350,20 @@
                         <ul class="menu-sub">
                             <li class="menu-item {{ request()->routeIs('schedule.now') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.now') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-calendar-day fa-xs me-2"></i>
                                     <div data-i18n="Jadwal Hari Ini">Jadwal Hari Ini</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('schedule.index') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-calendar-alt fa-xs me-2"></i>
                                     <div data-i18n="Data Schedule">Data Schedule</div>
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
                             <li class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
                                 <a href="{{ route('schedule.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-calendar-plus fa-xs me-2"></i>
                                     <div data-i18n="Create/Update">Create / Update</div>
                                 </a>
                             </li>
@@ -353,6 +390,7 @@
 
                             <li class="menu-item {{ request()->routeIs('attendance.index') ? 'active' : '' }}">
                                 <a href="{{ route('attendance.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-user-clock fa-xs me-2"></i>
                                     <div data-i18n="Absensi Hari Ini">Absensi Hari Ini</div>
                                 </a>
                             </li>
@@ -360,6 +398,7 @@
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
                             <li class="menu-item {{ request()->routeIs('attendance.reports') ? 'active' : '' }}">
                                 <a href="{{ route('attendance.reports') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-file-invoice fa-xs me-2"></i>
                                     <div data-i18n="Laporan Absensi">Laporan Absensi</div>
                                 </a>
                             </li>
@@ -368,6 +407,7 @@
 
                             <li class="menu-item {{ request()->routeIs('overtime.index') || request()->routeIs('overtime.create') ? 'active' : '' }}">
                                 <a href="{{ route('overtime.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-history fa-xs me-2"></i>
                                     <div data-i18n="Lembur Saya">Lembur Saya</div>
                                 </a>
                             </li>
@@ -376,6 +416,7 @@
                             @if(in_array(Auth::user()->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']))
                             <li class="menu-item {{ request()->routeIs('overtime.approval') ? 'active' : '' }}">
                                 <a href="{{ route('overtime.approval') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-check-double fa-xs me-2"></i>
                                     <div data-i18n="Approval Lembur">Approval Lembur</div>
                                 </a>
                             </li>
@@ -384,6 +425,7 @@
                             @if(Auth::user()->role == 'Admin')
                             <li class="menu-item {{ request()->routeIs('overtime.report') ? 'active' : '' }}">
                                 <a href="{{ route('overtime.report') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-chart-line fa-xs me-2"></i>
                                     <div data-i18n="Laporan Lembur">Laporan Lembur</div>
                                 </a>
                             </li>
@@ -406,7 +448,7 @@
                         </a>
                     </li>
 
-                    <li class="menu-item {{ request()->is('users*') || request()->is('staff*') || request()->is('blacklist*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('staff.*') || request()->routeIs('blacklist.*') || request()->routeIs('users.kontrak') || request()->routeIs('users.pas') || request()->routeIs('users.tim') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons fas fa-users"></i>
                             <div data-i18n="User Management">User</div>
@@ -414,28 +456,31 @@
                         <ul class="menu-sub">
                             <li class="menu-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
                                 <a href="{{ route('staff.index') }}" class="menu-link" style="color: #f1c40f !important; font-weight: bold;">
-                                    <i class="fas fa-map-marked-alt me-2"></i>
+                                    <i class="menu-icon tf-icons fas fa-desktop fa-xs me-2"></i>
                                     <div data-i18n="Monitor Station">Monitor Station</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('blacklist.*') ? 'active' : '' }}">
                                 <a href="{{ route('blacklist.index') }}" class="menu-link" style="color: #000000ff !important; font-weight: bold;">
-                                    <i class="fas fa-address-book"></i>
+                                    <i class="menu-icon tf-icons fas fa-user-slash fa-xs me-2"></i>
                                     <div data-i18n="Blacklist"> Blacklist</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('users.kontrak') ? 'active' : '' }}">
                                 <a href="{{ route('users.kontrak') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-file-contract fa-xs me-2"></i>
                                     <div data-i18n="Kontrak">Kontrak</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('users.pas') ? 'active' : '' }}">
                                 <a href="{{ route('users.pas') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-id-card fa-xs me-2"></i>
                                     <div data-i18n="PAS Tahunan">PAS Bandara</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('users.tim') ? 'active' : '' }}">
                                 <a href="{{ route('users.tim') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-id-badge fa-xs me-2"></i>
                                     <div data-i18n="TIM Bandara">TIM Bandara</div>
                                 </a>
                             </li>
@@ -463,17 +508,20 @@
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
                             <li class="menu-item {{ request()->routeIs('training.index') ? 'active' : '' }}">
                                 <a href="{{ route('training.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-tasks fa-xs me-2"></i>
                                     <div data-i18n="Manajemen">Manajemen Training</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
                                 <a href="{{ route('training.create') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-plus-square fa-xs me-2"></i>
                                     <div data-i18n="Tambah">Tambah Sertifikat</div>
                                 </a>
                             </li>
                             @else
                             <li class="menu-item {{ request()->routeIs('my.certificates') ? 'active' : '' }}">
                                 <a href="{{ route('my.certificates') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-award fa-xs me-2"></i>
                                     <div data-i18n="Saya">Sertifikat Saya</div>
                                 </a>
                             </li>
@@ -489,17 +537,20 @@
                         <ul class="menu-sub">
                             <li class="menu-item {{ request()->routeIs('leaves.pengajuan') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.pengajuan') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-paper-plane fa-xs me-2"></i>
                                     <div data-i18n="Pengajuan">Pengajuan Leave</div>
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service']))
                             <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.index') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-check-circle fa-xs me-2"></i>
                                     <div data-i18n="Approval">Approval Leave</div>
                                 </a>
                             </li>
                             <li class="menu-item {{ request()->routeIs('leaves.laporan') ? 'active' : '' }}">
                                 <a href="{{ route('leaves.laporan') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons fas fa-file-alt fa-xs me-2"></i>
                                     <div data-i18n="Laporan">Laporan Leave</div>
                                 </a>
                             </li>
@@ -598,12 +649,12 @@
                         @yield('content')
                     </div>
                     <footer class="content-footer footer bg-footer-theme">
-                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                            <div class="mb-2 mb-md-0">
-                                {{-- © <script>
-                                    document.write(new Date().getFullYear());
-                                </script>, made with ❤️ --}}
-                                © 2025, made with PT. Angkasa Pratama Sejahtera
+                        <div class="container-xxl d-flex flex-wrap justify-content-center py-3">
+                            <div class="text-center">
+                                <p class="mb-0" style="font-size: 0.85rem; color: #a1acb8;">
+                                    © {{ date('Y') }} <span class="fw-semibold" style="color: #697a8d;">PT. Angkasa Pratama Sejahtera</span>. 
+                                    All Rights Reserved.
+                                </p>
                             </div>
                         </div>
                     </footer>
@@ -686,12 +737,20 @@
                 });
             }
 
-            // Tangani resize window
+            // Handle window resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth >= 1200) {
                     htmlTag.classList.remove('sidebar-mobile-open');
                 }
             });
+
+            // State Restoration (Desktop)
+            if (window.innerWidth >= 1200) {
+                const state = localStorage.getItem('customSidebarState');
+                if (state === 'expanded' || !state) {
+                    htmlTag.classList.remove('sidebar-collapsed');
+                }
+            }
         });
     </script>
 </body>

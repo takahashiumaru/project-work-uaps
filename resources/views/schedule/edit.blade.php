@@ -29,7 +29,7 @@
     @include('partials.navbar')
     <!-- Main Content -->
     <div class="main-content">
-        <div class="header d-flex justify-content-between align-items-center">
+        <div class="header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
             <div>
                 <h2 class="fas fa-users"> Schedule</h2>
                 <p>Informasi terperinci mengenai jadwal yang telah terdaftar dalam sistem.</p>

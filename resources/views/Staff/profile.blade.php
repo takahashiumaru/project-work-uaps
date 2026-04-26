@@ -4,6 +4,10 @@
 
 @section('styles')
 <style>
+    h4 {
+        font-size: 1.3rem;
+    }
+
     .profile-header {
         text-align: center;
         margin-bottom: 2rem;
@@ -44,12 +48,12 @@
 
     .form-control {
         width: 100%;
-        padding: 0.75rem 1rem;
+        padding: 0.65rem 0.85rem;
         border: 1px solid #d9dee3;
         border-radius: 0.5rem;
         background-color: #f8f9fa;
         color: #697a8d;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         transition: all 0.2s ease;
     }
 
@@ -90,14 +94,20 @@
     .info-label {
         font-weight: 600;
         color: #566a7f;
+        font-size: 0.875rem;
     }
 
     .info-value {
         color: #697a8d;
         text-align: right;
+        font-size: 0.875rem;
     }
 
     @media (max-width: 768px) {
+        h4 {
+            font-size: 1.1rem !important;
+        }
+
         .personal-data-form {
             grid-template-columns: 1fr;
             gap: 1rem;
@@ -114,8 +124,27 @@
             gap: 0.25rem;
         }
 
+        .info-label {
+            font-size: 0.8rem;
+        }
+
         .info-value {
             text-align: left;
+            font-size: 0.85rem;
+        }
+
+        .form-control {
+            font-size: 0.85rem;
+            padding: 0.6rem 0.8rem;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+        }
+        
+        .nav-link {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.75rem;
         }
     }
 
@@ -152,8 +181,8 @@
     <!-- Header -->
     <div class="row">
         <div class="col-lg-12 mb-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="fw-bold py-3 mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+                <h4 class="fw-bold pt-3 pb-1 mb-0">
                     <span class="text-muted fw-light">Profile /</span> {{ $user->fullname }}
                 </h4>
                 <div class="d-flex align-items-center gap-2">
@@ -194,8 +223,8 @@
                         <div class="profile-info-item">
                             <span class="info-label">Status</span>
                             <span class="info-value">
-                                <span class="badge {{ $user->status === 'Active' ? 'bg-label-success' : 'bg-label-warning' }}">
-                                    {{ $user->status }}
+                                <span class="badge {{ ($user->status === 'Active' || $user->status === 'Employed') ? 'bg-label-success' : 'bg-label-warning' }}">
+                                    {{ $user->status ?? 'Empty' }}
                                 </span>
                             </span>
                         </div>
@@ -377,8 +406,8 @@
                             <div class="profile-info-item">
                                 <span class="info-label">Employment Status</span>
                                 <span class="info-value">
-                                    <span class="badge {{ $user->status === 'Active' ? 'bg-label-success' : 'bg-label-warning' }}">
-                                        {{ $user->status }}
+                                    <span class="badge {{ ($user->status === 'Active' || $user->status === 'Employed') ? 'bg-label-success' : 'bg-label-warning' }}">
+                                        {{ $user->status ?? 'Empty' }}
                                     </span>
                                 </span>
                             </div>

@@ -174,8 +174,8 @@
     <!-- Header -->
     <div class="row">
         <div class="col-lg-12 mb-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="fw-bold py-3 mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
+                <h4 class="fw-bold pt-3 pb-1 mb-0">
                     <span class="text-muted fw-light">Schedule / Shift /</span> Edit Shift
                 </h4>
                 <div class="d-flex align-items-center gap-2">

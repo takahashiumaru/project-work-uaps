@@ -71,7 +71,7 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="container">
-            <div class="header d-flex justify-content-between align-items-center">
+            <div class="header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
                 <div>
                     <h2 class="fas fa-users"> User</h2>
                     <p>Sebuah informasi tentang pegawai yang terdaftar dalam sistem.</p>

@@ -140,8 +140,8 @@
         <!-- Header -->
         <div class="row">
             <div class="col-lg-12 mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="fw-bold py-3 mb-4">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
+                    <h4 class="fw-bold pt-3 pb-1 mb-0">
                         <span class="text-muted fw-light">Schedule /</span> Shift Management
                     </h4>
                     <div class="d-flex align-items-center gap-2">
@@ -168,7 +168,7 @@
         <!-- Action Buttons -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
                     <div>
                         <h5 class="mb-0">Daftar Shift</h5>
                         <p class="text-muted mb-0">Kelola semua shift yang tersedia</p>

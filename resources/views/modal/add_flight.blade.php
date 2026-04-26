@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button> -->
             </div>
-            <form action="{{ route('flights.store') }}" method="POST" enctype="multipart/form-data">
+            <form id="addFlightForm" action="{{ route('flights.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <!-- Airline -->
@@ -49,9 +49,23 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmitFlight">
+                        <span id="btnText">Add Flight</span>
+                        <span id="btnLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
                 </div>
+                <script>
+                    document.getElementById('addFlightForm').addEventListener('submit', function() {
+                        const btn = document.getElementById('btnSubmitFlight');
+                        const text = document.getElementById('btnText');
+                        const loader = document.getElementById('btnLoader');
+                        
+                        btn.disabled = true;
+                        text.classList.add('d-none');
+                        loader.classList.remove('d-none');
+                    });
+                </script>
             </form>
         </div>
     </div>
