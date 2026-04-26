@@ -130,7 +130,7 @@
         .station-count {
             font-size: 1.4rem;
             font-weight: 800;
-            color: var(--primary-color);
+            color: #4A7EBB; /* Tetap biru logo untuk angka aktif di card putih */
             line-height: 1;
         }
 
@@ -286,7 +286,7 @@
 
         /* --- BUTTONS & INPUTS --- */
         .btn-primary-custom {
-            background: var(--primary-color);
+            background: #4A7EBB; /* Selalu biru logo */
             border: none;
             border-radius: 8px;
             padding: 0 20px;
@@ -329,9 +329,9 @@
         }
 
         .btn-primary-custom:hover {
-            background: #4338CA;
+            background: #3A6DAA; /* Biru logo sedikit gelap */
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 12px rgba(74, 126, 187, 0.3);
         }
 
         .filter-select {

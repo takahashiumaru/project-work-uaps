@@ -30,8 +30,7 @@
         class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('template/') }}/assets/css/demo.css" />
 
-    <link rel="stylesheet"
-        href="{{ asset('template/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="{{ asset('template/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="{{ asset('template/') }}/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <script src="{{ asset('template/') }}/assets/vendor/js/helpers.js"></script>
@@ -40,7 +39,7 @@
     @yield('styles')
     <style>
         /* --- KUSTOMISASI SIDEBAR SESUAI KRITERIA --- */
-        
+
         /* 1. Posisi Tetap (Persistent) & Ukuran Proporsional */
         #layout-menu {
             position: fixed !important;
@@ -49,30 +48,37 @@
             bottom: 0 !important;
             margin: 0 !important;
             height: 100vh !important;
-            width: 260px !important;
-            max-width: 260px !important;
-            z-index: 1099 !important; /* Menutupi navbar di mobile */
+            width: 250px !important;
+            max-width: 250px !important;
+            z-index: 1099 !important;
+            /* Menutupi navbar di mobile */
             display: flex;
             flex-direction: column;
             transition: width 0.3s ease, transform 0.3s ease !important;
             overflow-y: auto !important;
             overflow-x: hidden !important;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.05); /* Tambah shadow agar terpisah dengan konten */
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+            /* Tambah shadow agar terpisah dengan konten */
         }
 
         /* --- KUSTOMISASI FONT HEADER SECARA GLOBAL --- */
-        h4, .h4, h4.fw-bold.py-3 {
+        h4,
+        .h4,
+        h4.fw-bold.py-3 {
             font-size: 1.25rem !important;
         }
 
         @media (max-width: 768px) {
-            h4, .h4, h4.fw-bold.py-3 {
+
+            h4,
+            .h4,
+            h4.fw-bold.py-3 {
                 font-size: 1.1rem !important;
             }
         }
 
         .layout-page {
-            padding-left: 260px !important;
+            padding-left: 250px !important;
             transition: padding-left 0.3s ease !important;
         }
 
@@ -83,18 +89,22 @@
             padding-left: 1.5rem !important;
             padding-right: 1.5rem !important;
         }
+
         .layout-navbar.navbar-detached {
-            margin: 0 !important; /* Hilangkan gap atas, kiri, kanan */
+            margin: 0 !important;
+            /* Hilangkan gap atas, kiri, kanan */
             width: 100% !important;
             max-width: 100% !important;
-            border-radius: 0 !important; /* Buat navbar kotak nempel sisi */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+            border-radius: 0 !important;
+            /* Buat navbar kotak nempel sisi */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
             padding-left: 1.5rem !important;
             padding-right: 1.5rem !important;
         }
-        
+
         /* Optimasi Padding di Layar HP agar Lebih Lebar */
         @media (max-width: 767.98px) {
+
             .container-xxl,
             .layout-navbar.navbar-detached {
                 padding-left: 0.75rem !important;
@@ -102,20 +112,87 @@
             }
         }
 
-        /* Active Menu State ("Menyala") */
-        .menu-sub .menu-item.active > .menu-link {
-            color: var(--primary-color, #4F46E5) !important;
-            font-weight: 700 !important;
-            background-color: rgba(79, 70, 229, 0.08) !important;
-            border-radius: 8px;
-            margin: 0 10px;
+        .menu-link {
+            font-size: 0.82rem !important;
+            padding: 0.48rem 0.85rem !important; /* Memberi sedikit lebih banyak ruang napas vertikal */
         }
-        
-        .menu-item.active > .menu-link {
-            background-color: rgba(79, 70, 229, 0.08) !important;
-            color: var(--primary-color, #4F46E5) !important;
-            font-weight: bold;
-            border-radius: 12px;
+
+        /* Prevent long text from pushing the layout */
+        .menu-link > div:not(.badge) {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Khusus tanggal agar bisa bungkus (wrap) dan tidak kepotong */
+        #tanggalSekarang {
+            white-space: normal !important;
+            font-size: 0.75rem !important;
+            line-height: 1.2 !important;
+            overflow: visible !important;
+        }
+
+        .menu-inner > .menu-item > .menu-link .menu-icon {
+            font-size: 1.05rem !important;
+            flex-shrink: 0 !important; /* Pastikan ikon tidak ikut diperkecil */
+        }
+
+        /* Pastikan chevron/arrow tidak terpotong */
+        .menu-link .menu-toggle-icon {
+            flex-shrink: 0 !important;
+            margin-left: auto !important;
+        }
+
+        /* Make all menu links have the same pill shape and alignment */
+        .layout-menu .menu-inner .menu-item > .menu-link {
+            margin: 0.12rem 1rem !important; /* Memberi sedikit jarak agar tidak terlalu dempet */
+            width: auto !important;
+            border-radius: 0.5rem !important; /* Semua sudut melengkung */
+            transition: all 0.3s ease;
+            position: relative !important;
+        }
+
+        /* Active Menu State ("Menyala") - Elegant Transparent Look */
+        .layout-menu .menu-inner .menu-item.active > .menu-link {
+            background-color: rgba(74, 126, 187, 0.12) !important;
+            color: #4A7EBB !important;
+            font-weight: 700 !important;
+            box-shadow: none !important; /* No shadow for flat elegant look */
+        }
+
+        .layout-menu .menu-inner .menu-item.active > .menu-link .menu-icon,
+        .layout-menu .menu-inner .menu-item.active > .menu-link div {
+            color: #4A7EBB !important;
+            font-weight: 700 !important;
+        }
+
+        /* Garis vertikal biru di sisi kiri menu aktif */
+        .layout-menu .menu-inner .menu-item.active > .menu-link::before {
+            content: "" !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 20% !important;
+            height: 60% !important;
+            width: 3px !important;
+            background-color: #4A7EBB !important;
+            display: block !important;
+            border-radius: 0 3px 3px 0 !important;
+        }
+
+        /* Sembunyikan garis/indikator tambahan bawaan Sneat di sisi kanan */
+        .layout-menu .menu-inner .menu-item.active::before,
+        .layout-menu .menu-inner .menu-item.active::after {
+            display: none !important;
+            content: none !important;
+            background: none !important;
+            width: 0 !important;
+        }
+
+        /* Sub-menu indentation - padding kiri agar terlihat rapi */
+        .layout-menu .menu-inner .menu-sub .menu-item > .menu-link {
+            padding-left: 1.5rem !important;
         }
 
         /* 2. State Collapsed (Diringkas) */
@@ -123,6 +200,7 @@
             width: 80px !important;
             max-width: 80px !important;
         }
+
         html.sidebar-collapsed .layout-page {
             padding-left: 80px !important;
         }
@@ -132,15 +210,17 @@
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
-            padding: 24px 0 !important; /* Ruang napas vertikal */
+            padding: 24px 0 !important;
+            /* Ruang napas vertikal */
             height: auto !important;
         }
-        
+
         /* Sembunyikan tanda chevron "<" agar logo bisa ke tengah sempurna */
         html.sidebar-collapsed #layout-menu:not(:hover) #custom-sidebar-close-mobile,
         html.sidebar-collapsed #layout-menu:not(:hover) .layout-menu-toggle {
             display: none !important;
         }
+
         html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-link {
             display: flex !important;
             justify-content: center !important;
@@ -148,6 +228,7 @@
             width: 100%;
             margin: 0 !important;
         }
+
         html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-logo {
             display: flex !important;
             justify-content: center !important;
@@ -155,12 +236,25 @@
             width: 100%;
             margin: 0 !important;
         }
+
         html.sidebar-collapsed #layout-menu:not(:hover) .app-brand-logo img {
-            width: 55px !important; /* Ukuran ideal untuk logo mini */
+            width: 55px !important;
+            /* Ukuran ideal untuk logo mini */
             height: auto;
             object-fit: contain;
             margin: 0 !important;
             transition: width 0.3s ease;
+        }
+
+        /* Penyesuaian ukuran icon dan jarak menu saat mode collapsed/minimize */
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-inner > .menu-item > .menu-link {
+            margin: 0.05rem 1rem !important; /* Jarak vertikal lebih rapat saat minimize */
+            padding: 0.35rem 0.85rem !important; /* Pill sedikit lebih tipis saat minimize */
+        }
+        
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-inner > .menu-item > .menu-link .menu-icon {
+            font-size: 0.95rem !important; /* Icon sedikit lebih kecil */
+            margin-right: 0 !important;
         }
 
         /* Sembunyikan teks saat collapsed agar rapi */
@@ -187,11 +281,12 @@
         /* Menengahkan icon saat collapsed */
         html.sidebar-collapsed #layout-menu:not(:hover) .menu-link i {
             margin: 0 !important;
-            font-size: 1.25rem !important; /* Dikecilkan sedikit */
+            font-size: 1.25rem !important;
+            /* Dikecilkan sedikit */
             width: auto !important;
             display: block !important;
         }
-        
+
         html.sidebar-collapsed #layout-menu:not(:hover) .menu-link {
             justify-content: center !important;
             align-items: center !important;
@@ -200,9 +295,10 @@
             width: 50px !important;
             height: 50px !important;
             display: flex !important;
-            border-radius: 12px !important; /* Sudut melengkung rapi */
+            border-radius: 12px !important;
+            /* Sudut melengkung rapi */
         }
-        
+
         html.sidebar-collapsed #layout-menu:not(:hover) .menu-item {
             width: 80px !important;
             padding: 0 !important;
@@ -214,16 +310,17 @@
 
         /* Sembunyikan garis biru vertikal bawaan Sneat saat collapsed */
         html.sidebar-collapsed #layout-menu:not(:hover) .menu-item.active::before,
-        html.sidebar-collapsed #layout-menu:not(:hover) .menu-item.active > .menu-link::before {
+        html.sidebar-collapsed #layout-menu:not(:hover) .menu-item.active>.menu-link::before {
             display: none !important;
         }
 
         /* EXPAND ON HOVER BEHAVIOR (Ketika Collapsed lalu di-hover) */
         html.sidebar-collapsed #layout-menu:hover {
-            width: 260px !important;
-            max-width: 260px !important;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.1) !important;
+            width: 250px !important;
+            max-width: 250px !important;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1) !important;
         }
+
         html.sidebar-collapsed #layout-menu:hover .app-brand-logo img {
             width: 120px !important;
         }
@@ -233,25 +330,32 @@
             #layout-menu {
                 transform: translateX(-100%) !important;
             }
+
             #layout-menu .app-brand {
-                display: flex !important; /* Pastikan logo muncul di mobile */
+                display: flex !important;
+                /* Pastikan logo muncul di mobile */
                 height: 64px;
                 padding: 0 1.5rem;
             }
+
             .layout-page {
                 padding-left: 0 !important;
             }
+
             /* Saat dibuka di mobile */
             html.sidebar-mobile-open #layout-menu {
                 transform: translateX(0) !important;
             }
+
             /* Mencegah scroll body saat sidebar terbuka di mobile */
             html.sidebar-mobile-open {
                 overflow: hidden;
             }
+
             html.sidebar-collapsed #layout-menu {
-                width: 260px !important; /* Tetap full width di mobile */
-                max-width: 260px !important;
+                width: 250px !important;
+                /* Tetap full width di mobile */
+                max-width: 250px !important;
             }
         }
 
@@ -262,13 +366,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1049;
             display: none;
         }
+
         html.sidebar-mobile-open #custom-layout-overlay {
             display: block;
         }
+
         /* Menghilangkan garis pemisah (divider) di menu header sidebar */
         .menu-header::before {
             display: none !important;
@@ -280,7 +386,7 @@
                 display: block !important;
             }
         }
-        
+
         .app-brand-logo img {
             max-width: 100px;
             height: auto;
@@ -292,6 +398,71 @@
             font-size: 0.65rem !important;
             margin-right: 0.5rem !important;
         }
+        /* Modern Profile Dropdown Styling */
+        .navbar-nav .dropdown-menu {
+            border: none !important;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1) !important;
+            border-radius: 16px !important;
+            padding: 8px !important;
+            min-width: 260px !important;
+            margin-top: 15px !important;
+            border: 1px solid rgba(0,0,0,0.05) !important;
+        }
+
+        .navbar-nav .dropdown-item {
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            margin: 2px 0 !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .navbar-nav .dropdown-item:hover {
+            background-color: rgba(74, 126, 187, 0.08) !important;
+            color: #4A7EBB !important;
+            transform: translateX(6px);
+        }
+
+        .navbar-nav .dropdown-item i {
+            font-size: 1.25rem !important;
+            color: #4A7EBB !important;
+            margin-right: 12px !important;
+            opacity: 0.8;
+        }
+
+        .navbar-nav .dropdown-divider {
+            margin: 8px 8px !important;
+            border-color: #f1f3f5 !important;
+            opacity: 0.6;
+        }
+
+        /* User Header Info in Dropdown */
+        .navbar-nav .dropdown-item .avatar img {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            border: 2px solid #fff;
+        }
+
+        .navbar-nav .dropdown-item .fw-semibold {
+            font-size: 0.95rem;
+            color: #2c3e50;
+        }
+
+        .navbar-nav .dropdown-item .text-muted {
+            font-size: 0.8rem;
+        }
+
+        /* Nav Avatar Shadow */
+        .nav-item .avatar img {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item .avatar:hover img {
+            transform: scale(1.08);
+            box-shadow: 0 4px 15px rgba(74, 126, 187, 0.2);
+        }
+
     </style>
 
     <!-- 4. State Management (Anti-Refresh/Flicker) -->
@@ -314,7 +485,8 @@
                 <div class="app-brand demo">
                     <a href="{{ route('home') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="{{ asset('storage/aps_mini.png') }}" alt="APS" style="width: 100px; height: auto;">
+                            <img src="{{ asset('storage/aps_mini.png') }}" alt="APS"
+                                style="width: 70px; height: auto;">
                         </span>
                     </a>
 
@@ -360,13 +532,22 @@
                                     <div data-i18n="Data Schedule">Data Schedule</div>
                                 </a>
                             </li>
-                            @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
-                            <li class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
-                                <a href="{{ route('schedule.index') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-calendar-plus fa-xs me-2"></i>
-                                    <div data-i18n="Create/Update">Create / Update</div>
-                                </a>
-                            </li>
+                            @if (in_array(Auth::user()->role, [
+                                    'Admin',
+                                    'Ass Leader Bge',
+                                    'Ass Leader Apron',
+                                    'Head Of Airport Service',
+                                    'SPV',
+                                    'Bge',
+                                    'Apron',
+                                ]))
+                                <li
+                                    class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
+                                    <a href="{{ route('schedule.index') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-calendar-plus fa-xs me-2"></i>
+                                        <div data-i18n="Create/Update">Create / Update</div>
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     </li>
@@ -379,7 +560,8 @@
                     </li>
 
 
-                    <li class="menu-item {{ request()->is('attendance*') || request()->is('overtime*') ? 'active open' : '' }}">
+                    <li
+                        class="menu-item {{ request()->is('attendance*') || request()->is('overtime*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons fas fa-clipboard-check"></i>
                             <div data-i18n="Attendance & Lembur">Attendance</div>
@@ -396,16 +578,17 @@
                             </li>
 
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                            <li class="menu-item {{ request()->routeIs('attendance.reports') ? 'active' : '' }}">
-                                <a href="{{ route('attendance.reports') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-file-invoice fa-xs me-2"></i>
-                                    <div data-i18n="Laporan Absensi">Laporan Absensi</div>
-                                </a>
-                            </li>
+                                <li class="menu-item {{ request()->routeIs('attendance.reports') ? 'active' : '' }}">
+                                    <a href="{{ route('attendance.reports') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-file-invoice fa-xs me-2"></i>
+                                        <div data-i18n="Laporan Absensi">Laporan Absensi</div>
+                                    </a>
+                                </li>
                             @endif
 
 
-                            <li class="menu-item {{ request()->routeIs('overtime.index') || request()->routeIs('overtime.create') ? 'active' : '' }}">
+                            <li
+                                class="menu-item {{ request()->routeIs('overtime.index') || request()->routeIs('overtime.create') ? 'active' : '' }}">
                                 <a href="{{ route('overtime.index') }}" class="menu-link">
                                     <i class="menu-icon tf-icons fas fa-history fa-xs me-2"></i>
                                     <div data-i18n="Lembur Saya">Lembur Saya</div>
@@ -413,79 +596,82 @@
                             </li>
 
 
-                            @if(in_array(Auth::user()->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']))
-                            <li class="menu-item {{ request()->routeIs('overtime.approval') ? 'active' : '' }}">
-                                <a href="{{ route('overtime.approval') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-check-double fa-xs me-2"></i>
-                                    <div data-i18n="Approval Lembur">Approval Lembur</div>
-                                </a>
-                            </li>
+                            @if (in_array(Auth::user()->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']))
+                                <li class="menu-item {{ request()->routeIs('overtime.approval') ? 'active' : '' }}">
+                                    <a href="{{ route('overtime.approval') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-check-double fa-xs me-2"></i>
+                                        <div data-i18n="Approval Lembur">Approval Lembur</div>
+                                    </a>
+                                </li>
                             @endif
 
-                            @if(Auth::user()->role == 'Admin')
-                            <li class="menu-item {{ request()->routeIs('overtime.report') ? 'active' : '' }}">
-                                <a href="{{ route('overtime.report') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-chart-line fa-xs me-2"></i>
-                                    <div data-i18n="Laporan Lembur">Laporan Lembur</div>
-                                </a>
-                            </li>
+                            @if (Auth::user()->role == 'Admin')
+                                <li class="menu-item {{ request()->routeIs('overtime.report') ? 'active' : '' }}">
+                                    <a href="{{ route('overtime.report') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-chart-line fa-xs me-2"></i>
+                                        <div data-i18n="Laporan Lembur">Laporan Lembur</div>
+                                    </a>
+                                </li>
                             @endif
 
                         </ul>
                     </li>
 
                     @if (in_array(Auth::user()->role, ['Admin']))
-                    {{-- HEADER KHUSUS ADMIN --}}
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">Administrator</span>
-                    </li>
+                        {{-- HEADER KHUSUS ADMIN --}}
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text">Administrator</span>
+                        </li>
 
-                    {{-- MENU BARU: STATION MANAGEMENT (ON/OFF) --}}
-                    <li class="menu-item {{ request()->routeIs('stations.*') ? 'active' : '' }}">
-                        <a href="{{ route('stations.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons fas fa-building"></i>
-                            <div data-i18n="Manajemen Station">Manajemen Station</div>
-                        </a>
-                    </li>
+                        {{-- MENU BARU: STATION MANAGEMENT (ON/OFF) --}}
+                        <li class="menu-item {{ request()->routeIs('stations.*') ? 'active' : '' }}">
+                            <a href="{{ route('stations.index') }}" class="menu-link">
+                                <i class="menu-icon tf-icons fas fa-building"></i>
+                                <div data-i18n="Manajemen Station">Manajemen Station</div>
+                            </a>
+                        </li>
 
-                    <li class="menu-item {{ request()->routeIs('staff.*') || request()->routeIs('blacklist.*') || request()->routeIs('users.kontrak') || request()->routeIs('users.pas') || request()->routeIs('users.tim') ? 'active open' : '' }}">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons fas fa-users"></i>
-                            <div data-i18n="User Management">User</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
-                                <a href="{{ route('staff.index') }}" class="menu-link" style="color: #f1c40f !important; font-weight: bold;">
-                                    <i class="menu-icon tf-icons fas fa-desktop fa-xs me-2"></i>
-                                    <div data-i18n="Monitor Station">Monitor Station</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('blacklist.*') ? 'active' : '' }}">
-                                <a href="{{ route('blacklist.index') }}" class="menu-link" style="color: #000000ff !important; font-weight: bold;">
-                                    <i class="menu-icon tf-icons fas fa-user-slash fa-xs me-2"></i>
-                                    <div data-i18n="Blacklist"> Blacklist</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('users.kontrak') ? 'active' : '' }}">
-                                <a href="{{ route('users.kontrak') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-file-contract fa-xs me-2"></i>
-                                    <div data-i18n="Kontrak">Kontrak</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('users.pas') ? 'active' : '' }}">
-                                <a href="{{ route('users.pas') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-id-card fa-xs me-2"></i>
-                                    <div data-i18n="PAS Tahunan">PAS Bandara</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('users.tim') ? 'active' : '' }}">
-                                <a href="{{ route('users.tim') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-id-badge fa-xs me-2"></i>
-                                    <div data-i18n="TIM Bandara">TIM Bandara</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li
+                            class="menu-item {{ request()->routeIs('staff.*') || request()->routeIs('blacklist.*') || request()->routeIs('users.kontrak') || request()->routeIs('users.pas') || request()->routeIs('users.tim') ? 'active open' : '' }}">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons fas fa-users"></i>
+                                <div data-i18n="User Management">User</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item {{ request()->routeIs('staff.*') ? 'active' : '' }}">
+                                    <a href="{{ route('staff.index') }}" class="menu-link"
+                                        style="color: #f1c40f !important; font-weight: bold;">
+                                        <i class="menu-icon tf-icons fas fa-desktop fa-xs me-2"></i>
+                                        <div data-i18n="Monitor Station">Monitor Station</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('blacklist.*') ? 'active' : '' }}">
+                                    <a href="{{ route('blacklist.index') }}" class="menu-link"
+                                        style="color: #000000ff !important; font-weight: bold;">
+                                        <i class="menu-icon tf-icons fas fa-user-slash fa-xs me-2"></i>
+                                        <div data-i18n="Blacklist"> Blacklist</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('users.kontrak') ? 'active' : '' }}">
+                                    <a href="{{ route('users.kontrak') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-file-contract fa-xs me-2"></i>
+                                        <div data-i18n="Kontrak">Kontrak</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('users.pas') ? 'active' : '' }}">
+                                    <a href="{{ route('users.pas') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-id-card fa-xs me-2"></i>
+                                        <div data-i18n="PAS Tahunan">PAS Bandara</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('users.tim') ? 'active' : '' }}">
+                                    <a href="{{ route('users.tim') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-id-badge fa-xs me-2"></i>
+                                        <div data-i18n="TIM Bandara">TIM Bandara</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     @endif
 
                     <li class="menu-header small text-uppercase">
@@ -506,25 +692,25 @@
                         </a>
                         <ul class="menu-sub">
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                            <li class="menu-item {{ request()->routeIs('training.index') ? 'active' : '' }}">
-                                <a href="{{ route('training.index') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-tasks fa-xs me-2"></i>
-                                    <div data-i18n="Manajemen">Manajemen Training</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
-                                <a href="{{ route('training.create') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-plus-square fa-xs me-2"></i>
-                                    <div data-i18n="Tambah">Tambah Sertifikat</div>
-                                </a>
-                            </li>
+                                <li class="menu-item {{ request()->routeIs('training.index') ? 'active' : '' }}">
+                                    <a href="{{ route('training.index') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-tasks fa-xs me-2"></i>
+                                        <div data-i18n="Manajemen">Manajemen Training</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
+                                    <a href="{{ route('training.create') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-plus-square fa-xs me-2"></i>
+                                        <div data-i18n="Tambah">Tambah Sertifikat</div>
+                                    </a>
+                                </li>
                             @else
-                            <li class="menu-item {{ request()->routeIs('my.certificates') ? 'active' : '' }}">
-                                <a href="{{ route('my.certificates') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-award fa-xs me-2"></i>
-                                    <div data-i18n="Saya">Sertifikat Saya</div>
-                                </a>
-                            </li>
+                                <li class="menu-item {{ request()->routeIs('my.certificates') ? 'active' : '' }}">
+                                    <a href="{{ route('my.certificates') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-award fa-xs me-2"></i>
+                                        <div data-i18n="Saya">Sertifikat Saya</div>
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     </li>
@@ -541,19 +727,27 @@
                                     <div data-i18n="Pengajuan">Pengajuan Leave</div>
                                 </a>
                             </li>
-                            @if (in_array(Auth::user()->role, ['Leader Bge', 'Leader Apron', 'Ass Leader Apron', 'Ass Leader Bge', 'Admin', 'SPV', 'Head Of Airport Service']))
-                            <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">
-                                <a href="{{ route('leaves.index') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-check-circle fa-xs me-2"></i>
-                                    <div data-i18n="Approval">Approval Leave</div>
-                                </a>
-                            </li>
-                            <li class="menu-item {{ request()->routeIs('leaves.laporan') ? 'active' : '' }}">
-                                <a href="{{ route('leaves.laporan') }}" class="menu-link">
-                                    <i class="menu-icon tf-icons fas fa-file-alt fa-xs me-2"></i>
-                                    <div data-i18n="Laporan">Laporan Leave</div>
-                                </a>
-                            </li>
+                            @if (in_array(Auth::user()->role, [
+                                    'Leader Bge',
+                                    'Leader Apron',
+                                    'Ass Leader Apron',
+                                    'Ass Leader Bge',
+                                    'Admin',
+                                    'SPV',
+                                    'Head Of Airport Service',
+                                ]))
+                                <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">
+                                    <a href="{{ route('leaves.index') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-check-circle fa-xs me-2"></i>
+                                        <div data-i18n="Approval">Approval Leave</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('leaves.laporan') ? 'active' : '' }}">
+                                    <a href="{{ route('leaves.laporan') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons fas fa-file-alt fa-xs me-2"></i>
+                                        <div data-i18n="Laporan">Laporan Leave</div>
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     </li>
@@ -571,7 +765,8 @@
                     id="layout-navbar">
                     <!-- Tombol Toggle Sidebar (Ditampilkan di semua ukuran layar) -->
                     <div class="navbar-nav align-items-xl-center me-3 me-xl-0">
-                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)" id="custom-sidebar-toggle">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)"
+                            id="custom-sidebar-toggle">
                             <i class="bx bx-menu bx-sm"></i>
                         </a>
                     </div>
@@ -583,12 +778,12 @@
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
                                         @if (!empty(Auth::user()->profile_picture))
-                                        <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}"
-                                            alt="Profile" class="rounded-circle"
-                                            style="width: 40px; height: 40px; object-fit: cover;" />
+                                            <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}"
+                                                alt="Profile" class="rounded-circle"
+                                                style="width: 40px; height: 40px; object-fit: cover;" />
                                         @else
-                                        <img src="{{ asset('storage/photo/user.jpg') }}" alt
-                                            class="w-px-40 h-auto rounded-circle" />
+                                            <img src="{{ asset('storage/photo/user.jpg') }}" alt
+                                                class="w-px-40 h-auto rounded-circle" />
                                         @endif
                                     </div>
                                 </a>
@@ -599,12 +794,12 @@
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
                                                         @if (!empty(Auth::user()->profile_picture))
-                                                        <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}"
-                                                            alt="Profile" class="rounded-circle"
-                                                            style="width: 40px; height: 40px; object-fit: cover;" />
+                                                            <img src="{{ asset('storage/photo/' . Auth::user()->profile_picture) }}"
+                                                                alt="Profile" class="rounded-circle"
+                                                                style="width: 40px; height: 40px; object-fit: cover;" />
                                                         @else
-                                                        <img src="{{ asset('storage/photo/user.jpg') }}" alt
-                                                            class="w-px-40 h-auto rounded-circle" />
+                                                            <img src="{{ asset('storage/photo/user.jpg') }}" alt
+                                                                class="w-px-40 h-auto rounded-circle" />
                                                         @endif
                                                     </div>
                                                 </div>
@@ -620,7 +815,8 @@
                                         <div class="dropdown-divider"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="{{ route('users.profile', Auth::user()->id) }}">
+                                        <a class="dropdown-item"
+                                            href="{{ route('users.profile', Auth::user()->id) }}">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">Profile</span>
                                         </a>
@@ -652,7 +848,8 @@
                         <div class="container-xxl d-flex flex-wrap justify-content-center py-3">
                             <div class="text-center">
                                 <p class="mb-0" style="font-size: 0.85rem; color: #a1acb8;">
-                                    © {{ date('Y') }} <span class="fw-semibold" style="color: #697a8d;">PT. Angkasa Pratama Sejahtera</span>. 
+                                    © 2025 <span class="fw-semibold" style="color: #697a8d;">PT. Angkasa Pratama
+                                        Sejahtera</span>.
                                     All Rights Reserved.
                                 </p>
                             </div>
@@ -707,14 +904,14 @@
 
             function toggleSidebar() {
                 const isMobile = window.innerWidth < 1200;
-                
+
                 if (isMobile) {
                     // Logika Mobile: Toggle class sidebar-mobile-open
                     htmlTag.classList.toggle('sidebar-mobile-open');
                 } else {
                     // Logika Desktop: Toggle class sidebar-collapsed & simpan ke localStorage
                     htmlTag.classList.toggle('sidebar-collapsed');
-                    
+
                     if (htmlTag.classList.contains('sidebar-collapsed')) {
                         localStorage.setItem('customSidebarState', 'collapsed');
                     } else {
@@ -724,13 +921,13 @@
             }
 
             if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-            
+
             if (mobileCloseBtn) {
                 mobileCloseBtn.addEventListener('click', function() {
                     htmlTag.classList.remove('sidebar-mobile-open');
                 });
             }
-            
+
             if (overlay) {
                 overlay.addEventListener('click', function() {
                     htmlTag.classList.remove('sidebar-mobile-open');

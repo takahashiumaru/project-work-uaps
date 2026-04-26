@@ -5,21 +5,23 @@
     <title>Kode OTP Reset Password</title>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; margin: 0; padding: 0;">
-    <table align="center" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+    <table align="center" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border: 1px solid #eee;">
         <tr>
-            <td align="center" style="background-color: #0d6efd; padding: 20px;">
-                {{-- <img src="{{ asset('storage/aps.jpeg') }}"  alt="Logo" width="120" style="display:block; margin-bottom:10px;"> --}}
-                <h2 style="color: #ffffff; margin: 0;">Reset Password Akun Anda</h2>
+            <td align="center" style="background-color: #4A7EBB; padding: 30px 20px;">
+                {{-- <img src="{{ asset('storage/aps_mini.png') }}"  alt="Logo" width="80" style="display:block; margin-bottom:15px;"> --}}
+                <h2 style="color: #ffffff; margin: 0; font-family: Arial, sans-serif; font-size: 22px; letter-spacing: 0.5px;">Reset Password Akun Anda</h2>
             </td>
         </tr>
         <tr>
-            <td style="padding: 30px;">
-                <p style="font-size: 16px; color: #333;">Halo, <strong>{{ $user->fullname }}</strong> 👋</p>
-                <p style="font-size: 15px; color: #555;">
-                    Kami menerima permintaan untuk mereset password akun Anda. Berikut kode OTP Anda:
+            <td style="padding: 40px 30px;">
+                <p style="font-size: 16px; color: #333; margin-top: 0;">Halo, <strong>{{ $user->fullname }}</strong> 👋</p>
+                <p style="font-size: 15px; color: #555; line-height: 1.5;">
+                    Kami menerima permintaan untuk mereset password akun Anda. Silakan gunakan kode OTP di bawah ini untuk melanjutkan:
                 </p>
-                <div style="text-align: center; margin: 25px 0;">
-                    <span style="font-size: 30px; font-weight: bold; color: #0d6efd;">{{ $otp }}</span>
+                <div style="text-align: center; margin: 35px 0;">
+                    <div style="display: inline-block; padding: 15px 30px; background-color: #f8fafc; border-radius: 12px; border: 2px dashed #4A7EBB;">
+                        <span style="font-size: 36px; font-weight: 800; color: #4A7EBB; letter-spacing: 5px;">{{ $otp }}</span>
+                    </div>
                 </div>
                 <p style="font-size: 14px; color: #888;">
                     Kode ini hanya berlaku selama <strong>10 menit</strong>. Jika Anda tidak meminta reset password, abaikan email ini.
