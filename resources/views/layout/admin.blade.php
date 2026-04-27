@@ -698,6 +698,7 @@
                                         <div data-i18n="Manajemen">Manajemen Training</div>
                                     </a>
                                 </li>
+                                
                                 <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
                                     <a href="{{ route('training.create') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-plus-square fa-xs me-2"></i>
