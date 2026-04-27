@@ -100,15 +100,51 @@
             background: #fff !important;
         }
 
-        .input-group-text {
-            border-radius: 0 12px 12px 0 !important;
-            border: 1.5px solid #e0e6ed !important;
-            border-left: none !important;
-            background: #fff !important;
+        /* Password toggle wrapper */
+        .password-wrapper {
+            position: relative;
         }
 
-        #password {
-            border-right: none !important;
+        .password-wrapper .form-control {
+            padding-right: 48px !important;
+        }
+
+        .btn-toggle-password {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none !important;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #94a3b8;
+            transition: color 0.2s ease, background 0.2s ease;
+            padding: 0;
+            z-index: 5;
+        }
+
+        .btn-toggle-password:hover {
+            color: #4A7EBB;
+            background: rgba(74, 126, 187, 0.08);
+        }
+
+        .btn-toggle-password:focus {
+            outline: none;
+            box-shadow: none !important;
+        }
+
+        .btn-toggle-password svg {
+            width: 18px;
+            height: 18px;
+            transition: opacity 0.15s ease;
         }
 
         .btn-primary {
@@ -214,13 +250,22 @@
                                         <small>Lupa Password?</small>
                                     </a>
                                 </div>
-                                <div class="input-group input-group-merge">
+                                <div class="password-wrapper">
                                     <input type="password" id="password"
                                         class="form-control @error('password') is-invalid @enderror" name="password"
-                                        placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                        placeholder="Masukkan password Anda"
                                         aria-describedby="password" required />
-                                    <span class="input-group-text cursor-pointer"><i
-                                            class="icon-base bx bx-show"></i></span>
+                                    <button type="button" class="btn-toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                                        <!-- Eye icon (show) -->
+                                        <svg id="iconShow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                        <!-- Eye-off icon (hide) -->
+                                        <svg id="iconHide" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="display:none;">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                        </svg>
+                                    </button>
                                 </div>
 
                                 @error('password')
@@ -263,21 +308,18 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const togglePassword = document.querySelector('.form-password-toggle .input-group-text');
-            const passwordInput = document.querySelector('#password');
-            const icon = togglePassword.querySelector('i');
+            const toggleBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const iconShow = document.getElementById('iconShow');
+            const iconHide = document.getElementById('iconHide');
 
-            togglePassword.addEventListener('click', function() {
-                // Jika tipe password, ubah ke text (show)
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('bx-show');
-                    icon.classList.add('bx-hide');
-                } else { // jika text, ubah kembali ke password (hide)
-                    passwordInput.type = 'password';
-                    icon.classList.remove('bx-hide');
-                    icon.classList.add('bx-show');
-                }
+            toggleBtn.addEventListener('click', function() {
+                const isHidden = passwordInput.type === 'password';
+                passwordInput.type = isHidden ? 'text' : 'password';
+                iconShow.style.display = isHidden ? 'none' : 'block';
+                iconHide.style.display = isHidden ? 'block' : 'none';
+                // Beri visual feedback animasi
+                toggleBtn.style.color = isHidden ? '#4A7EBB' : '#94a3b8';
             });
         });
     </script>
