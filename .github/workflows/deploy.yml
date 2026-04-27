@@ -66,6 +66,7 @@ jobs:
               image-uaps-8081
 
             # 7. Pastikan storage:link berjalan (agar image muncul)
+            docker exec uaps-app-8081 rm -rf public/storage
             docker exec uaps-app-8081 php artisan storage:link --force || true
 
             # 8. Bersihkan image lama yang tidak terpakai
