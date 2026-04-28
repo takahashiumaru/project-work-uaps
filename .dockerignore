@@ -8,3 +8,5 @@ storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
 storage/logs/*
+# Exclude user-uploaded photos but keep defaults — handled by volume mount in production
+storage/app/public/photo/[0-9]*

@@ -63,11 +63,30 @@ sed -i 's/APP_ENV=local/APP_ENV=production/' .env\n\
 sed -i 's/APP_DEBUG=true/APP_DEBUG=false/' .env\n\
 sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql_db/' .env\n\
 \n\
+echo 'Setting up storage directories...'\n\
+# Pastikan folder storage/app/public/photo ada\n\
+mkdir -p storage/app/public/photo\n\
+# Hapus public/storage jika itu directory biasa (bukan symlink)\n\
+if [ -d public/storage ] && [ ! -L public/storage ]; then\n\
+    rm -rf public/storage\n\
+fi\n\
+# Buat symlink jika belum ada\n\
+if [ ! -L public/storage ]; then\n\
+    php artisan storage:link --force || true\n\
+fi\n\
+# Fallback: jika symlink gagal, buat directory langsung dan copy foto default\n\
+if [ ! -d public/storage/photo ]; then\n\
+    mkdir -p public/storage/photo\n\
+    if [ -f storage/app/public/photo/user.jpg ]; then\n\
+        cp storage/app/public/photo/user.jpg public/storage/photo/user.jpg\n\
+    fi\n\
+fi\n\
+# Set permissions\n\
+chown -R www-data:www-data storage public/storage\n\
+chmod -R 775 storage public/storage\n\
+\n\
 echo 'Setting up cache...'\n\
 php artisan optimize:clear\n\
-# Remove real directory if exists to allow storage:link to create symlink\n\
-rm -rf public/storage\n\
-php artisan storage:link --force || true\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
 php artisan view:cache\n\

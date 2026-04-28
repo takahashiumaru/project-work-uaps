@@ -447,13 +447,20 @@ class UserController extends Controller
             if ($request->hasFile('profile_picture')) {
                 $file = $request->file('profile_picture');
                 $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
-                
-                // Simpan file ke storage/app/public/photo
-                $file->storeAs('photo', $filename, 'public');
-                
+
+                // Simpan langsung ke public/storage/photo agar tidak bergantung pada symlink
+                $photoDir = public_path('storage/photo');
+                if (!file_exists($photoDir)) {
+                    mkdir($photoDir, 0775, true);
+                }
+                $file->move($photoDir, $filename);
+
                 // Hapus foto lama jika bukan default
                 if ($user->profile_picture && $user->profile_picture !== 'user.jpg') {
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete('photo/' . $user->profile_picture);
+                    $oldPath = public_path('storage/photo/' . $user->profile_picture);
+                    if (file_exists($oldPath)) {
+                        unlink($oldPath);
+                    }
                 }
 
                 $user->profile_picture = $filename;
@@ -462,7 +469,7 @@ class UserController extends Controller
                 Alert::success('Berhasil', 'Foto profil berhasil diperbarui.');
                 return back();
             }
-            
+
             Alert::error('Gagal', 'File tidak ditemukan.');
             return back();
         } catch (\Exception $e) {
