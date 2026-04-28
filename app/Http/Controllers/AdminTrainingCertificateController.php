@@ -56,7 +56,10 @@ class AdminTrainingCertificateController extends Controller
         if ($request->hasFile('certificate_file')) {
             $file = $request->file('certificate_file');
             $extension = $file->getClientOriginalExtension() ?: 'pdf';
-            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time().'.'.$extension;
+            
+            // Bersihkan nama sertifikat agar aman untuk nama file (hilangkan karakter aneh/slash)
+            $safeName = preg_replace('/[^A-Za-z0-9\-]/', '_', $validatedData['certificate_name']);
+            $filename = $safeName . '_' . $validatedData['user_id'] . '_' . time() . '.' . $extension;
             
             // Simpan langsung ke public/storage/certificates
             $certDir = public_path('storage/certificates');
@@ -111,7 +114,10 @@ class AdminTrainingCertificateController extends Controller
             
             $file = $request->file('certificate_file');
             $extension = $file->getClientOriginalExtension() ?: 'pdf';
-            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time().'.'.$extension;
+            
+            // Bersihkan nama sertifikat agar aman untuk nama file
+            $safeName = preg_replace('/[^A-Za-z0-9\-]/', '_', $validatedData['certificate_name']);
+            $filename = $safeName . '_' . $validatedData['user_id'] . '_' . time() . '.' . $extension;
             
             $certDir = public_path('storage/certificates');
             if (!file_exists($certDir)) {
