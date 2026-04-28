@@ -65,6 +65,8 @@ sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql_db/' .env\n\
 \n\
 echo 'Setting up cache...'\n\
 php artisan optimize:clear\n\
+# Remove real directory if exists to allow storage:link to create symlink\n\
+rm -rf public/storage\n\
 php artisan storage:link --force || true\n\
 php artisan config:cache\n\
 php artisan route:cache\n\
