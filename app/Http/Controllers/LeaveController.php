@@ -208,12 +208,14 @@ class LeaveController extends Controller
 
         $status = '';
 
-        if ($user->role === 'Porter Bge') {
+        if ($user->role === 'Admin') {
+            $status = 'approved';
+        } else if ($user->role === 'Porter Bge') {
             $status = 'pending Bge';
         } else if ($user->role === 'Porter Apron') {
             $status = 'pending Apron';
         } else {
-            $status = 'approved';
+            $status = 'pending';
         }
 
         $startDate = Carbon::parse($request->start_date);

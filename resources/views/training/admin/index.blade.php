@@ -150,16 +150,16 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Daftar Seluruh Sertifikat</h5>
-            <a href="{{ route('training.create') }}" class="btn btn-primary">Tambah Sertifikat</a>
+            <a href="{{ route('admin.training.certificates.create') }}" class="btn btn-primary">Tambah Sertifikat</a>
         </div>
         <div class="card-body">
-            <form action="{{ route('training.index') }}" method="GET" class="mb-3">
+            <form action="{{ route('admin.training.certificates.index') }}" method="GET" class="mb-3">
                 <div class="input-group">
                     <input type="text" name="search" class="form-control"
                         placeholder="Cari nama, NIP, atau nama sertifikat..." value="{{ request('search') }}">
                     <button class="btn btn-outline-secondary" type="submit">Cari</button>
                     @if (request('search'))
-                        <a href="{{ route('training.index') }}" class="btn btn-outline-danger">Reset</a>
+                        <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-outline-danger">Reset</a>
                     @endif
                 </div>
             </form>
@@ -221,16 +221,16 @@
 
                                 {{-- Kolom Aksi --}}
                                 <td class="d-flex align-items-center gap-2">
-                                    <a href="{{ route('training.edit', $certificate->id) }}" class="action-btn"
+                                    <a href="{{ route('admin.training.certificates.edit', $certificate->id) }}" class="action-btn"
                                         title="Edit Certificate">
                                         <i class="bx bx-edit"></i>
                                     </a>
-                                    <form action="{{ route('training.destroy', $certificate->id) }}" method="POST"
-                                        class="d-inline">
+                                    <form action="{{ route('admin.training.certificates.destroy', $certificate->id) }}" method="POST"
+                                        class="d-inline" id="delete-form-{{ $certificate->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="action-btn border-0" title="Delete Shift"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus sertifikat ini?')"
+                                        <button type="button" class="action-btn border-0" title="Delete Certificate"
+                                            onclick="confirmDeleteCertificate('{{ $certificate->id }}')"
                                             style="background: red;">
                                             <i class="bx bx-trash"></i>
                                         </button>
@@ -302,8 +302,33 @@
                 });
             @endif
         });
+
+        function confirmDeleteCertificate(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data sertifikat yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: '<i class="bx bx-trash me-1"></i> Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-danger me-3',
+                    cancelButton: 'btn btn-label-secondary'
+                },
+                buttonsStyling: false,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
-    @if (session('success') || session('error'))
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @endif
 @endsection

@@ -692,15 +692,15 @@
                         </a>
                         <ul class="menu-sub">
                             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-                                <li class="menu-item {{ request()->routeIs('training.index') ? 'active' : '' }}">
-                                    <a href="{{ route('training.index') }}" class="menu-link">
+                                <li class="menu-item {{ request()->routeIs('admin.training.certificates.index') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.training.certificates.index') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-tasks fa-xs me-2"></i>
                                         <div data-i18n="Manajemen">Manajemen Training</div>
                                     </a>
                                 </li>
                                 
-                                <li class="menu-item {{ request()->routeIs('training.create') ? 'active' : '' }}">
-                                    <a href="{{ route('training.create') }}" class="menu-link">
+                                <li class="menu-item {{ request()->routeIs('admin.training.certificates.create') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.training.certificates.create') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-plus-square fa-xs me-2"></i>
                                         <div data-i18n="Tambah">Tambah Sertifikat</div>
                                     </a>
@@ -951,6 +951,8 @@
             }
         });
     </script>
+    @include('sweetalert::alert')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

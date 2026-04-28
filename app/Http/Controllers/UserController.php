@@ -444,23 +444,31 @@ class UserController extends Controller
 
         try {
             $user = User::findOrFail($userId);
-            $file = $request->file('profile_picture');
-            $filename = now()->timestamp . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('storage/photo');
+            if ($request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
+                
+                // Simpan file ke storage/app/public/photo
+                $file->storeAs('photo', $filename, 'public');
+                
+                // Hapus foto lama jika bukan default
+                if ($user->profile_picture && $user->profile_picture !== 'user.jpg') {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete('photo/' . $user->profile_picture);
+                }
 
-            if (! file_exists($destinationPath)) mkdir($destinationPath, 0775, true);
-            $file->move($destinationPath, $filename);
+                $user->profile_picture = $filename;
+                $user->save();
 
-            if ($user->profile_picture && file_exists($destinationPath . '/' . $user->profile_picture)) {
-                unlink($destinationPath . '/' . $user->profile_picture);
+                Alert::success('Berhasil', 'Foto profil berhasil diperbarui.');
+                return back();
             }
-
-            $user->profile_picture = $filename;
-            $user->save();
-
-            return back()->with('success', 'Foto profil berhasil diubah.');
+            
+            Alert::error('Gagal', 'File tidak ditemukan.');
+            return back();
         } catch (\Exception $e) {
-            return back()->with('error', 'Gagal ubah foto: ' . $e->getMessage());
+            Log::error('Error upload photo: ' . $e->getMessage());
+            Alert::error('Gagal', 'Gagal ubah foto: ' . $e->getMessage());
+            return back();
         }
     }
 

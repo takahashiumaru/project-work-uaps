@@ -70,7 +70,7 @@
                 @endif
             </div>
             <button type="submit" class="btn btn-primary">Perbarui Sertifikat</button>
-            {{-- Penyesuaian route name ke 'training.index' --}}
+            {{-- Penyesuaian route name ke 'admin.training.certificates.index' --}}
             <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>

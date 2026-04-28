@@ -244,7 +244,7 @@
                                 <div class="profile-info-item">
                                     <span class="info-label">PAS Registered</span>
                                     <span
-                                        class="info-value">{{ user->pas_registered ? \Carbon\Carbon::parse($user->pas_registered)->format('d F Y') : 'N/A' }}</span>
+                                        class="info-value">{{ $user->pas_registered ? \Carbon\Carbon::parse($user->pas_registered)->format('d F Y') : 'N/A' }}</span>
                                 </div>
                             @endif
                             @if ($user->pas_expired)
@@ -484,15 +484,6 @@
         @section('scripts')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Handle photo upload click
-                    const profilePhoto = document.querySelector('.profile-photo');
-                    const fileInput = document.getElementById('fileInput');
-
-                    if (profilePhoto && fileInput) {
-                        profilePhoto.addEventListener('click', function() {
-                            fileInput.click();
-                        });
-                    }
 
                     // Show loading state when uploading photo
                     const photoForm = document.getElementById('photoForm');

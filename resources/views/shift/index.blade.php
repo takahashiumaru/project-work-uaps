@@ -232,12 +232,25 @@
                                                 <small
                                                     class="text-muted">{{ $shift->updated_at->format('d M Y, H:i') }}</small>
                                             </td>
-                                            <td class="d-flex align-items-center gap-2">
-                                                <a href="{{ route('shift.edit', $shift->id) }}" class="action-btn"
-                                                    title="Edit Shift">
-                                                    <i class="bx bx-edit"></i>
-                                                </a>
-                                            </td>
+                                             <td class="d-flex align-items-center gap-2">
+                                                @if (in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                                                    <a href="{{ route('shift.edit', $shift->id) }}" class="action-btn"
+                                                        title="Edit Shift">
+                                                        <i class="bx bx-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('shift.destroy', $shift->id) }}" method="POST"
+                                                        class="d-inline" id="delete-form-{{ $shift->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="action-btn bg-danger border-0"
+                                                            title="Delete Shift" onclick="confirmDeleteShift('{{ $shift->id }}')">
+                                                            <i class="bx bx-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <span class="badge bg-label-secondary">No Access</span>
+                                                @endif
+                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -353,6 +366,34 @@
                 });
             @endif
         });
+        function confirmDeleteShift(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data shift yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff3e1d',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: '<i class="bx bx-trash me-1"></i> Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-danger me-3',
+                    cancelButton: 'btn btn-label-secondary'
+                },
+                buttonsStyling: false,
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Gunakan encoding atau escape jika ID mengandung karakter khusus
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
     @if (session('success') || session('error'))
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

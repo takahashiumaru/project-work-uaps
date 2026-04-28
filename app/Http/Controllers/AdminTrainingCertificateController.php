@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\certificate;
+use App\Models\Certificate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -93,15 +93,15 @@ class AdminTrainingCertificateController extends Controller
         ]);
 
         if ($request->hasFile('certificate_file')) {
-            if ($certificate->file_path) {
-                Storage::disk('public')->delete($certificate->file_path);
+            if ($certificate->certificate_file) {
+                Storage::disk('public')->delete($certificate->certificate_file);
             }
             $filePath = $request->file('certificate_file')->store('certificates', 'public');
-            $validatedData['file_path'] = $filePath;
+            $validatedData['certificate_file'] = $filePath;
         } elseif ($request->boolean('remove_file')) {
-            if ($certificate->file_path) {
-                Storage::disk('public')->delete($certificate->file_path);
-                $validatedData['file_path'] = null;
+            if ($certificate->certificate_file) {
+                Storage::disk('public')->delete($certificate->certificate_file);
+                $validatedData['certificate_file'] = null;
             }
         }
 
@@ -112,8 +112,8 @@ class AdminTrainingCertificateController extends Controller
 
     public function destroy(Certificate $certificate)
     {
-        if ($certificate->file_path) {
-            Storage::disk('public')->delete($certificate->file_path);
+        if ($certificate->certificate_file) {
+            Storage::disk('public')->delete($certificate->certificate_file);
         }
 
         $certificate->delete();

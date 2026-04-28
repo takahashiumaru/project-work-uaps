@@ -102,12 +102,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/flight/{id}/users', [HomeController::class, 'getFlightUsers']);
 
     // --- SCHEDULES ---
-    Route::resource('schedule', ScheduleController::class); // Perbaikan typo 'scheduleController'
-    Route::get('/schedule-now', [ScheduleController::class, 'now'])->name('schedule.now');
-    Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.view'); // Hati-hati conflict dgn resource show
     Route::post('/schedule/auto-create', [ScheduleController::class, 'autoCreate'])->name('schedule.autoCreate');
+    Route::post('/schedule/import', [ScheduleController::class, 'import'])->name('schedule.import');
     Route::post('/schedule/update/{userId}/{date}', [ScheduleController::class, 'update'])->name('schedule.update_details');
     Route::post('/schedules/update-active', [ScheduleController::class, 'updateActive']);
+    Route::get('/schedule-now', [ScheduleController::class, 'now'])->name('schedule.now');
+    Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.view');
+    Route::resource('schedule', ScheduleController::class);
 
     // Freelance Schedule
     Route::get('/schedule-freelances', [ScheduleController::class, 'freelances'])->name('schedule.freelances');
@@ -144,10 +145,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-certificates', [TrainingController::class, 'myCertificates'])->name('my.certificates');
 
     // Admin View
-    Route::get('/training', [AdminTrainingCertificateController::class, 'index'])->name('training.index');
-    Route::get('/training/create', [AdminTrainingCertificateController::class, 'create'])->name('training.create');
-    Route::get('/training/edit/{certificate}', [AdminTrainingCertificateController::class, 'edit'])->name('training.edit');
-    Route::delete('/training/destroy/{certificate}', [AdminTrainingCertificateController::class, 'destroy'])->name('training.destroy');
+    Route::get('/training', [AdminTrainingCertificateController::class, 'index'])->name('admin.training.certificates.index');
+    Route::get('/training/create', [AdminTrainingCertificateController::class, 'create'])->name('admin.training.certificates.create');
+    Route::get('/training/edit/{certificate}', [AdminTrainingCertificateController::class, 'edit'])->name('admin.training.certificates.edit');
+    Route::delete('/training/destroy/{certificate}', [AdminTrainingCertificateController::class, 'destroy'])->name('admin.training.certificates.destroy');
 
     // Admin Resource (Prefix: admin/training)
     // Note: Anda punya route manual dan resource yg tumpang tindih, saya rapikan sedikit

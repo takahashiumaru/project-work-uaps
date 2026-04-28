@@ -46,7 +46,7 @@
                 @endif
             </dd>
         </dl>
-        {{-- Mengubah route admin.training.certificates.index menjadi training.index --}}
+        {{-- Mengubah route admin.training.certificates.index menjadi admin.training.certificates.index --}}
         <a href="{{ route('admin.training.certificates.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </div>

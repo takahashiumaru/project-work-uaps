@@ -72,8 +72,8 @@
         </a>
         <div id="trainingDropdown" class="collapse">
             @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-            <a href="{{ route('training.index') }}" class="dropdown-item ps-4">Manajemen Training</a>
-            <a href="{{ route('training.create') }}" class="dropdown-item ps-4">Tambah Sertifikat</a>
+            <a href="{{ route('admin.training.certificates.index') }}" class="dropdown-item ps-4">Manajemen Training</a>
+            <a href="{{ route('admin.training.certificates.create') }}" class="dropdown-item ps-4">Tambah Sertifikat</a>
             @else
             <a href="{{ route('my.certificates') }}" class="dropdown-item ps-4">Sertifikat Training Saya</a>
             @endif

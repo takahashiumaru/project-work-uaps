@@ -203,10 +203,22 @@
                         <span class="text-muted fw-light">Schedule /</span> Data Schedule
                     </h4>
                     <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-primary">
+                        @if (in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron', 'Admin']))
+                            <form action="{{ route('schedule.autoCreate') }}" method="POST" class="m-0 p-0">
+                                @csrf
+                                <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center">
+                                    <i class="bx bx-magic-wand me-1"></i> Auto Create
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center" data-bs-toggle="modal"
+                                data-bs-target="#importModal">
+                                <i class="bx bx-import me-1"></i> Import
+                            </button>
+                        @endif
+                        <div class="badge bg-primary d-flex align-items-center" style="height: 31px; padding: 0 12px;">
                             <i class="bx bx-calendar me-1"></i>
                             {{ Carbon\Carbon::now()->format('F Y') }}
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -339,6 +351,31 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Import Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import Schedule</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('schedule.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <p>Silakan pilih file Excel (.xlsx, .xls) untuk mengimpor jadwal.</p>
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Pilih File</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-modal="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Import Now</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

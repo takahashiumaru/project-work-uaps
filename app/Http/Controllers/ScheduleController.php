@@ -544,4 +544,21 @@ class ScheduleController extends Controller
 
         return response()->json(['message' => 'Status aktif staff diperbarui']);
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        try {
+            \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\ScheduleImport, $request->file('file'));
+            Alert::success('Berhasil', 'Data jadwal berhasil diimpor.');
+            return back();
+        } catch (\Exception $e) {
+            Log::error('Error saat import schedule: ' . $e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+            return back();
+        }
+    }
 }
