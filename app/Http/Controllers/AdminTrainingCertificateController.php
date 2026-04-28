@@ -55,9 +55,17 @@ class AdminTrainingCertificateController extends Controller
         // Upload file (jika ada)
         if ($request->hasFile('certificate_file')) {
             $file = $request->file('certificate_file');
-            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time();
-            $filePath = $file->storeAs('certificates', $filename, 'public');
-            $validatedData['certificate_file'] = $filePath; // Simpan ke kolom yang benar
+            $extension = $file->getClientOriginalExtension() ?: 'pdf';
+            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time().'.'.$extension;
+            
+            // Simpan langsung ke public/storage/certificates
+            $certDir = public_path('storage/certificates');
+            if (!file_exists($certDir)) {
+                mkdir($certDir, 0775, true);
+            }
+            $file->move($certDir, $filename);
+            
+            $validatedData['certificate_file'] = 'certificates/' . $filename;
         }
 
         Certificate::create($validatedData);
@@ -93,14 +101,31 @@ class AdminTrainingCertificateController extends Controller
         ]);
 
         if ($request->hasFile('certificate_file')) {
+            // Hapus file lama jika ada
             if ($certificate->certificate_file) {
-                Storage::disk('public')->delete($certificate->certificate_file);
+                $oldPath = public_path('storage/' . $certificate->certificate_file);
+                if (file_exists($oldPath) && is_file($oldPath)) {
+                    unlink($oldPath);
+                }
             }
-            $filePath = $request->file('certificate_file')->store('certificates', 'public');
-            $validatedData['certificate_file'] = $filePath;
+            
+            $file = $request->file('certificate_file');
+            $extension = $file->getClientOriginalExtension() ?: 'pdf';
+            $filename = str_replace(' ', '_', $validatedData['certificate_name']).'_'.$validatedData['user_id'].'_'.time().'.'.$extension;
+            
+            $certDir = public_path('storage/certificates');
+            if (!file_exists($certDir)) {
+                mkdir($certDir, 0775, true);
+            }
+            $file->move($certDir, $filename);
+            
+            $validatedData['certificate_file'] = 'certificates/' . $filename;
         } elseif ($request->boolean('remove_file')) {
             if ($certificate->certificate_file) {
-                Storage::disk('public')->delete($certificate->certificate_file);
+                $oldPath = public_path('storage/' . $certificate->certificate_file);
+                if (file_exists($oldPath) && is_file($oldPath)) {
+                    unlink($oldPath);
+                }
                 $validatedData['certificate_file'] = null;
             }
         }
@@ -113,7 +138,10 @@ class AdminTrainingCertificateController extends Controller
     public function destroy(Certificate $certificate)
     {
         if ($certificate->certificate_file) {
-            Storage::disk('public')->delete($certificate->certificate_file);
+            $oldPath = public_path('storage/' . $certificate->certificate_file);
+            if (file_exists($oldPath) && is_file($oldPath)) {
+                unlink($oldPath);
+            }
         }
 
         $certificate->delete();

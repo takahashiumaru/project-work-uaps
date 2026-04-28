@@ -81,6 +81,9 @@ if [ ! -d public/storage/photo ]; then\n\
         cp storage/app/public/photo/user.jpg public/storage/photo/user.jpg\n\
     fi\n\
 fi\n\
+if [ ! -d public/storage/certificates ]; then\n\
+    mkdir -p public/storage/certificates\n\
+fi\n\
 # Set permissions\n\
 chown -R www-data:www-data storage public/storage\n\
 chmod -R 775 storage public/storage\n\
