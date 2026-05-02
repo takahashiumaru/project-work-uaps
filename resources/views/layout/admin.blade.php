@@ -41,7 +41,14 @@
         /* --- KUSTOMISASI SIDEBAR SESUAI KRITERIA --- */
 
         /* 1. Posisi Tetap (Persistent) & Ukuran Proporsional */
-        #layout-menu {
+        #layout-menu, #layout-menu ul, #layout-menu li {
+            list-style: none !important;
+            list-style-type: none !important;
+        }
+        #layout-menu li::before, #layout-menu li::after {
+            display: none !important;
+            content: none !important;
+        }
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
@@ -50,15 +57,13 @@
             height: 100vh !important;
             width: 250px !important;
             max-width: 250px !important;
-            z-index: 1099 !important;
-            /* Menutupi navbar di mobile */
+            z-index: 1050 !important;
             display: flex;
             flex-direction: column;
             transition: width 0.3s ease, transform 0.3s ease !important;
             overflow-y: auto !important;
             overflow-x: hidden !important;
             box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
-            /* Tambah shadow agar terpisah dengan konten */
         }
 
         /* --- KUSTOMISASI FONT HEADER SECARA GLOBAL --- */
@@ -92,14 +97,15 @@
 
         .layout-navbar.navbar-detached {
             margin: 0 !important;
-            /* Hilangkan gap atas, kiri, kanan */
             width: 100% !important;
             max-width: 100% !important;
             border-radius: 0 !important;
-            /* Buat navbar kotak nempel sisi */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
             padding-left: 1.5rem !important;
             padding-right: 1.5rem !important;
+            z-index: 1040 !important;
+            position: sticky !important;
+            top: 0 !important;
         }
 
         /* Optimasi Padding di Layar HP agar Lebih Lebar */
@@ -152,6 +158,18 @@
             border-radius: 0.5rem !important; /* Semua sudut melengkung */
             transition: all 0.3s ease;
             position: relative !important;
+        }
+
+        /* Ensure no bullets appear on any li items */
+        .menu-inner, .menu-sub, .menu-item {
+            list-style: none !important;
+        }
+
+        /* Suppress default Sneat/Bootstrap bullets in submenus */
+        .menu-sub .menu-item::before,
+        .menu-sub .menu-item::after {
+            display: none !important;
+            content: none !important;
         }
 
         /* Active Menu State ("Menyala") - Elegant Transparent Look */
@@ -461,6 +479,492 @@
         .nav-item .avatar:hover img {
             transform: scale(1.08);
             box-shadow: 0 4px 15px rgba(74, 126, 187, 0.2);
+        }
+
+        /* ============================================== */
+        /* GLOBAL DATATABLE DESIGN SYSTEM (SaaS Clean)   */
+        /* ============================================== */
+
+        /* --- 1. CARD CONTAINER --- */
+        .card:not(.stat-card):not(.modern-card) {
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important;
+            border-radius: 0.75rem;
+            background: #ffffff;
+        }
+        .card-header:not(.chart-header) {
+            background: #ffffff !important;
+            border-bottom: 1px solid #f3f4f6 !important;
+            padding: 1.25rem 1.5rem !important;
+        }
+        .card:not(.stat-card):not(.modern-card) > .card-body { padding: 1.5rem !important; }
+
+        /* --- 2. TABLE CORE --- */
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #374151;
+            margin-bottom: 0;
+        }
+        .table th {
+            background-color: #ffffff !important;
+            color: #9ca3af !important;
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em;
+            padding: 0.875rem 1.5rem !important;
+            border-bottom: 1px solid #e5e7eb !important;
+            border-top: none !important;
+            white-space: nowrap;
+        }
+        .table td {
+            background-color: #ffffff !important;
+            padding: 1rem 1.5rem !important;
+            font-size: 0.875rem !important;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6 !important;
+            color: #1f2937;
+            line-height: 1.5;
+        }
+        .table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+        .table tbody tr:hover td {
+            background-color: #f9fafb !important;
+        }
+        .table tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        /* Kill vertical borders & striped */
+        .table-bordered, .table-bordered th, .table-bordered td {
+            border-left: none !important;
+            border-right: none !important;
+            border-top: none !important;
+        }
+        .table-striped tbody tr:nth-of-type(odd),
+        .table-striped tbody tr:nth-of-type(odd) td {
+            background-color: transparent !important;
+        }
+        .table-responsive {
+            border-radius: 0 0 0.75rem 0.75rem;
+            overflow-x: auto;
+        }
+
+        /* --- 3. BADGES (Pill / Soft Color) --- */
+        .table .badge, .badge {
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 0.3em 0.75em;
+            border-radius: 9999px;
+            border: none;
+        }
+        /* Soft badge palette (scoped to table only) */
+        .table .badge.bg-primary, .table .bg-primary   { background-color: #eff6ff !important; color: #2563eb !important; }
+        .table .badge.bg-success, .table .bg-success    { background-color: #f0fdf4 !important; color: #16a34a !important; }
+        .table .badge.bg-warning, .table .bg-warning    { background-color: #fefce8 !important; color: #ca8a04 !important; }
+        .table .badge.bg-danger,  .table .bg-danger     { background-color: #fef2f2 !important; color: #dc2626 !important; }
+        .table .badge.bg-info,    .table .bg-info       { background-color: #f0f9ff !important; color: #0284c7 !important; }
+        .table .badge.bg-dark,    .table .bg-dark       { background-color: #f3f4f6 !important; color: #374151 !important; }
+        .table .badge.bg-secondary,.table .bg-secondary { background-color: #f3f4f6 !important; color: #6b7280 !important; }
+
+        .bg-label-primary   { background-color: #eff6ff !important; color: #2563eb !important; }
+        .bg-label-success   { background-color: #f0fdf4 !important; color: #16a34a !important; }
+        .bg-label-warning   { background-color: #fefce8 !important; color: #ca8a04 !important; }
+        .bg-label-danger    { background-color: #fef2f2 !important; color: #dc2626 !important; }
+        .bg-label-info      { background-color: #f0f9ff !important; color: #0284c7 !important; }
+
+        /* Status badge system for leaves/etc */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.3em 0.75em;
+            border-radius: 9999px;
+            white-space: nowrap;
+        }
+        .status-approved  { background-color: #f0fdf4 !important; color: #16a34a !important; }
+        .status-rejected  { background-color: #fef2f2 !important; color: #dc2626 !important; }
+        .status-pending   { background-color: #fefce8 !important; color: #ca8a04 !important; }
+        .status-canceled  { background-color: #f3f4f6 !important; color: #6b7280 !important; }
+
+        /* Row highlight for monitoring pages (kontrak/PAS/TIM) */
+        .row-critical td { background-color: #fef2f2 !important; }
+        .row-critical:hover td { background-color: #fee2e2 !important; }
+        .row-warning td  { background-color: #fffbeb !important; }
+        .row-warning:hover td  { background-color: #fef3c7 !important; }
+
+        /* --- 4. CUSTOM PAGINATION (3-Part Layout) --- */
+        .dt-pagination-wrapper {
+            border-top: 1px solid #f3f4f6;
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+        }
+        .dt-pagination {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+        .dt-pagination-info {
+            font-size: 0.8125rem;
+            color: #9ca3af;
+            white-space: nowrap;
+            font-weight: 400;
+        }
+        .dt-pagination-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .dt-page-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+            background: transparent;
+            cursor: pointer;
+        }
+        .dt-page-btn:hover:not(.disabled):not(.active) {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+        .dt-page-btn.active {
+            background-color: #111827;
+            color: #ffffff;
+            border-color: #111827;
+            font-weight: 600;
+        }
+        .dt-page-btn.disabled {
+            color: #d1d5db;
+            pointer-events: none;
+            cursor: default;
+        }
+        .dt-page-btn i {
+            font-size: 1rem;
+        }
+        .dt-page-ellipsis {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            font-size: 0.8125rem;
+            color: #9ca3af;
+        }
+        .dt-page-numbers {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .dt-pagination-perpage {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+            color: #9ca3af;
+        }
+        .dt-pagination-perpage select {
+            width: auto;
+            min-width: 65px;
+            height: 36px;
+            padding: 0.25rem 2rem 0.25rem 0.625rem;
+            font-size: 0.8125rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            color: #374151;
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+        /* Legacy pagination - keep for backward compat but style consistently */
+        .pagination {
+            margin-bottom: 0;
+            gap: 0.25rem;
+        }
+        .page-item .page-link {
+            color: #6b7280;
+            border: none;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.5rem;
+            font-size: 0.8125rem;
+            line-height: 1.25;
+            transition: all 0.15s ease;
+        }
+        .page-item.active .page-link {
+            background-color: #111827 !important;
+            border-color: #111827 !important;
+            color: #ffffff !important;
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+        .page-item .page-link:hover {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+        .page-item.disabled .page-link {
+            color: #d1d5db;
+            background: transparent;
+        }
+
+        /* --- 5. NAV TABS (Station Tabs) --- */
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: auto !important;
+            overflow-y: visible;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 0;
+        }
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+        }
+        .nav-scroller .nav::-webkit-scrollbar { height: 0; }
+        .nav-tabs {
+            border-bottom: 1px solid #e5e7eb !important;
+        }
+        .nav-tabs .nav-link {
+            border: none !important;
+            border-bottom: 2px solid transparent !important;
+            color: #9ca3af;
+            padding: 0.75rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            border-radius: 0 !important;
+        }
+        .nav-tabs .nav-link:hover {
+            color: #374151;
+            border-bottom-color: #d1d5db !important;
+            background: transparent !important;
+        }
+        .nav-tabs .nav-link.active {
+            color: #111827 !important;
+            border-bottom: 2px solid #111827 !important;
+            background: transparent !important;
+            font-weight: 600;
+        }
+
+        /* --- 6. TOOLBAR (Search + Actions bar) --- */
+        .dt-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 1rem 0;
+        }
+        .dt-toolbar .dt-search {
+            position: relative;
+            flex: 1;
+            max-width: 320px;
+            min-width: 200px;
+        }
+        .dt-toolbar .dt-search .form-control {
+            padding-left: 2.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            height: 40px;
+            font-size: 0.875rem;
+            background: #f9fafb;
+            transition: all 0.2s ease;
+        }
+        .dt-toolbar .dt-search .form-control:focus {
+            background: #ffffff;
+            border-color: #d1d5db;
+            box-shadow: 0 0 0 3px rgba(17,24,39,0.05);
+        }
+        .dt-toolbar .dt-search .search-icon {
+            position: absolute;
+            left: 0.875rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 0.875rem;
+            pointer-events: none;
+        }
+        .dt-toolbar .dt-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* --- 7. FORM CONTROLS (Filters) --- */
+        .form-control, .form-select {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #d1d5db;
+            box-shadow: 0 0 0 3px rgba(17,24,39,0.05);
+        }
+        .form-label {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.375rem;
+        }
+
+        /* --- 8. BUTTONS (Clean style) --- */
+        .btn {
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s ease;
+        }
+        .btn-primary {
+            background-color: #111827 !important;
+            border-color: #111827 !important;
+            color: #ffffff !important;
+        }
+        .btn-primary:hover {
+            background-color: #1f2937 !important;
+            border-color: #1f2937 !important;
+        }
+        .btn-success {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+        }
+        .btn-success:hover {
+            background-color: #047857 !important;
+            border-color: #047857 !important;
+        }
+        .btn-outline-secondary {
+            border-color: #e5e7eb !important;
+            color: #6b7280 !important;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #f9fafb !important;
+            color: #374151 !important;
+        }
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 0.375rem;
+            background: #f3f4f6;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .action-btn:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        /* --- 9. EMPTY STATE --- */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        .empty-state i {
+            font-size: 2.5rem;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+        .empty-state p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        /* --- 10. RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .table th, .table td {
+                padding: 0.75rem 1rem !important;
+            }
+            .dt-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .dt-toolbar .dt-search {
+                max-width: 100%;
+            }
+            .dt-toolbar .dt-actions {
+                flex-wrap: wrap;
+            }
+            .card-body { padding: 1rem !important; }
+            .card-header { padding: 1rem !important; }
+
+            /* Pagination responsive */
+            .dt-pagination {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+            }
+            .dt-page-numbers {
+                display: none;
+            }
+            .dt-pagination-info {
+                order: 1;
+                text-align: center;
+            }
+            .dt-pagination-nav {
+                order: 2;
+            }
+            .dt-pagination-perpage {
+                order: 3;
+            }
+        }
+
+        /* --- 11. SWEETALERT2 PREMIUM CUSTOM STYLE --- */
+        .swal2-popup {
+            border-radius: 1.25rem !important;
+            padding: 1.5rem !important;
+            font-family: 'Public Sans', sans-serif !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+            border: none !important;
+        }
+        .swal2-title {
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            color: #111827 !important;
+            margin-bottom: 0.75rem !important;
+        }
+        .swal2-html-container {
+            font-size: 0.875rem !important;
+            color: #4b5563 !important;
+            line-height: 1.5 !important;
+        }
+        .swal2-actions {
+            margin-top: 1.5rem !important;
+            gap: 0.75rem !important;
+        }
+        .swal2-confirm, .swal2-cancel {
+            margin: 0 !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            padding: 0.625rem 1.25rem !important;
+            border-radius: 0.5rem !important;
+            box-shadow: none !important;
+        }
+        .swal2-confirm { background-color: #111827 !important; }
+        .swal2-cancel { background-color: #f3f4f6 !important; color: #374151 !important; }
+        .swal2-icon { border-width: 2px !important; margin-bottom: 1.25rem !important; }
+        .swal2-backdrop-show {
+            background: rgba(17, 24, 39, 0.4) !important;
+            backdrop-filter: blur(4px) !important;
         }
 
     </style>
@@ -895,6 +1399,7 @@
         setInterval(updateDateTime, 1000);
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {

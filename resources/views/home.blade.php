@@ -465,9 +465,7 @@
             <div class="col-md-4">
                 <div class="card stat-card stat-card-primary shadow-sm">
                     <div class="card-body">
-                        <div class="stat-title">Total Staff
-                            {{ isset($selectedStation) && $selectedStation !== 'All' ? Str::upper($selectedStation) : 'GLOBAL' }}
-                        </div>
+                        <div class="stat-title">Total Staff GLOBAL</div>
                         <div class="stat-value">{{ $userCount ?? 0 }}</div>
                         <i class="fas fa-users stat-icon"></i>
                     </div>

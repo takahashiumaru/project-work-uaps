@@ -70,7 +70,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $certificates->links('pagination::bootstrap-5') }}
+                {{ $certificates->links('vendor.pagination.custom') }}
             @endif
         </div>
     </div>

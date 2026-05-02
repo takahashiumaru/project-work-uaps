@@ -5,10 +5,9 @@
 @section('styles')
     <style>
         .calendar-container {
-            background: #fff;
-            border-radius: 0.75rem;
-            box-shadow: 0 0.125rem 0.375rem rgba(161, 172, 184, 0.12);
-            border: 1px solid #d9dee3;
+            background: #ffffff;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
             padding: 1.5rem;
         }
 
@@ -22,11 +21,12 @@
 
         .day-name {
             font-weight: 600;
-            color: #566a7f;
+            color: #4b5563;
             padding: 0.75rem;
-            background: #f8f9fa;
-            border-radius: 0.5rem;
+            background: #f9fafb;
+            border-radius: 0.375rem;
             font-size: 0.875rem;
+            border: 1px solid #f3f4f6;
         }
 
         .calendar-grid {
@@ -37,54 +37,60 @@
 
         .calendar-day {
             min-height: 120px;
-            border: 1px solid #e9ecef;
-            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
             padding: 0.75rem;
-            background: #fff;
+            background: #ffffff;
             transition: all 0.2s ease;
         }
 
         .calendar-day:hover {
-            box-shadow: 0 2px 8px rgba(161, 172, 184, 0.15);
-            transform: translateY(-1px);
+            background: #f8fafc;
+            border-color: #cbd5e1;
         }
 
         .calendar-day.inactive {
-            background: #f8f9fa;
-            border-color: #e9ecef;
-            color: #a0aec0;
+            background: #f9fafb;
+            border-color: #f3f4f6;
+            color: #9ca3af;
         }
 
         .calendar-day.has-schedule {
-            background: linear-gradient(135deg, #f0f7ff 0%, #e6f2ff 100%);
-            border-color: #667eea;
+            background: #f0fdf4; /* soft green/blue */
+            border-color: #bbf7d0;
         }
 
         .date-number {
             font-weight: 600;
-            color: #566a7f;
+            color: #374151;
             margin-bottom: 0.5rem;
             font-size: 0.875rem;
+            display: flex;
+            align-items: center;
         }
 
         .schedule-info {
             font-size: 0.75rem;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .shift-id {
             font-weight: 600;
-            color: #667eea;
+            color: #166534;
+            background: #dcfce7;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            display: inline-block;
+            margin-bottom: 0.25rem;
         }
 
         .shift-time {
-            color: #697a8d;
-            font-size: 0.7rem;
+            color: #4b5563;
+            font-size: 0.75rem;
         }
 
         .no-schedule {
-            color: #a0aec0;
-            font-style: italic;
+            color: #9ca3af;
             font-size: 0.75rem;
         }
 
@@ -94,57 +100,62 @@
             align-items: center;
             margin-bottom: 1.5rem;
             padding: 1rem;
-            background: #f8f9fa;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
             border-radius: 0.5rem;
         }
 
         .month-title {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
-            color: #566a7f;
+            color: #111827;
             margin: 0;
         }
 
         .nav-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
+            background: #ffffff;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            padding: 0.375rem 0.75rem;
             border-radius: 0.375rem;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .nav-btn:hover {
-            background: #5a6fd8;
-            transform: translateY(-1px);
+            background: #f3f4f6;
         }
 
         .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
-            background: #fff;
-            border-radius: 0.75rem;
+            background: #ffffff;
+            border-radius: 0.5rem;
             padding: 1.5rem;
-            border: 1px solid #d9dee3;
-            text-align: center;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            color: #667eea;
-            margin-bottom: 0.5rem;
+            color: #111827;
+            margin-bottom: 0.25rem;
         }
 
         .stat-label {
-            color: #697a8d;
+            color: #6b7280;
             font-size: 0.875rem;
+            font-weight: 500;
         }
 
         @media (max-width: 768px) {
@@ -174,20 +185,22 @@
         }
 
         .today {
-            background: linear-gradient(135deg, #667eea 0%, #4180c3 100%) !important;
-            color: white !important;
+            background: #eff6ff !important;
+            border-color: #bfdbfe !important;
         }
 
         .today .date-number {
-            color: white !important;
+            color: #1d4ed8 !important;
         }
-
-        .today .shift-id {
-            color: white !important;
-        }
-
-        .today .shift-time {
-            color: rgba(255, 255, 255, 0.9) !important;
+        
+        .badge-today {
+            background-color: #dbeafe;
+            color: #1e40af;
+            font-weight: 600;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.65rem;
+            margin-left: 0.5rem;
         }
     </style>
 @endsection
@@ -301,8 +314,7 @@
                                 <div class="date-number">
                                     {{ $currentDate->format('d') }}
                                     @if ($isToday)
-                                        <span class="badge bg-white text-primary ms-1"
-                                            style="font-size: 0.6rem;">Today</span>
+                                        <span class="badge-today">Today</span>
                                     @endif
                                 </div>
                                 <div class="schedule-info">

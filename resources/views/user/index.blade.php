@@ -139,7 +139,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $user->links('pagination::bootstrap-5') }}
+                {{ $user->links('vendor.pagination.custom') }}
             </div>
             @yield('konten')
         </div>

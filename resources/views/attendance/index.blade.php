@@ -6,17 +6,17 @@
 <style>
     .attendance-card {
         background: #fff;
-        border-radius: 0.75rem;
-        box-shadow: 0 0.125rem 0.375rem rgba(161, 172, 184, 0.12);
-        border: 1px solid #d9dee3;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 1px solid #f3f4f6;
         margin-bottom: 1.5rem;
+        overflow: hidden;
     }
     
     .attendance-header {
-        background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
-        color: white;
-        padding: 1.25rem 1.5rem;
-        border-radius: 0.75rem 0.75rem 0 0;
+        background: #ffffff;
+        padding: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
     }
     
     .attendance-body {
@@ -24,128 +24,71 @@
     }
     
     .status-badge {
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        font-size: 0.875rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.75rem;
     }
     
-    .badge-present {
-        background: #d1fae5;
-        color: #065f46;
-    }
-    
-    .badge-absent {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    .badge-in-progress {
-        background: #fef3c7;
-        color: #92400e;
-    }
-    
-    .time-display {
-        font-family: 'Courier New', monospace;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #566a7f;
-        background: #f8f9fa;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        text-align: center;
-        margin: 0.5rem 0;
-    }
+    .badge-present { background-color: #d1fae5; color: #065f46; }
+    .badge-absent { background-color: #fee2e2; color: #991b1b; }
+    .badge-in-progress { background-color: #fef3c7; color: #92400e; }
     
     .btn-attendance {
         padding: 0.75rem 2rem;
         border-radius: 0.5rem;
         font-weight: 600;
-        transition: all 0.2s ease;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border: none;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-    }
-    
-    .btn-checkin {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        color: white;
-    }
-    
-    .btn-checkout {
-        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
-        color: white;
-    }
-    
-    .btn-checkin:hover, .btn-checkout:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        color: white;
-    }
-    
-    .btn-disabled {
-        background: #e9ecef;
-        color: #6c757d;
-        cursor: not-allowed;
-    }
-    
-    .attendance-info {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-    }
-    
-    .info-item {
-        text-align: center;
-    }
-    
-    .info-label {
         font-size: 0.875rem;
-        color: #697a8d;
-        margin-bottom: 0.25rem;
     }
     
-    .info-value {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #566a7f;
+    .btn-checkin { background-color: #10b981; color: white; }
+    .btn-checkout { background-color: #ef4444; color: white; }
+    
+    .btn-checkin:hover { background-color: #059669; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+    .btn-checkout:hover { background-color: #dc2626; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2); }
+    
+    .attendance-info-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1.5rem;
+        background: #f9fafb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
     }
     
-    @media (max-width: 768px) {
-        .info-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .btn-attendance {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .time-display {
-            font-size: 1.1rem;
-        }
-    }
+    .info-item { text-align: center; }
+    .info-label { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; }
+    .info-value { font-size: 1.125rem; font-weight: 700; color: #111827; }
     
-    .current-time {
-        background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
+    .current-time-banner {
+        background: #111827;
         color: white;
-        padding: 1rem;
-        border-radius: 0.5rem;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
         text-align: center;
-        margin-bottom: 1rem;
-        font-family: 'Courier New', monospace;
-        font-size: 1.1rem;
-        font-weight: 600;
+        margin-bottom: 1.5rem;
+        font-family: 'Inter', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-section {
+        background: #ffffff;
+        border: 1px solid #f3f4f6;
+        border-radius: 1rem;
+        padding: 1.5rem;
     }
 </style>
 @endsection
@@ -172,174 +115,147 @@
         </div>
     </div>
 
-    <!-- Current Time Display -->
+    <!-- Current Time Banner -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="current-time">
-                <i class="bx bx-time-five me-2"></i>
-                <span id="liveClock">Loading...</span>
+            <div class="current-time-banner">
+                <i class="bx bx-time-five"></i>
+                <span id="liveClock">00:00:00</span>
             </div>
         </div>
     </div>
 
-    <!-- Attendance Status Card -->
+    <!-- Attendance Card -->
     <div class="row">
         <div class="col-12">
             <div class="attendance-card">
                 <div class="attendance-header">
-                    <h5 class="mb-0" style="color: white;">
-                        <i class="bx bx-user-check me-2" style="color: white;"></i>Today's Attendance Status
-                    </h5>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="flex-shrink-0 bg-label-primary p-2 rounded">
+                            <i class="bx bx-user-check fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold">Attendance Status</h5>
+                            <p class="text-muted mb-0 small">Real-time status for {{ \Carbon\Carbon::now()->format('l, d F Y') }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="attendance-body">
-                    <!-- Attendance Information -->
-                    <div class="attendance-info">
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <div class="info-label">Station</div>
-                                <div class="info-value">{{ $todayAttendance ? ($user->station ?? '-') : '-' }}</div>
+                    <!-- Status Container -->
+                    <div class="attendance-info-container">
+                        <div class="info-item">
+                            <div class="info-label">Station</div>
+                            <div class="info-value">{{ $todayAttendance ? ($user->station ?? '-') : '-' }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Current Status</div>
+                            <div class="info-value">
+                                @if(!$todayAttendance)
+                                    <span class="status-badge badge-absent">Not Clocked In</span>
+                                @elseif($todayAttendance && $todayAttendance->check_in_time && !$todayAttendance->check_out_time)
+                                    <span class="status-badge badge-in-progress">On Duty</span>
+                                @elseif($todayAttendance && $todayAttendance->check_in_time && $todayAttendance->check_out_time)
+                                    <span class="status-badge badge-present">Shift Completed</span>
+                                @endif
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">Status</div>
-                                <div class="info-value">
-                                    @if(!$todayAttendance)
-                                        <span class="status-badge badge-absent">Belum Check In</span>
-                                    @elseif($todayAttendance && $todayAttendance->check_in_time && !$todayAttendance->check_out_time)
-                                        <span class="status-badge badge-in-progress">Sedang Bekerja</span>
-                                    @elseif($todayAttendance && $todayAttendance->check_in_time && $todayAttendance->check_out_time)
-                                        <span class="status-badge badge-present">Selesai Bekerja</span>
-                                    @endif
-                                </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Clock In</div>
+                            <div class="info-value">
+                                @if($todayAttendance && $todayAttendance->check_in_time)
+                                    {{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i') }}
+                                @else
+                                    <span class="text-muted">--:--</span>
+                                @endif
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">Check In</div>
-                                <div class="info-value">
-                                    {{ $todayAttendance && $todayAttendance->check_in_time
-                                        ? \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i')
-                                        : '-' }}
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">Check Out</div>
-                                <div class="info-value">
-                                    {{ $todayAttendance && $todayAttendance->check_out_time
-                                        ? \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i')
-                                        : '-' }}
-                                </div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Clock Out</div>
+                            <div class="info-value">
+                                @if($todayAttendance && $todayAttendance->check_out_time)
+                                    {{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i') }}
+                                @else
+                                    <span class="text-muted">--:--</span>
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="text-center">
+                    <div class="text-center py-3">
                         @if(!$todayAttendance)
-                            {{-- Belum ada absen sama sekali --}}
                             <a href="{{ route('attendance.camera', ['type' => 'in']) }}" 
                                class="btn-attendance btn-checkin">
-                                <i class="bx bx-log-in"></i> Check In
+                                <i class="bx bx-log-in"></i> Clock In Now
                             </a>
                         @elseif($todayAttendance && $todayAttendance->check_in_time && !$todayAttendance->check_out_time)
-                            {{-- Sudah Check In, belum Check Out --}}
                             <a href="{{ route('attendance.camera', ['type' => 'out']) }}" 
                                class="btn-attendance btn-checkout">
-                                <i class="bx bx-log-out"></i> Check Out
+                                <i class="bx bx-log-out"></i> Clock Out Now
                             </a>
                         @elseif($todayAttendance && $todayAttendance->check_in_time && $todayAttendance->check_out_time)
-                            {{-- Sudah Check In dan Check Out (selesai) --}}
-                            <button class="btn-attendance btn-disabled" disabled>
-                                <i class="bx bx-check-circle"></i> Completed
-                            </button>
+                            <div class="bg-light p-3 rounded-pill d-inline-flex align-items-center gap-2 px-4 border">
+                                <i class="bx bx-check-double text-success fs-4"></i>
+                                <span class="fw-bold text-success">Today's work is finished</span>
+                            </div>
                         @endif
-                    </div>
-
-                    <!-- Additional Information -->
-                    <div class="mt-4 text-center">
-                        <small class="text-muted">
-                            <i class="bx bx-info-circle me-1"></i>
-                            @if(!$todayAttendance)
-                                Silakan lakukan Check In untuk memulai hari kerja Anda.
-                            @elseif($todayAttendance && $todayAttendance->check_in_time && !$todayAttendance->check_out_time)
-                                Anda telah Check In pada {{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i') }}. Jangan lupa Check Out setelah selesai bekerja.
-                            @elseif($todayAttendance && $todayAttendance->check_in_time && $todayAttendance->check_out_time)
-                                Anda telah menyelesaikan hari kerja pada {{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i') }}. Terima kasih!
-                            @endif
-                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Quick Stats Card -->
-    <!-- <div class="row mt-4">
+    <!-- Instruction Cards -->
+    <div class="row mt-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="bx bx-stats me-2"></i>Quick Overview
-                    </h5>
+            <div class="info-section">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                    <i class="bx bx-info-circle text-primary fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Attendance Guidelines</h6>
                 </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-4 mb-3">
-                            <div class="info-item">
-                                <div class="info-label">Total Hari Kerja</div>
-                                <div class="info-value text-primary">-</div>
-                                <small class="text-muted">Bulan Ini</small>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="d-flex gap-3">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-success"><i class="bx bx-check-circle"></i></span>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="info-item">
-                                <div class="info-label">Tepat Waktu</div>
-                                <div class="info-value text-success">-</div>
-                                <small class="text-muted">Rate</small>
-                            </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="info-item">
-                                <div class="info-label">Terlambat</div>
-                                <div class="info-value text-warning">-</div>
-                                <small class="text-muted">Bulan Ini</small>
+                            <div>
+                                <h6 class="mb-1 fw-bold">Check In</h6>
+                                <p class="mb-0 small text-muted">Clock in when you start your shift.</p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- Information Card -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title">
-                        <i class="bx bx-info-circle me-2"></i> Informasi Absensi
-                    </h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <i class="bx bx-check-circle text-success me-2"></i>
-                                    <strong>Check In</strong> dilakukan saat mulai bekerja
-                                </li>
-                                <li class="mb-2">
-                                    <i class="bx bx-time text-primary me-2"></i>
-                                    <strong>Check Out</strong> dilakukan setelah selesai bekerja
-                                </li>
-                            </ul>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="d-flex gap-3">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-time"></i></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold">Check Out</h6>
+                                <p class="mb-0 small text-muted">Clock out once shift ends.</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <i class="bx bx-camera text-info me-2"></i>
-                                    Absensi menggunakan <strong>foto selfie</strong>
-                                </li>
-                                <li class="mb-2">
-                                    <i class="bx bx-history text-warning me-2"></i>
-                                    Lihat riwayat di menu <strong>History</strong>
-                                </li>
-                            </ul>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="d-flex gap-3">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-info"><i class="bx bx-camera"></i></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold">Face Verification</h6>
+                                <p class="mb-0 small text-muted">Selfie required for authentication.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="d-flex gap-3">
+                            <div class="avatar flex-shrink-0">
+                                <span class="avatar-initial rounded bg-label-warning"><i class="bx bx-history"></i></span>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold">Work History</h6>
+                                <p class="mb-0 small text-muted">Track your records in history.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

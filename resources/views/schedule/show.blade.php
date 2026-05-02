@@ -229,50 +229,8 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1 mt-4">
-                        <div class="text-muted">
-                            Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
-                        </div>
-                        <nav>
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">
-                                    <!-- Previous Page Link -->
-                                    @if ($user->onFirstPage())
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Previous</span>
-                                    </li>
-                                    @else
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $user->previousPageUrl() }}" rel="prev">Previous</a>
-                                    </li>
-                                    @endif
-
-                                    <!-- Pagination Elements -->
-                                    @foreach ($user->getUrlRange(1, $user->lastPage()) as $page => $url)
-                                    @if ($page == $user->currentPage())
-                                    <li class="page-item active">
-                                        <span class="page-link">{{ $page }}</span>
-                                    </li>
-                                    @else
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                    </li>
-                                    @endif
-                                    @endforeach
-
-                                    <!-- Next Page Link -->
-                                    @if ($user->hasMorePages())
-                                    <li class="page-item">
-                                        <a class="page-link" href="{{ $user->nextPageUrl() }}" rel="next">Next</a>
-                                    </li>
-                                    @else
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Next</span>
-                                    </li>
-                                    @endif
-                                </ul>
-                            </nav>
-                        </nav>
+                    <div class="dt-pagination-wrapper">
+                        {{ $user->links('vendor.pagination.custom') }}
                     </div>
                 </div>
             </div>

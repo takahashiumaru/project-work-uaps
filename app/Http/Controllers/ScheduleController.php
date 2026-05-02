@@ -431,7 +431,7 @@ class ScheduleController extends Controller
                 ->orWhere('id', 'like', "%{$search}%");
         })
             ->orderBy('fullname', 'asc')
-            ->paginate(10)
+            ->paginate(request()->input('per_page', 10))
             ->withQueryString();
 
         return view('schedule.show', [
@@ -448,7 +448,7 @@ class ScheduleController extends Controller
                 ->orWhere('id', 'like', "%{$search}%");
         })
             ->orderBy('name', 'asc')
-            ->paginate(10)
+            ->paginate(request()->input('per_page', 10))
             ->withQueryString();
 
 

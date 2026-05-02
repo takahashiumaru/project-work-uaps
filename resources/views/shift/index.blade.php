@@ -268,6 +268,11 @@
                                 </a>
                             </div>
                         @endif
+
+                        {{-- Pagination --}}
+                        <div class="dt-pagination-wrapper">
+                            {{ $shifts->links('vendor.pagination.custom') }}
+                        </div>
                     </div>
                 </div>
             </div>

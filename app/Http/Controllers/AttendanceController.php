@@ -411,20 +411,27 @@ class AttendanceController extends Controller
             $startDate = $period->copy()->startOfMonth();
             $endDate = $period->copy()->endOfMonth();
 
-            // ===== AMBIL STATION =====
-            $station = \App\Models\Station::where('code', $request->station_id)->first();
+            // ===== QUERY USER (GABUNG SEMUA FILTER) =====
+            $queryUser = \App\Models\User::query();
 
-            if (!$station) {
-                return redirect()->back()->with('error', 'Station tidak ditemukan.');
+            if ($request->filled('user_name')) {
+                $queryUser->where(function ($q) use ($request) {
+                    $q->where('id', $request->user_name)
+                        ->orWhere('fullname', 'LIKE', "%{$request->user_name}%");
+                });
             }
 
-            // ===== AMBIL SEMUA USER DI STATION =====
-            $users = \App\Models\User::where('station', $request->station_id)
-                ->orderBy('fullname')
-                ->get();
+            if ($request->filled('station_id')) {
+                $queryUser->where('station', $request->station_id);
+            }
 
-            if ($users->isEmpty()) {
-                return redirect()->back()->with('error', 'Tidak ada karyawan di station tersebut.');
+            $users = $queryUser->orderBy('fullname')->get();
+
+            // ===== AMBIL INFO STATION UNTUK FILENAME =====
+            $stationName = 'Semua_Station';
+            if ($request->filled('station_id')) {
+                $st = \App\Models\Station::where('code', $request->station_id)->first();
+                if ($st) $stationName = str_replace(' ', '_', $st->name);
             }
 
             $attendances = collect();
@@ -490,14 +497,15 @@ class AttendanceController extends Controller
             ])->values();
 
             // ===== FILE NAME =====
-            $fileName = 'Laporan_Absensi_' . $station->name . '_' . $request->month . '.xlsx';
+            $exportName = $users->count() === 1 ? str_replace(' ', '_', $users->first()->fullname) : $stationName;
+            $fileName = 'Laporan_Absensi_' . $exportName . '_' . $request->month . '.xlsx';
 
             return \Maatwebsite\Excel\Facades\Excel::download(
                 new AttendanceReportExport($attendances),
                 $fileName
             );
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat export.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat export: ' . $e->getMessage());
         }
     }
 }

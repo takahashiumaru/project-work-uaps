@@ -60,13 +60,15 @@ class HomeController extends Controller
         $totalFlightPerDay = $totalFlightQuery->count();
 
 
-        // 3. Total Staff (User Count)
-        $userQuery = User::query();
+        // 3. Total Staff (ALWAYS GLOBAL as requested)
+        $userCount = User::count();
+        
+        // 3b. Staff for attendance calculation (Filtered by Station)
+        $userKehadiranQuery = User::query();
         if ($selectedStation !== 'All') {
-            $userQuery->where('station', $selectedStation);
+            $userKehadiranQuery->where('station', $selectedStation);
         }
-        $userCount = $userQuery->count();
-        $userKehadiranCount = $userCount; // Disamakan agar persentase akurat per station
+        $userKehadiranCount = $userKehadiranQuery->count();
 
 
         // 4. Staff Sedang Bekerja (Working Manpower via Flight Details)

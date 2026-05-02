@@ -276,6 +276,15 @@ class UserController extends Controller
         $stations = Station::where('is_active', 1)->orderBy('code', 'ASC')->get();
 
         $query = User::query();
+        $search = $request->input('search');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
+
         if ($request->has('station') && $request->station != null) {
             $query->where('station', $request->station);
         }
@@ -284,7 +293,8 @@ class UserController extends Controller
         }
 
         $query->whereNotNull('contract_end');
-        $users = $query->orderBy('contract_end', 'ASC')->paginate(20);
+        $perPage = $request->input('per_page', 20);
+        $users = $query->orderBy('contract_end', 'ASC')->paginate($perPage)->withQueryString();
 
         return view('user.kontrak', compact('users', 'stations'));
     }
@@ -327,6 +337,14 @@ class UserController extends Controller
 
         $stations = Station::where('is_active', 1)->orderBy('code', 'ASC')->get();
         $query = User::query();
+        $search = $request->input('search');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
 
         if ($request->has('station') && $request->station != null) {
             $query->where('station', $request->station);
@@ -336,7 +354,8 @@ class UserController extends Controller
         }
 
         $query->whereNotNull('pas_expired');
-        $users = $query->orderBy('pas_expired', 'ASC')->paginate(20);
+        $perPage = $request->input('per_page', 20);
+        $users = $query->orderBy('pas_expired', 'ASC')->paginate($perPage)->withQueryString();
 
         return view('user.pas', compact('users', 'stations'));
     }
@@ -378,6 +397,14 @@ class UserController extends Controller
 
         $stations = Station::where('is_active', 1)->orderBy('code', 'ASC')->get();
         $query = User::query();
+        $search = $request->input('search');
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
 
         if ($request->has('station') && $request->station != null) {
             $query->where('station', $request->station);
@@ -388,7 +415,8 @@ class UserController extends Controller
 
         // Hanya tampilkan yang punya data TIM Expired
         $query->whereNotNull('tim_expired');
-        $users = $query->orderBy('tim_expired', 'ASC')->paginate(20);
+        $perPage = $request->input('per_page', 20);
+        $users = $query->orderBy('tim_expired', 'ASC')->paginate($perPage)->withQueryString();
 
         return view('user.tim', compact('users', 'stations'));
     }

@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Exports\OvertimeReportExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OvertimeController extends Controller
 {
@@ -18,7 +20,8 @@ class OvertimeController extends Controller
         // Staff melihat riwayat lemburnya sendiri
         $overtimes = Overtime::where('user_id', Auth::id())
                         ->orderBy('date', 'desc')
-                        ->paginate(10);
+                        ->paginate(10)
+                        ->withQueryString();
 
         return view('overtime.index', compact('overtimes'));
     }
@@ -53,7 +56,7 @@ class OvertimeController extends Controller
     // ==========================================
     // 2. HALAMAN LEADER (Approval)
     // ==========================================
-    public function approvalList()
+    public function approvalList(Request $request)
     {
         $user = Auth::user();
 
@@ -64,14 +67,30 @@ class OvertimeController extends Controller
 
         $query = Overtime::with('user')->where('status', 'Pending');
 
-        // Jika BUKAN Admin, hanya tampilkan request dari Station yang sama
-        if ($user->role !== 'Admin') {
+        // Filter Search (NIP / Nama)
+        if ($search = $request->input('search')) {
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter Station
+        if ($user->role == 'Admin') {
+            if ($request->filled('station')) {
+                $query->whereHas('user', function($q) use ($request) {
+                    $q->where('station', $request->station);
+                });
+            }
+        } else {
+            // Jika BUKAN Admin, hanya tampilkan request dari Station yang sama
             $query->whereHas('user', function($q) use ($user) {
                 $q->where('station', $user->station);
             });
         }
 
-        $pendingOvertimes = $query->orderBy('date', 'desc')->get();
+        $perPage = $request->input('per_page', 20);
+        $pendingOvertimes = $query->orderBy('date', 'desc')->paginate($perPage)->withQueryString();
 
         return view('overtime.approval', compact('pendingOvertimes'));
     }
@@ -108,6 +127,15 @@ class OvertimeController extends Controller
         if (Auth::user()->role !== 'Admin') { abort(403); }
 
         $query = Overtime::with('user')->where('status', 'Approved');
+        $search = $request->input('search');
+
+        // Filter Search (NIP / Nama)
+        if ($search) {
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
 
         // Filter Station
         if ($request->has('station') && $request->station != null) {
@@ -121,9 +149,38 @@ class OvertimeController extends Controller
             $query->whereBetween('date', [$request->date_start, $request->date_end]);
         }
 
-        $overtimes = $query->latest()->paginate(20);
+        $overtimes = $query->latest()->paginate(20)->withQueryString();
         $totalHours = $query->sum('duration'); // Total jam untuk payroll
 
         return view('overtime.report', compact('overtimes', 'totalHours'));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        if (Auth::user()->role !== 'Admin') { abort(403); }
+
+        $query = Overtime::with('user')->where('status', 'Approved');
+        $search = $request->input('search');
+
+        if ($search) {
+            $query->whereHas('user', function($q) use ($search) {
+                $q->where('fullname', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->has('station') && $request->station != null) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('station', $request->station);
+            });
+        }
+        
+        if ($request->date_start && $request->date_end) {
+            $query->whereBetween('date', [$request->date_start, $request->date_end]);
+        }
+
+        $overtimes = $query->latest()->get();
+
+        return Excel::download(new OvertimeReportExport($overtimes), 'Laporan_Lembur_'.date('YmdHis').'.xlsx');
     }
 }

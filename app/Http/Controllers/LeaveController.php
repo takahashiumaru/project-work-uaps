@@ -39,7 +39,16 @@ class LeaveController extends Controller
             $query->orWhere('leaves.status', 'pending');
         }
 
-        $leaves = $query->paginate(10); // Paginasi data
+        // Search Filter
+        if ($search = request('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('users.fullname', 'LIKE', "%{$search}%")
+                  ->orWhere('users.id', 'LIKE', "%{$search}%")
+                  ->orWhere('leaves.reason', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $leaves = $query->paginate(10)->withQueryString(); // Paginasi data
 
         // --- Logika Perhitungan Sisa Cuti ---
         $totalLeaveQuota = 12; // Asumsi kuota cuti tahunan adalah 12 hari
@@ -71,7 +80,16 @@ class LeaveController extends Controller
             $query->orWhere('leaves.status', 'pending');
         }
 
-        $leaves = $query->paginate(10); // Paginasi data
+        // Search Filter
+        if ($search = request('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('users.fullname', 'LIKE', "%{$search}%")
+                  ->orWhere('users.id', 'LIKE', "%{$search}%")
+                  ->orWhere('leaves.reason', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $leaves = $query->paginate(10)->withQueryString(); // Paginasi data
 
         // --- Logika Perhitungan Sisa Cuti ---
         $totalLeaveQuota = 12; // Asumsi kuota cuti tahunan adalah 12 hari
@@ -90,24 +108,13 @@ class LeaveController extends Controller
     {
         $authUser = Auth::user();
 
-        // Jika belum ada filter user_name, tampilkan halaman kosong
-        if (!$request->filled('user_name')) {
-            return view('leaves.laporan', [
-                'leaves' => collect(),
-                'user' => null,
-                'leaveBalance' => 0,
-                'usedLeaveDays' => 0,
-            ]);
-        }
+        $year = $request->year ?? date('Y');
 
         // Ambil data leaves join users (pemohon, approver, rejector)
-        $leaves = \App\Models\Leave::join('users as u', 'leaves.user_id', '=', 'u.id')
+        $query = \App\Models\Leave::join('users as u', 'leaves.user_id', '=', 'u.id')
             ->leftJoin('users as approved', 'leaves.approved_by', '=', 'approved.id')
             ->leftJoin('users as rejected', 'leaves.rejected_by', '=', 'rejected.id')
-            ->where(function ($q) use ($request) {
-                $q->whereRaw("CAST(u.id AS CHAR) LIKE ?", ["%{$request->user_name}%"])
-                    ->orWhere('u.fullname', 'LIKE', "%{$request->user_name}%");
-            })
+            ->whereYear('leaves.start_date', $year)
             ->select(
                 'leaves.*',
                 'u.id as user_id',
@@ -116,59 +123,58 @@ class LeaveController extends Controller
                 'approved.fullname as user_approve',
                 'rejected.fullname as user_rejected'
             )
-            ->orderBy('leaves.created_at', 'asc')
-            ->paginate(10);
+            ->orderBy('leaves.created_at', 'asc');
 
-        // Ambil user (dari join)
-        $user = $leaves->first() ? (object)[
-            'id'       => $leaves->first()->user_id,
-            'fullname' => $leaves->first()->user_leave,
-            'station'  => $leaves->first()->station,
-        ] : null;
-
-        if (!$user) {
-            return view('leaves.laporan', [
-                'leaves' => collect(),
-                'user' => null,
-                'leaveBalance' => 0,
-                'usedLeaveDays' => 0,
-            ]);
+        if ($request->filled('user_name')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereRaw("CAST(u.id AS CHAR) LIKE ?", ["%{$request->user_name}%"])
+                    ->orWhere('u.fullname', 'LIKE', "%{$request->user_name}%");
+            });
         }
 
-        // Hitung sisa cuti
-        $totalLeaveQuota = 12;
-        $usedLeaveDays = \App\Models\Leave::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->where('leave_type', 'Cuti Tahunan')
-            ->whereYear('start_date', $request->year ?? date('Y'))
-            ->sum('total_days');
+        $perPage = $request->input('per_page', 10);
+        $leaves = $query->paginate($perPage)->withQueryString();
 
-        $leaveBalance = $totalLeaveQuota - $usedLeaveDays;
-
-        return view('leaves.laporan', compact('leaves', 'user', 'leaveBalance', 'usedLeaveDays'));
+        return view('leaves.laporan', compact('leaves'));
     }
 
     public function export(Request $request)
     {
-        if (!$request->filled('user_name')) {
-            return redirect()->back()->with('error', 'Pilih karyawan terlebih dahulu.');
+        $year = $request->input('year', date('Y'));
+
+        // Build query with joins to get full data matching the laporan view
+        $query = \App\Models\Leave::join('users as u', 'leaves.user_id', '=', 'u.id')
+            ->leftJoin('users as approved', 'leaves.approved_by', '=', 'approved.id')
+            ->leftJoin('users as rejected', 'leaves.rejected_by', '=', 'rejected.id')
+            ->whereYear('leaves.start_date', $year)
+            ->select(
+                'leaves.*',
+                'u.id as user_nip',
+                'u.fullname as user_leave',
+                'u.station as station',
+                'approved.fullname as user_approve',
+                'rejected.fullname as user_rejected'
+            )
+            ->orderBy('u.fullname')
+            ->orderBy('leaves.start_date');
+
+        // Optional: filter by specific user
+        if ($request->filled('user_name')) {
+            $query->where(function ($q) use ($request) {
+                $q->whereRaw("CAST(u.id AS CHAR) LIKE ?", ["%{$request->user_name}%"])
+                  ->orWhere('u.fullname', 'LIKE', "%{$request->user_name}%");
+            });
         }
 
-        $user = \App\Models\User::where('id', $request->user_name)
-            ->orWhere('fullname', 'LIKE', "%{$request->user_name}%")
-            ->first();
+        $leaves = $query->get();
 
-        if (!$user) {
-            return redirect()->back()->with('error', 'Karyawan tidak ditemukan.');
-        }
+        $userLabel = $request->filled('user_name') ? '_' . preg_replace('/[^A-Za-z0-9]/', '_', $request->user_name) : '_Semua';
+        $fileName = 'Laporan_Cuti' . $userLabel . '_' . $year . '.xlsx';
 
-        $leaves = \App\Models\Leave::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        $fileName = 'Laporan_Leaves_' . $user->fullname . '.xlsx';
-
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\LeavesReportExport($leaves), $fileName);
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\LeavesReportExport($leaves),
+            $fileName
+        );
     }
 
     /**

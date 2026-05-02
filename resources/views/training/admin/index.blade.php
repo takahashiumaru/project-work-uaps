@@ -1,141 +1,9 @@
 @extends('layout.admin')
 
-
-@section('styles')
-    <style>
-        .table-responsive {
-            border-radius: 0.75rem;
-            overflow: hidden;
-            overflow-x: auto;
-        }
-
-        .shift-table {
-            width: 100%;
-            table-layout: auto;
-        }
-
-        .shift-table th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #566a7f;
-            padding: 1rem;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .shift-table td {
-            padding: 1rem;
-            vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .shift-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            background: #5a6fd8;
-            transform: translateY(-1px);
-            color: white;
-        }
-
-        .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
-            color: white;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stats-number {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .stats-label {
-            opacity: 0.9;
-            font-size: 0.875rem;
-        }
-
-        .create-btn {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            color: white;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .create-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
-            color: white;
-        }
-
-        .badge-shift {
-            background: #667eea;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .time-badge {
-            background: #e9ecef;
-            color: #566a7f;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
-        }
-
-        .manpower-badge {
-            background: #ffeaa7;
-            color: #2d3436;
-            padding: 0.375rem 0.75rem;
-            border-radius: 0.375rem;
-            font-weight: 600;
-        }
-
-        @media (max-width: 768px) {
-            .table-responsive {
-                font-size: 0.875rem;
-            }
-
-            .shift-table th,
-            .shift-table td {
-                padding: 0.75rem 0.5rem;
-            }
-
-            .create-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
-@endsection
-
+@section('title', 'Manajemen Training & Sertifikat')
 
 @section('content')
+<<<<<<< Updated upstream
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Training /</span> Manajemen Training
     </h4>
@@ -240,13 +108,133 @@
                         @endforeach
                     </tbody>
                 </table>
+=======
+<div class="container-xxl flex-grow-1 container-p-y">
+    <div class="py-4">
+        {{-- Header --}}
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1 mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Manajemen Training & Sertifikat</h4>
+                <p class="text-muted mb-0" style="font-size:0.875rem;">Monitoring validitas sertifikat dan riwayat training karyawan.</p>
+>>>>>>> Stashed changes
             </div>
-            {{-- Paginasi --}}
-            <div class="mt-3">
-                {{ $certificates->appends(request()->except('page'))->links('pagination::bootstrap-5') }}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item active">Training</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                {{-- Toolbar --}}
+                <div class="dt-toolbar">
+                    <form action="{{ route('training.index') }}" method="GET" class="dt-search">
+                        <i class="bx bx-search search-icon"></i>
+                        <input type="text" name="search" class="form-control" placeholder="Cari NIP, Nama, atau Sertifikat..." value="{{ request('search') }}">
+                    </form>
+                    <div class="dt-actions">
+                        <a href="{{ route('training.create') }}" class="btn btn-primary">
+                            <i class="bx bx-plus me-1"></i>Tambah Sertifikat
+                        </a>
+                    </div>
+                </div>
+
+                {{-- Tabel --}}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Staff</th>
+                                <th>Sertifikat</th>
+                                <th>Masa Berlaku</th>
+                                <th>Status</th>
+                                <th class="text-center">File</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($certificates as $certificate)
+                                @php
+                                    $rowClass = '';
+                                    if ($certificate->is_expired) {
+                                        $rowClass = 'row-critical';
+                                    } elseif ($certificate->is_expiring_soon) {
+                                        $rowClass = 'row-warning';
+                                    }
+                                @endphp
+                                <tr class="{{ $rowClass }}">
+                                    <td>
+                                        <strong>{{ $certificate->fullname ?? 'N/A' }}</strong>
+                                        <div class="small text-muted">NIP: {{ $certificate->user_id ?? 'N/A' }}</div>
+                                    </td>
+                                    <td>{{ $certificate->certificate_name }}</td>
+                                    <td>
+                                        <div class="small text-muted">Mulai: {{ $certificate->start_date->format('d M Y') }}</div>
+                                        <div class="fw-bold">Hingga: {{ $certificate->end_date->format('d M Y') }}</div>
+                                    </td>
+                                    <td>
+                                        @if ($certificate->is_expired)
+                                            <span class="badge bg-danger">Kadaluarsa</span>
+                                            <div class="small text-danger" style="font-size: 0.7rem;">
+                                                {{ $certificate->end_date->diffForHumans(now(), true) }} lalu
+                                            </div>
+                                        @elseif ($certificate->is_expiring_soon)
+                                            <span class="badge bg-warning text-dark">Mendekati Expired</span>
+                                            <div class="small text-warning" style="font-size: 0.7rem;">
+                                                Sisa {{ $certificate->remaining_days }} hari
+                                            </div>
+                                        @else
+                                            <span class="badge bg-success">Aktif</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($certificate->certificate_file)
+                                            <a href="{{ Storage::url($certificate->certificate_file) }}" target="_blank"
+                                                class="action-btn" title="Lihat File">
+                                                <i class='bx bx-file'></i>
+                                            </a>
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a href="{{ route('training.edit', $certificate->id) }}" class="action-btn" title="Edit">
+                                                <i class="bx bx-edit-alt"></i>
+                                            </a>
+                                            <form action="{{ route('training.destroy', $certificate->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus sertifikat ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="action-btn" style="color: #dc2626; border-color: #fecaca; background: #fef2f2;" title="Hapus">
+                                                    <i class="bx bx-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <div class="empty-state">
+                                            <i class="bx bx-certification d-block"></i>
+                                            <p>Tidak ada data sertifikat training.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $certificates->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
     </div>
+<<<<<<< Updated upstream
 @endsection
 
 
@@ -331,4 +319,7 @@
             });
         }
     </script>
+=======
+</div>
+>>>>>>> Stashed changes
 @endsection

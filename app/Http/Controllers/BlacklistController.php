@@ -23,7 +23,7 @@ class BlacklistController extends Controller
                   ->orWhere('nik', 'like', '%'.$request->search.'%');
         }
 
-        $blacklists = $query->latest()->paginate(10);
+        $blacklists = $query->latest()->paginate(10)->withQueryString();
         return view('blacklist.index', compact('blacklists'));
     }
 

@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Models\Shift;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ShiftController extends Controller
 {
     public function index(): View
     {
-        if (!in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
-        $shifts = Shift::orderBy('id', 'asc')->paginate(30);
+        $perPage = request()->input('per_page', 30);
+        $shifts = Shift::orderBy('id', 'asc')->paginate($perPage)->withQueryString();
+
         return view('shift.index', compact('shifts'));
     }
 
     public function create(): View
     {
-        if (!in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -47,22 +49,23 @@ class ShiftController extends Controller
                 'description',
                 'start_time',
                 'end_time',
-                'use_manpower'
+                'use_manpower',
             ]));
 
             Alert::success('Success', 'Data berhasil disimpan');
+
             return redirect()->route('shift.index');
         } catch (\Exception $e) {
-            Log::error('Error saat create data: ' . $e->getMessage());
+            Log::error('Error saat create data: '.$e->getMessage());
             Alert::error('Terjadi Kesalahan', 'Gagal create data.');
+
             return back()->withInput();
         }
     }
 
-
     public function edit(Shift $shift): View
     {
-        if (!in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -89,25 +92,27 @@ class ShiftController extends Controller
                 'description',
                 'start_time',
                 'end_time',
-                'use_manpower'
+                'use_manpower',
             ]));
 
             Alert::success('Success', 'Data shift berhasil diperbarui');
+
             return redirect()->route('shift.index');
         } catch (\Exception $e) {
-            Log::error('Gagal update shift: ' . $e->getMessage(), [
+            Log::error('Gagal update shift: '.$e->getMessage(), [
                 'request' => $request->all(),
                 'shift_id' => $shift->id,
             ]);
 
             Alert::error('Terjadi Kesalahan', 'Gagal memperbarui data shift.');
+
             return back()->withInput();
         }
     }
 
     public function destroy(Shift $shift)
     {
-        if (!in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -116,15 +121,18 @@ class ShiftController extends Controller
             $isUsed = \App\Models\Schedule::where('shift_id', $shift->id)->exists();
             if ($isUsed) {
                 Alert::error('Gagal', 'Shift ini tidak bisa dihapus karena sedang digunakan dalam jadwal kerja.');
+
                 return back();
             }
 
             $shift->delete();
             Alert::success('Berhasil', 'Data shift berhasil dihapus');
+
             return redirect()->route('shift.index');
         } catch (\Exception $e) {
-            Log::error('Gagal hapus shift: ' . $e->getMessage());
-            Alert::error('Gagal', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
+            Log::error('Gagal hapus shift: '.$e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan saat menghapus data: '.$e->getMessage());
+
             return back();
         }
     }

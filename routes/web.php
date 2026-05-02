@@ -178,5 +178,6 @@ Route::middleware(['auth'])->group(function () {
 
         // Admin Report
         Route::get('/overtime/report', 'report')->name('overtime.report');
+        Route::get('/overtime/export', 'exportExcel')->name('overtime.export');
     });
 });

@@ -6,11 +6,14 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="py-4">
 
-        {{-- Header dengan Breadcrumb --}}
+        {{-- Header --}}
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1 mb-4">
-            <h4 class="fw-bold mb-0">Presence Report ({{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }})</h4>
+            <div>
+                <h4 class="fw-bold mb-1">Presence Report ({{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }})</h4>
+                <p class="text-muted mb-0" style="font-size:0.875rem;">Detail riwayat absensi harian karyawan.</p>
+            </div>
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('attendance.index') }}">Attendance</a></li>
                     <li class="breadcrumb-item active">History</li>
@@ -18,30 +21,28 @@
             </nav>
         </div>
 
-        {{-- Tombol Back --}}
+        {{-- Back --}}
         <div class="mb-3">
-            <a href="{{ route('attendance.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill shadow-sm">
-                <i class="bi bi-arrow-left"></i> Back
+            <a href="{{ route('attendance.index') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="bx bx-arrow-back me-1"></i> Back
             </a>
         </div>
 
-        {{-- Card Tabel --}}
-        <div class="card shadow-sm rounded-3">
+        {{-- Card --}}
+        <div class="card">
             <div class="card-header">
-                <h5 class="card-title mb-0">Attendance History</h5>
+                <h6 class="mb-0" style="color: #374151; font-weight: 600;">Attendance History</h6>
             </div>
             <div class="card-body p-0">
-
-                {{-- Scrollable Table --}}
                 <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
-                    <table class="table table-bordered align-middle text-center mb-0">
-                        <thead class="table-light sticky-top">
+                    <table class="table text-center">
+                        <thead style="position: sticky; top: 0; z-index: 10;">
                             <tr>
-                                <th style="width: 10%">Date</th>
-                                <th style="width: 30%">Office</th>
-                                <th style="width: 30%">Shift</th>
-                                <th style="width: 20%">In</th>
-                                <th style="width: 20%">Out</th>
+                                <th>Date</th>
+                                <th>Office</th>
+                                <th>Shift</th>
+                                <th>In</th>
+                                <th>Out</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -58,10 +59,9 @@
 
                             $isShiftKosong = $startTime && $startTime->format('H:i') === '00:00' && $endTime && $endTime->format('H:i') === '00:00';
 
-                            // tanggal yg sedang di-loop
                             $currentDate = \Carbon\Carbon::parse($month)->day($day);
                             $today = now()->startOfDay();
-                            $isFuture = $currentDate->gt($today); // cek apakah hari depan
+                            $isFuture = $currentDate->gt($today);
                             @endphp
                             <tr>
                                 <td>{{ $day }}</td>
@@ -85,7 +85,7 @@
                                             bg-success text-white
                                         @endif
                                     @endif
-                                ">
+                                " style="border-radius: 0.25rem;">
                                     {{ $checkIn instanceof \DateTimeInterface ? $checkIn->format('H:i') : ($checkIn ? (string) $checkIn : '-') }}
                                 </td>
 
@@ -100,7 +100,7 @@
                                             bg-success text-white
                                         @endif
                                     @endif
-                                ">
+                                " style="border-radius: 0.25rem;">
                                     {{ $checkIn instanceof \DateTimeInterface ? $checkOut->format('H:i') : ($checkOut ? (string) $checkOut : '-') }}
                                 </td>
                             </tr>
@@ -112,44 +112,20 @@
         </div>
 
         {{-- Keterangan --}}
-        <div class="card mt-4">
-            <div class="card-body">
-                <small class="d-block mb-1 fw-semibold">Keterangan:</small>
-                <ul class="mb-0 small list-unstyled">
-                    <li>
-                        <span style="display:inline-block;width:15px;height:15px;background-color:#d4edda;border:1px solid #c3e6cb;margin-right:6px;"></span>
-                        Hijau = On Time (Check-in ≤ jam mulai, atau Check-out ≥ jam selesai)
-                    </li>
-                    <li>
-                        <span style="display:inline-block;width:15px;height:15px;background-color:#f8d7da;border:1px solid #f5c6cb;margin-right:6px;"></span>
-                        Merah = Terlambat Masuk / Pulang Cepat / Tidak Absen
-                    </li>
-                    <li>
-                        <span style="display:inline-block;width:15px;height:15px;background-color:#e9ecef;border:1px solid #dee2e6;margin-right:6px;"></span>
-                        Abu-abu = Shift Kosong (00:00 - 00:00)
-                    </li>
-                    <li>
-                        <span style="display:inline-block;width:15px;height:15px;background-color:#ffffff;border:1px solid #dee2e6;margin-right:6px;"></span>
-                        Putih = Hari yang akan datang (belum divalidasi)
-                    </li>
-                </ul>
+        <div class="d-flex flex-wrap gap-4 mt-4">
+            <div class="d-flex align-items-center gap-2">
+                <span style="display:inline-block;width:12px;height:12px;background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:3px;"></span>
+                <small class="text-muted">On Time</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span style="display:inline-block;width:12px;height:12px;background-color:#fef2f2;border:1px solid #fecaca;border-radius:3px;"></span>
+                <small class="text-muted">Terlambat / Pulang Cepat / Tidak Absen</small>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span style="display:inline-block;width:12px;height:12px;background-color:#ffffff;border:1px solid #e5e7eb;border-radius:3px;"></span>
+                <small class="text-muted">Hari yang akan datang</small>
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-@section('styles')
-<!-- Bootstrap Icons -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-<style>
-    .table td, .table th {
-        vertical-align: middle;
-    }
-    .sticky-top {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-</style>
 @endsection

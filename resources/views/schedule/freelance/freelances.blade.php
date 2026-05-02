@@ -94,7 +94,7 @@
                             Menampilkan {{ $user->firstItem() }} - {{ $user->lastItem() }} dari {{ $user->total() }} data
                         </div>
                         <nav>
-                            {{ $user->links('pagination::bootstrap-5') }}
+                            {{ $user->links('vendor.pagination.custom') }}
                         </nav>
                     </div>
                 </div>

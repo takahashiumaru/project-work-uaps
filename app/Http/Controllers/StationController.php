@@ -47,7 +47,8 @@ class StationController extends Controller
             abort(403, 'Akses Ditolak'); 
         }
 
-        $stations = Station::all(); // Ambil semua termasuk yang mati
+        $perPage = request()->input('per_page', 10);
+        $stations = Station::paginate($perPage)->withQueryString();
         return view('stations.index', compact('stations'));
     }
 
