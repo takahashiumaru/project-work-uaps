@@ -1195,7 +1195,7 @@
                             <div data-i18n="Training">Training</div>
                         </a>
                         <ul class="menu-sub">
-                            @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
+                            @if (in_array(Auth::user()->role, ['Admin', 'HSE', 'Head Of Airport Service']))
                                 <li class="menu-item {{ request()->routeIs('admin.training.certificates.index') ? 'active' : '' }}">
                                     <a href="{{ route('admin.training.certificates.index') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-tasks fa-xs me-2"></i>
@@ -1233,12 +1233,9 @@
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, [
-                                    'Leader Bge',
-                                    'Leader Apron',
-                                    'Ass Leader Apron',
-                                    'Ass Leader Bge',
+                                
                                     'Admin',
-                                    'SPV',
+                                    
                                     'Head Of Airport Service',
                                 ]))
                                 <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">

@@ -680,6 +680,10 @@ namespace App\Models {
      * @property string|null $human_factors_registered
      * @property string|null $safety_management_system_expired
      * @property string|null $safety_management_system_registered
+     * @property string|null $certificate_file
+     * @property \Illuminate\Support\Carbon $end_date
+     * @property \Illuminate\Support\Carbon $start_date
+     * @property string $certificate_name
      * @property string $user_id
      * @property int $id
      * @property-read mixed $is_expired
@@ -689,6 +693,10 @@ namespace App\Models {
      * @property-read \App\Models\User $user
      * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereUserId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereCertificateName($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereStartDate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereEndDate($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereCertificateFile($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereSafetyManagementSystemRegistered($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereSafetyManagementSystemExpired($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Certificate>|Certificate whereHumanFactorsRegistered($value)
