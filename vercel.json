@@ -37,7 +37,6 @@
         "DB_HOST": "4mysql-dbas-jkt-001.sumobase.my.id",
         "DB_PORT": "63306",
         "DB_DATABASE": "dbab1923fc92591e4d",
-        "DB_USERNAME": "uJsDUd16Ku0ldn0Jn",
-        "DB_PASSWORD": "f575a4e11381ad43017653b0"
+        "DB_USERNAME": "uJsDUd16Ku0ldn0Jn"
     }
 }
