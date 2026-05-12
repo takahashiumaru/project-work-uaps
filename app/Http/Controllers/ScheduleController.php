@@ -411,17 +411,19 @@ class ScheduleController extends Controller
 
     public function show(): View
     {
-        if (!in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron'])) {
+        if (!in_array(Auth::user()->role, ['SPV Bge', 'Ass Leader Bge', 'Leader Bge', 'SPV Apron', 'Ass Leader Apron', 'Leader Apron', 'Admin'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         $roleSpv = Auth::user()->role;
         $rolePorter = null;
 
-        if ($roleSpv === 'SPV Bge') {
+        if ($roleSpv === 'SPV Bge' || $roleSpv === 'Ass Leader Bge' || $roleSpv === 'Leader Bge') {
             $rolePorter = 'Porter Bge';
-        } elseif ($roleSpv === 'SPV Apron') {
+        } elseif ($roleSpv === 'SPV Apron' || $roleSpv === 'Ass Leader Apron' || $roleSpv === 'Leader Apron') {
             $rolePorter = 'Porter Apron';
+        } elseif ($roleSpv === 'ADMIN') {
+            $rolePorter = 'Porter';
         }
 
         $search = request('search');

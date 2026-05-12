@@ -1047,7 +1047,7 @@
                                 ]))
                                 <li
                                     class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
-                                    <a href="{{ route('schedule.index') }}" class="menu-link">
+                                    <a href="{{ route('schedule.view') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-calendar-plus fa-xs me-2"></i>
                                         <div data-i18n="Create/Update">Create / Update</div>
                                     </a>
