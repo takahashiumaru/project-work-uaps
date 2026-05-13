@@ -15,5 +15,7 @@ class Station extends Model
         'code',      // Kode (SUB, CGK)
         'name',      // Nama (Surabaya, Jakarta)
         'is_active', // Status (1/0)
+        'latitude',  // Latitude
+        'longitude', // Longitude
     ];
 }

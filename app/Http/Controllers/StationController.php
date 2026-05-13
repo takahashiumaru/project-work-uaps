@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Station;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth; // Tambahkan ini agar Auth::user() terbaca
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class StationController extends Controller
 {
@@ -101,5 +103,34 @@ class StationController extends Controller
 
         Alert::success('Berhasil', 'Station berhasil diubah!');
         return redirect()->route('stations.index');
+    }
+
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Ambil data station berdasarkan id
+            $station = Station::findOrFail($id);
+
+            // Hapus user yang station-nya sama dengan code station
+            User::where('station', $station->code)->delete();
+
+            // Hapus station
+            $station->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('stations.index')
+                ->with('success', 'Station dan user terkait berhasil dihapus.');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return redirect()
+                ->route('stations.index')
+                ->with('error', $e->getMessage());
+        }
     }
 } // <--- PENUTUP CLASS HARUS ADA DI SINI (PALING BAWAH)

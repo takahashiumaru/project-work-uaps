@@ -36,9 +36,9 @@
                                 <td>{{ $st->name }}</td>
                                 <td>
                                     @if($st->is_active)
-                                        <span class="badge bg-label-success">Operasional</span>
+                                    <span class="badge bg-label-success">Operasional</span>
                                     @else
-                                        <span class="badge bg-label-danger">Dibekukan</span>
+                                    <span class="badge bg-label-danger">Dibekukan</span>
                                     @endif
                                 </td>
                                 <td>{{ $st->latitude }}</td>
@@ -46,20 +46,43 @@
                                 <td>
                                     <form action="{{ route('stations.toggle', $st->id) }}" method="POST">
                                         @csrf
+
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" 
-                                                   role="switch" 
-                                                   onchange="this.form.submit()" 
-                                                   style="width: 3em; height: 1.5em; cursor: pointer;"
-                                                   {{ $st->is_active ? 'checked' : '' }}>
+                                            <input class="form-check-input"
+                                                type="checkbox"
+                                                role="switch"
+                                                onchange="this.form.submit()"
+                                                style="width: 3em; height: 1.5em; cursor: pointer;"
+                                                {{ $st->is_active ? 'checked' : '' }}>
+
                                             <label class="form-check-label ms-2 mt-1">
                                                 {{ $st->is_active ? 'Matikan' : 'Hidupkan' }}
                                             </label>
+                                        </div>
+                                    </form>
                                 </td>
+
                                 <td>
-                                    <a href="{{ route('stations.edit', $st->id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ route('stations.edit', $st->id) }}"
+                                        class="btn btn-sm btn-primary">
                                         <i class="fas fa-edit me-2"></i> Edit
                                     </a>
+
+                                    <form action="{{ route('stations.destroy', $st->id) }}"
+                                        method="POST"
+                                        class="d-inline"
+                                        id="delete-form-{{ $st->id }}">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="button"
+                                            class="action-btn bg-danger border-0"
+                                            onclick="confirmDeleteShift('{{ $st->id }}', '{{ $st->code }}')">
+
+                                            <i class="bx bx-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
@@ -76,3 +99,26 @@
     </div>
 </div>
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDeleteShift(id, code) {
+        Swal.fire({
+            title: 'Yakin hapus?',
+            html: `
+                <p>Station ini akan dihapus.</p>
+                <p>User dengan code <b>${code}</b> juga akan terhapus.</p>
+            `,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>

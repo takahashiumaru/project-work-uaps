@@ -97,6 +97,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/stations/toggle/{id}', [StationController::class, 'toggleStatus'])->name('stations.toggle');
     Route::get('/stations/{id}/edit', [StationController::class, 'edit'])->name('stations.edit');
     Route::post('/stations/{station}/update', [StationController::class, 'update'])->name('stations.update');
+    Route::delete('/stations/{id}', [StationController::class, 'destroy'])->name('stations.destroy');
 
     // --- FLIGHTS ---
     Route::resource('flights', FlightController::class);
