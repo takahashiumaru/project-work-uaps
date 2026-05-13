@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Station;
+use App\Models\User;
 
 class AttendanceController extends Controller
 {
@@ -74,12 +75,30 @@ class AttendanceController extends Controller
             $target['longitude']
         );
 
-        $allowedRadius = config('locations.radius', 20);
+        $user = auth()->user();
+
+        $station = Station::where('code', $user->station)->first();
+
+        if (!$station) {
+            return back()->with('error', 'Station tidak ditemukan');
+        }
+
+        $targetLat = $station->latitude;
+        $targetLong = $station->longitude;
+
+        $allowedRadius = 20; // meter
+
+        $distance = $this->calculateDistance(
+            $request->latitude,
+            $request->longitude,
+            $targetLat,
+            $targetLong
+        );
 
         if ($distance > $allowedRadius) {
             return back()->with(
                 'error',
-                "Anda berada di luar radius {$target['name']}. Jarak: "
+                "Anda berada di luar radius {$station->name}. Jarak: "
                     . round($distance) . " meter (Max {$allowedRadius}m)"
             );
         }

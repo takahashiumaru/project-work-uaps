@@ -95,6 +95,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/stations/create', [StationController::class, 'create'])->name('stations.create');
     Route::post('/stations/store', [StationController::class, 'store'])->name('stations.store');
     Route::post('/stations/toggle/{id}', [StationController::class, 'toggleStatus'])->name('stations.toggle');
+    Route::get('/stations/{id}/edit', [StationController::class, 'edit'])->name('stations.edit');
+    Route::post('/stations/{station}/update', [StationController::class, 'update'])->name('stations.update');
 
     // --- FLIGHTS ---
     Route::resource('flights', FlightController::class);

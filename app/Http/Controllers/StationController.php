@@ -23,16 +23,20 @@ class StationController extends Controller
         $request->validate([
             'code' => 'required|unique:stations,code|max:3|alpha',
             'name' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         Station::create([
             'code' => strtoupper($request->code),
             'name' => $request->name,
-            'is_active' => true
+            'is_active' => true,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
         ]);
 
         Alert::success('Berhasil', 'Station baru berhasil dibuka!');
-        return redirect()->route('home');
+        return redirect()->route('stations.index');
     }
 
     // =================================================================
@@ -43,8 +47,8 @@ class StationController extends Controller
     public function index()
     {
         // Pengecekan Admin
-        if (Auth::user()->role !== 'Admin') { 
-            abort(403, 'Akses Ditolak'); 
+        if (Auth::user()->role !== 'Admin') {
+            abort(403, 'Akses Ditolak');
         }
 
         $perPage = request()->input('per_page', 10);
@@ -56,22 +60,46 @@ class StationController extends Controller
     public function toggleStatus($id)
     {
         // Pengecekan Admin
-        if (Auth::user()->role !== 'Admin') { 
-            abort(403, 'Akses Ditolak'); 
+        if (Auth::user()->role !== 'Admin') {
+            abort(403, 'Akses Ditolak');
         }
 
         $station = Station::findOrFail($id);
-        
+
         // Balik statusnya (Jika 1 jadi 0, Jika 0 jadi 1)
         $station->is_active = !$station->is_active;
         $station->save();
 
         // Pesan Notifikasi
         $statusText = $station->is_active ? 'DIAKTIFKAN' : 'DINONAKTIFKAN';
-        
+
         Alert::success('Berhasil', "Station {$station->code} berhasil {$statusText}.");
 
         return back();
     }
 
+    // Menampilkan Form Ubah Station
+    public function edit($id)
+    {
+        $station = Station::findOrFail($id);
+
+        return view('stations.edit', compact('station'));
+    }
+
+    // Proses Ubah Station
+    public function update(Request $request, Station $station)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        $station->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+
+        Alert::success('Berhasil', 'Station berhasil diubah!');
+        return redirect()->route('stations.index');
+    }
 } // <--- PENUTUP CLASS HARUS ADA DI SINI (PALING BAWAH)

@@ -23,7 +23,10 @@
                                 <th>Kode</th>
                                 <th>Nama Station</th>
                                 <th>Status</th>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
                                 <th>Aksi Kontrol</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,6 +41,8 @@
                                         <span class="badge bg-label-danger">Dibekukan</span>
                                     @endif
                                 </td>
+                                <td>{{ $st->latitude }}</td>
+                                <td>{{ $st->longitude }}</td>
                                 <td>
                                     <form action="{{ route('stations.toggle', $st->id) }}" method="POST">
                                         @csrf
@@ -50,6 +55,11 @@
                                             <label class="form-check-label ms-2 mt-1">
                                                 {{ $st->is_active ? 'Matikan' : 'Hidupkan' }}
                                             </label>
+                                </td>
+                                <td>
+                                    <a href="{{ route('stations.edit', $st->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit me-2"></i> Edit
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
