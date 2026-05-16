@@ -18,8 +18,6 @@ class ScheduleController extends Controller
     public function index()
     {
         $userId = Auth::id();
-
-        print_r($userId);
         $currentDate = Carbon::now();
         $startOfMonth = $currentDate->copy()->startOfMonth();
         $endOfMonth = $currentDate->copy()->endOfMonth();

@@ -1018,7 +1018,7 @@
                         </a>
                     </li>
 
-                    <li class="menu-item {{ request()->is('schedule*') ? 'active open' : '' }}">
+                    <li class="menu-item {{ request()->is('schedule*') || request()->routeIs('schedule.*') || request()->routeIs('freelance.*') ? 'active open' : '' }}">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons fas fa-users"></i>
                             <div data-i18n="Schedule">Schedule</div>
@@ -1046,7 +1046,7 @@
                                     'Apron',
                                 ]))
                                 <li
-                                    class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') ? 'active' : '' }}">
+                                    class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') || request()->routeIs('schedule.view') || request()->routeIs('schedule.show') ? 'active' : '' }}">
                                     <a href="{{ route('schedule.view') }}" class="menu-link">
                                         <i class="menu-icon tf-icons fas fa-calendar-plus fa-xs me-2"></i>
                                         <div data-i18n="Create/Update">Create / Update</div>
