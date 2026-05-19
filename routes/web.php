@@ -183,4 +183,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/overtime/report', 'report')->name('overtime.report');
         Route::get('/overtime/export', 'exportExcel')->name('overtime.export');
     });
+
+    // --- BANTUAN & LAINNYA ---
+    Route::view('/faq', 'faq')->name('faq');
+    Route::view('/kebijakan-privasi', 'kebijakan')->name('kebijakan');
 });

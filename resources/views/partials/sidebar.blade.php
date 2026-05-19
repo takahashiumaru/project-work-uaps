@@ -91,5 +91,7 @@
             @endif
         </div>
     </div>
+    <a href="{{ route('faq') }}"><i class="fas fa-question-circle"></i> FAQ</a>
+    <a href="{{ route('kebijakan') }}"><i class="fas fa-shield-alt"></i> Kebijakan Privasi</a>
     <p id="tanggalSekarang"><i class="fas fa-clock"></i> Loading...</p>
 </div>

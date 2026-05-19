@@ -1254,6 +1254,20 @@
                         </ul>
                     </li>
 
+                    <li class="menu-item {{ request()->routeIs('faq') ? 'active' : '' }}">
+                        <a href="{{ route('faq') }}" class="menu-link">
+                            <i class="menu-icon tf-icons fas fa-question-circle"></i>
+                            <div data-i18n="FAQ">FAQ</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item {{ request()->routeIs('kebijakan') ? 'active' : '' }}">
+                        <a href="{{ route('kebijakan') }}" class="menu-link">
+                            <i class="menu-icon tf-icons fas fa-shield-alt"></i>
+                            <div data-i18n="Kebijakan Privasi">Kebijakan Privasi</div>
+                        </a>
+                    </li>
+
                     <li class="menu-item mt-3">
                         <div class="menu-link disabled">
                             <i class="menu-icon tf-icons fas fa-clock"></i>
