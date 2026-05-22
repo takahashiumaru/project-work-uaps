@@ -4,15 +4,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #4F46E5;
-            --secondary-color: #818CF8;
+            --primary-color: #2F80ED;
+            --primary-dark: #2368C8;
+            --primary-soft: #EAF4FF;
+            --secondary-color: #60A5FA;
             --success-color: #10B981;
-            --info-color: #3B82F6;
+            --info-color: #38BDF8;
             --warning-color: #F59E0B;
             --danger-color: #EF4444;
-            --bg-light: #F3F4F6;
+            --bg-light: #F9FAFB;
             --text-main: #1F2937;
             --text-muted: #6B7280;
+            --card-border: #E5E7EB;
         }
 
         body {
@@ -22,56 +25,95 @@
         /* --- MODERN CARDS --- */
         .modern-card {
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(229, 231, 235, 0.5);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 14px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             overflow: hidden;
+            position: relative;
         }
 
         .modern-card:hover {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 18px 42px rgba(47, 128, 237, 0.1);
+            border-color: rgba(47, 128, 237, 0.22);
         }
 
         /* --- STAT CARDS (GRADIENT) --- */
         .stat-card {
-            border-radius: 16px;
+            border-radius: 15px;
             border: none;
             color: white;
             position: relative;
             overflow: hidden;
+            min-height: 96px;
+            box-shadow: 0 16px 34px rgba(47, 128, 237, 0.18);
         }
 
         .stat-card .card-body {
-            padding: 20px;
+            padding: 18px 20px;
             position: relative;
             z-index: 2;
         }
 
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.34), transparent 26%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.18), transparent 46%);
+            pointer-events: none;
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            right: -22px;
+            top: -22px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
         .stat-card-primary {
-            background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+            background: linear-gradient(135deg, #2F80ED 0%, #2368C8 64%, #174EA6 100%);
+        }
+
+        .stat-card-primary.shadow-sm {
+            box-shadow: 0 16px 34px rgba(47, 128, 237, 0.24) !important;
         }
 
         .stat-card-success {
-            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+            background: linear-gradient(135deg, #10B981 0%, #0EA5E9 100%);
+            box-shadow: 0 16px 34px rgba(16, 185, 129, 0.18);
+        }
+
+        .stat-card-success.shadow-sm {
+            box-shadow: 0 16px 34px rgba(16, 185, 129, 0.22) !important;
         }
 
         .stat-card-info {
-            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+            background: linear-gradient(135deg, #2563EB 0%, #2F80ED 54%, #38BDF8 100%);
+            box-shadow: 0 16px 34px rgba(37, 99, 235, 0.2);
+        }
+
+        .stat-card-info.shadow-sm {
+            box-shadow: 0 16px 34px rgba(37, 99, 235, 0.24) !important;
         }
 
         .stat-card .stat-title {
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            opacity: 0.9;
+            opacity: 0.86;
             margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.7px;
         }
 
         .stat-card .stat-value {
             font-size: 1.8rem;
-            font-weight: 800;
+            font-weight: 750;
             margin: 0;
             line-height: 1;
         }
@@ -81,7 +123,7 @@
             right: 0px;
             bottom: -15px;
             font-size: 4rem;
-            opacity: 0.15;
+            opacity: 0.16;
             transform: rotate(-15deg);
             transition: transform 0.3s ease;
         }
@@ -90,48 +132,249 @@
             transform: rotate(0deg) scale(1.1);
         }
 
-        /* --- STATION CARDS --- */
-        .station-card {
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #E5E7EB;
-            padding: 16px;
-            transition: all 0.3s ease;
+        /* --- DASHBOARD TOP AREA --- */
+        .dashboard-header {
+            background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+            border: 1px solid rgba(47, 128, 237, 0.12);
+            border-radius: 16px;
+            padding: 22px 26px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
             position: relative;
             overflow: hidden;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .dashboard-header::after {
+            content: "";
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            right: -50px;
+            top: -50px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(47, 128, 237, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .dashboard-title {
+            color: #1e293b !important;
+            font-size: 1.4rem !important;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .dashboard-scope {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .dashboard-scope::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.12);
+        }
+
+        .station-filter-control {
+            min-width: 280px;
+            height: 42px;
+            overflow: hidden;
+            border: 1px solid rgba(226, 232, 240, 0.85);
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .station-filter-control:focus-within {
+            border-color: rgba(47, 128, 237, 0.4);
+            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.08);
+        }
+
+        .station-filter-control .input-group-text {
+            width: 40px;
+            color: #64748b !important;
+            background: transparent !important;
+            border: none !important;
+            font-size: 0.9rem;
+        }
+
+        .station-filter-control .form-select {
+            min-width: 220px;
+            cursor: pointer;
+            color: #334155;
+            font-weight: 600 !important;
+            background-color: #ffffff;
+            font-size: 0.88rem;
+            padding-left: 0;
+            border: none !important;
+        }
+
+        .station-filter-control .form-select:focus {
+            box-shadow: none !important;
+        }
+
+        /* --- STATION CARDS --- */
+        .monitoring-section {
+            margin-bottom: 2.25rem;
+        }
+
+        .monitoring-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .monitoring-icon {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.22);
+        }
+
+        .monitoring-heading h6 {
+            color: var(--text-main);
+            font-size: 0.98rem;
+            letter-spacing: 0;
+        }
+
+        .station-card {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 1)),
+                #ffffff;
+            border-radius: 15px;
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            padding: 18px;
+            min-height: 134px;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
         }
 
         .station-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(47, 128, 237, 0.12);
+            border-color: rgba(47, 128, 237, 0.28);
         }
 
-        .border-left-active {
-            border-left: 4px solid var(--success-color) !important;
+        .station-card::before {
+            content: "";
+            position: absolute;
+            top: 16px;
+            bottom: 16px;
+            left: 0;
+            width: 4px;
+            border-radius: 0 999px 999px 0;
+            background: var(--success-color);
         }
 
-        .border-left-empty {
-            border-left: 4px solid var(--danger-color) !important;
+        .station-card::after {
+            content: "";
+            position: absolute;
+            width: 96px;
+            height: 96px;
+            right: -40px;
+            top: -42px;
+            border-radius: 999px;
+            background: rgba(47, 128, 237, 0.07);
+            pointer-events: none;
+        }
+
+        .station-card-empty::before {
+            background: var(--danger-color);
+        }
+
+        .station-card-active::after {
+            background: rgba(16, 185, 129, 0.08);
         }
 
         .station-code {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: var(--text-main);
+            letter-spacing: 0;
         }
 
         .station-name {
             font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-top: 2px;
+            margin-bottom: 0;
+            max-width: 150px;
         }
 
         .station-count {
-            font-size: 1.4rem;
+            font-size: 1.55rem;
             font-weight: 800;
-            color: #4A7EBB; /* Tetap biru logo untuk angka aktif di card putih */
+            color: var(--primary-color);
             line-height: 1;
+        }
+
+        .station-count-label {
+            color: #94a3b8;
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0;
+        }
+
+        .station-detail-btn,
+        .station-empty-btn {
+            height: 34px;
+            border-radius: 9px !important;
+            border: 1px solid rgba(203, 213, 225, 0.85) !important;
+            background: #ffffff !important;
+            font-size: 0.82rem;
+            box-shadow: none !important;
+        }
+
+        .station-detail-btn {
+            color: var(--primary-color) !important;
+        }
+
+        .station-detail-btn:hover {
+            color: #ffffff !important;
+            border-color: transparent !important;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+            transform: translateY(-1px);
+        }
+
+        .station-empty-btn {
+            color: #cbd5e1 !important;
+            cursor: not-allowed !important;
+        }
+
+        .station-create-card {
+            min-height: 134px;
+            background:
+                linear-gradient(180deg, rgba(234, 244, 255, 0.58), rgba(255, 255, 255, 0.9)) !important;
+            border: 1.5px dashed rgba(47, 128, 237, 0.32) !important;
+            color: var(--primary-color);
+        }
+
+        .station-create-card::before {
+            display: none;
+        }
+
+        .station-create-icon {
+            width: 44px;
+            height: 44px;
+            color: var(--primary-color);
+            background: #ffffff;
+            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.13);
         }
 
         /* --- CHARTS & INFO LAYOUT --- */
@@ -142,9 +385,9 @@
             margin-bottom: 24px;
         }
 
-        @media(min-width: 768px) {
+        @media(min-width: 1200px) {
             .top-charts-container {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
             }
 
             .bottom-charts-container {
@@ -156,39 +399,357 @@
             font-weight: 700;
             font-size: 1rem;
             color: var(--text-main);
-            padding: 16px 20px 0;
+            padding: 18px 20px 0;
             border-bottom: none;
             background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .chart-heading-main {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .chart-heading-icon {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 11px;
+            background: var(--primary-soft);
+            color: var(--primary-color);
+            flex: 0 0 auto;
+        }
+
+        .chart-heading-title {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-width: 0;
+        }
+
+        .chart-heading-title strong {
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 750;
+        }
+
+        .chart-period {
+            color: #94a3b8;
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .chart-metric-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0.42rem 0.65rem;
+            border-radius: 999px;
+            background: #f8fbff;
+            border: 1px solid rgba(47, 128, 237, 0.12);
+            color: #2368c8;
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .chart-metric-pill i {
+            font-size: 0.95rem;
+        }
+
+        .attendance-chart-header {
+            padding-bottom: 4px;
+        }
+
+        .chart-title-group {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+
+        .chart-legend-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex: 0 0 auto;
+        }
+
+        .chart-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #475569;
+            font-size: 0.8rem;
+            font-weight: 650;
+            line-height: 1;
+            white-space: nowrap;
+            padding: 0.42rem 0.58rem;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .chart-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            display: inline-block;
+            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+        }
+
+        .chart-legend-dot.sick {
+            background: #F59E0B;
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.12);
+        }
+
+        .chart-legend-dot.leave {
+            background: #EF4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+        }
+
+        .chart-insight-strip {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            padding: 0 20px 8px;
+        }
+
+        .chart-insight-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: #f8fbff;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .chart-insight-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 0.8rem;
+            font-weight: 650;
+        }
+
+        .chart-insight-value {
+            color: var(--text-main);
+            font-size: 0.96rem;
+            font-weight: 800;
+        }
+
+        .chart-insight-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .chart-insight-indicator.sick {
+            background-color: #F59E0B;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+        }
+
+        .chart-insight-indicator.leave {
+            background-color: #EF4444;
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
         }
 
         .chart-canvas-wrapper {
             position: relative;
-            height: 300px;
-            padding: 0 10px;
+            height: 310px;
+            padding: 4px 10px 0;
+        }
+
+        .chart-card-aircraft .chart-canvas-wrapper {
+            height: 318px;
+            padding-top: 8px;
+        }
+
+        .line-chart-header {
+            align-items: flex-start;
+            padding-bottom: 4px;
+        }
+
+        .line-chart-title-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .line-chart-title-block .chart-heading-title {
+            gap: 6px;
+        }
+
+        .line-chart-title-block .chart-heading-title strong {
+            font-size: 0.98rem;
+            line-height: 1.25;
+        }
+
+        .line-chart-legend {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: #475569;
+            font-size: 0.78rem;
+            font-weight: 650;
+        }
+
+        .line-series-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .line-series-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        .line-series-dot.primary {
+            background: #2F80ED;
+            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.12);
+        }
+
+        .line-series-dot.compare {
+            background: #94A3B8;
+            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+        }
+
+        .chart-period-select {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 12px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.95);
+            color: #0f172a;
+            font-size: 0.82rem;
+            font-weight: 650;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+        }
+
+        .chart-period-select i {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .chart-card-attendance .chart-canvas-wrapper {
+            height: 286px;
+            padding-top: 0;
         }
 
         /* --- INFO LIST --- */
+        .attendance-stat-card {
+            min-height: 100%;
+        }
+
+        .attendance-score {
+            margin: 0 0 14px;
+            padding: 16px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #EAF4FF 0%, #F3F8FF 100%);
+            border: 1px solid rgba(47, 128, 237, 0.16);
+        }
+
+        .attendance-score-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .attendance-score-label {
+            color: #4E6178;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .attendance-score-value {
+            color: var(--text-main);
+            font-size: 1.5rem;
+            font-weight: 750;
+            line-height: 1;
+        }
+
+        .attendance-score-badge {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: #ffffff;
+            box-shadow: 0 14px 28px rgba(47, 128, 237, 0.2);
+            flex: 0 0 auto;
+        }
+
+        .attendance-progress {
+            height: 9px;
+            border-radius: 999px;
+            background: rgba(47, 128, 237, 0.12);
+            overflow: hidden;
+        }
+
+        .attendance-progress-bar {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #10B981 0%, #2F80ED 100%);
+            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.18);
+        }
+
         .info-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: grid;
+            gap: 9px;
         }
 
         .info-item {
             display: flex;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed #E5E7EB;
+            padding: 10px;
+            border: 1px solid rgba(226, 232, 240, 0.82);
+            border-radius: 13px;
+            background: #ffffff;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
 
-        .info-item:last-child {
-            border-bottom: none;
+        .info-item:hover {
+            transform: translateY(-1px);
+            border-color: rgba(47, 128, 237, 0.18);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
         }
 
         .info-icon-wrapper {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            border-radius: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -197,8 +758,8 @@
         }
 
         .icon-blue {
-            background: #EFF6FF;
-            color: #3B82F6;
+            background: var(--primary-soft);
+            color: var(--primary-color);
         }
 
         .icon-green {
@@ -224,14 +785,14 @@
         .info-label {
             flex: 1;
             font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+            color: #64748b;
+            font-size: 0.82rem;
         }
 
         .info-value {
             font-weight: 800;
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
 
         /* --- TABLE STYLES --- */
@@ -286,18 +847,18 @@
 
         /* --- BUTTONS & INPUTS --- */
         .btn-primary-custom {
-            background: #4A7EBB; /* Selalu biru logo */
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 0 20px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             height: 42px;
-            /* Fix height agar sejajar dengan select box */
             white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(47, 128, 237, 0.15);
         }
 
         /* KUSTOMISASI MOBILE RESPONSIVE */
@@ -305,6 +866,26 @@
             .dashboard-title {
                 font-size: 1.25rem !important;
                 line-height: 1.4;
+            }
+
+            .chart-header,
+            .attendance-chart-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .chart-heading-title strong {
+                font-size: 0.96rem;
+            }
+
+            .chart-legend-inline,
+            .chart-insight-strip {
+                width: 100%;
+            }
+
+            .chart-insight-strip {
+                grid-template-columns: 1fr;
+                padding: 0 16px 8px;
             }
 
             .action-buttons {
@@ -322,6 +903,10 @@
                 width: 100% !important;
             }
 
+            .station-filter-control {
+                min-width: 0;
+            }
+
             .action-buttons select {
                 min-width: 0 !important;
                 /* Mencegah select box jebol/overflow di layar kecil */
@@ -329,9 +914,9 @@
         }
 
         .btn-primary-custom:hover {
-            background: #3A6DAA; /* Biru logo sedikit gelap */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 126, 187, 0.3);
+            background: linear-gradient(135deg, #3B91FF, var(--primary-dark));
+            transform: translateY(-1.5px);
+            box-shadow: 0 6px 16px rgba(47, 128, 237, 0.24);
         }
 
         .filter-select {
@@ -349,7 +934,7 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         {{-- HEADER SECTION --}}
-        <div class="row mb-4 align-items-center">
+        <div class="dashboard-header row mb-4 align-items-center">
             <div class="col-md-6">
                 @php
                     $hour = date('H');
@@ -360,7 +945,7 @@
                 </h4>
                 <p class="text-muted mb-0" style="font-size: 0.9rem;">
                     Dashboard Overview &bull;
-                    <span class="fw-semibold text-primary">
+                    <span class="dashboard-scope">
                         {{ isset($selectedStation) && $selectedStation !== 'All' ? 'Station ' . $selectedStation : 'Global' }}
                     </span>
                 </p>
@@ -369,12 +954,10 @@
                 <div class="d-flex flex-wrap justify-content-md-end align-items-center gap-3 action-buttons">
                     @if (Auth::user()->role == 'Admin')
                         <form action="{{ url()->current() }}" method="GET" id="stationFilterForm" class="m-0">
-                            <div class="input-group shadow-sm" style="border-radius: 8px; overflow: hidden; height: 42px;">
-                                <span class="input-group-text bg-white border-0 text-primary"><i
-                                        class="fas fa-filter"></i></span>
+                            <div class="input-group station-filter-control">
+                                <span class="input-group-text border-0"><i class="fas fa-filter"></i></span>
                                 <select name="station" class="form-select border-0 fw-semibold"
-                                    onchange="document.getElementById('stationFilterForm').submit()"
-                                    style="cursor: pointer; min-width: 200px;">
+                                    onchange="document.getElementById('stationFilterForm').submit()">
                                     <option value="All"
                                         {{ isset($selectedStation) && $selectedStation == 'All' ? 'selected' : '' }}>Semua
                                         Station (Global)</option>
@@ -403,13 +986,12 @@
 
         {{-- MONITORING STATION WIDGET (KHUSUS ADMIN) --}}
         @if (Auth::user()->role == 'Admin')
-            <div class="mb-5">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="bg-primary rounded p-2 me-2 text-white d-flex align-items-center justify-content-center"
-                        style="width: 32px; height: 32px;">
+            <div class="monitoring-section">
+                <div class="monitoring-heading">
+                    <div class="monitoring-icon">
                         <i class="fas fa-satellite-dish fa-sm"></i>
                     </div>
-                    <h6 class="mb-0 fw-bold text-dark">Monitoring Station (Realtime)</h6>
+                    <h6 class="mb-0 fw-bold">Monitoring Station (Realtime)</h6>
                 </div>
 
                 <div class="row g-3">
@@ -417,27 +999,27 @@
                         @php
                             $count = $stationStats[$st->code] ?? 0;
                             $borderColor = $count > 0 ? 'border-left-active' : 'border-left-empty';
+                            $stationStatusClass = $count > 0 ? 'station-card-active' : 'station-card-empty';
                         @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6">
-                            <div class="station-card {{ $borderColor }} h-100 d-flex flex-column justify-content-between">
+                            <div class="station-card {{ $borderColor }} {{ $stationStatusClass }} h-100 d-flex flex-column justify-content-between">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <div>
                                         <div class="station-code">{{ $st->code }}</div>
-                                        <div class="station-name text-truncate" style="max-width: 120px;"
-                                            title="{{ $st->name }}">{{ $st->name }}</div>
+                                        <div class="station-name text-truncate" title="{{ $st->name }}">{{ $st->name }}</div>
                                     </div>
                                     <div class="text-end">
                                         <div class="station-count">{{ $count }}</div>
-                                        <small class="text-muted fw-semibold">Staff Aktif</small>
+                                        <small class="station-count-label">Staff Aktif</small>
                                     </div>
                                 </div>
                                 @if ($count > 0)
                                     <a href="{{ route('staff.index', ['station' => $st->code]) }}"
-                                        class="btn btn-sm btn-light w-100 fw-semibold text-primary border">
+                                        class="btn btn-sm station-detail-btn w-100 fw-semibold">
                                         <i class="fas fa-users me-1"></i> Lihat Detail
                                     </a>
                                 @else
-                                    <button class="btn btn-sm btn-light w-100 fw-semibold text-muted border" disabled>
+                                    <button class="btn btn-sm station-empty-btn w-100 fw-semibold" disabled>
                                         Kosong
                                     </button>
                                 @endif
@@ -447,13 +1029,11 @@
 
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <a href="{{ route('stations.create') }}"
-                            class="station-card h-100 d-flex flex-column align-items-center justify-content-center text-decoration-none"
-                            style="background: #F8FAFC; border: 2px dashed #CBD5E1;">
-                            <div class="icon-blue rounded-circle d-flex align-items-center justify-content-center mb-2"
-                                style="width: 40px; height: 40px;">
+                            class="station-card station-create-card h-100 d-flex flex-column align-items-center justify-content-center text-decoration-none">
+                            <div class="station-create-icon rounded-circle d-flex align-items-center justify-content-center mb-2">
                                 <i class="fas fa-plus"></i>
                             </div>
-                            <div class="fw-bold text-primary" style="font-size: 0.9rem;">Buka Station Baru</div>
+                            <div class="fw-bold" style="font-size: 0.9rem;">Buka Station Baru</div>
                         </a>
                     </div>
                 </div>
@@ -493,9 +1073,21 @@
 
         {{-- CHARTS ATAS --}}
         <div class="top-charts-container">
-            <div class="modern-card">
-                <div class="card-header chart-header">
-                    Performa Pengerjaan Pesawat <span class="text-muted fw-normal fs-6">(7 Hari Terakhir)</span>
+            <div class="modern-card chart-card-aircraft">
+                <div class="card-header chart-header line-chart-header">
+                    <div class="chart-heading-main line-chart-title-block">
+                        <div class="chart-heading-title">
+                            <strong>Performa Pengerjaan Pesawat</strong>
+                            <span class="chart-period">(7 Hari Terakhir)</span>
+                        </div>
+                        <div class="line-chart-legend" aria-label="Legend Performa Pengerjaan Pesawat">
+                            <span class="line-series-item"><span class="line-series-dot primary"></span>Selesai</span>
+                            <span class="line-series-item"><span class="line-series-dot compare"></span>Rata-rata</span>
+                        </div>
+                    </div>
+                    <span class="chart-period-select">
+                        7 Hari
+                    </span>
                 </div>
                 <div class="card-body">
                     <div class="chart-canvas-wrapper">
@@ -505,7 +1097,11 @@
             </div>
             <div class="modern-card">
                 <div class="card-header chart-header">
-                    Distribusi Staff by Role
+                    <div class="chart-heading-main">
+                        <div class="chart-heading-title">
+                            <strong>Distribusi Staff by Role</strong>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="chart-canvas-wrapper">
@@ -517,9 +1113,34 @@
 
         {{-- CHARTS BAWAH & INFO --}}
         <div class="bottom-charts-container">
-            <div class="modern-card">
-                <div class="card-header chart-header">
-                    Data Absensi Staff <span class="text-muted fw-normal fs-6">(7 Hari Terakhir)</span>
+            <div class="modern-card chart-card-attendance">
+                <div class="card-header chart-header attendance-chart-header">
+                    <div class="chart-heading-main">
+                        <div class="chart-heading-title">
+                            <strong>Data Absensi Staff</strong>
+                            <span class="chart-period">(7 Hari Terakhir)</span>
+                        </div>
+                    </div>
+                    <div class="chart-legend-inline" aria-label="Legend Data Absensi Staff">
+                        <span class="chart-legend-item"><span class="chart-legend-dot sick"></span>Sakit</span>
+                        <span class="chart-legend-item"><span class="chart-legend-dot leave"></span>Cuti</span>
+                    </div>
+                </div>
+                <div class="chart-insight-strip">
+                    <div class="chart-insight-item">
+                        <span class="chart-insight-label">
+                            <span class="chart-insight-indicator sick"></span>
+                            Total Sakit
+                        </span>
+                        <span class="chart-insight-value">{{ array_sum($sickData ?? []) }}</span>
+                    </div>
+                    <div class="chart-insight-item">
+                        <span class="chart-insight-label">
+                            <span class="chart-insight-indicator leave"></span>
+                            Total Cuti
+                        </span>
+                        <span class="chart-insight-value">{{ array_sum($leaveData ?? []) }}</span>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="chart-canvas-wrapper">
@@ -527,36 +1148,49 @@
                     </div>
                 </div>
             </div>
-            <div class="modern-card">
-                <div class="card-header chart-header mb-2">
-                    Statistik Kehadiran Hari Ini
+            <div class="modern-card attendance-stat-card">
+                <div class="card-header chart-header mb-1">
+                    <div class="chart-heading-main">
+                        <div class="chart-heading-title">
+                            <strong>Statistik Kehadiran Hari Ini</strong>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body pt-0">
+                    @php
+                        $attendancePercentValue = min(100, max(0, (float) ($attendancePercentage ?? 0)));
+                    @endphp
+                    <div class="attendance-score">
+                        <div class="attendance-score-top">
+                            <div>
+                                <div class="attendance-score-label">Persentase Kehadiran</div>
+                                <div class="attendance-score-value">{{ $attendancePercentage ?? 0 }}%</div>
+                            </div>
+                        </div>
+                        <div class="attendance-progress" aria-label="Persentase Kehadiran">
+                            <span class="attendance-progress-bar" style="width: {{ $attendancePercentValue }}%;"></span>
+                        </div>
+                    </div>
                     <ul class="info-list">
                         <li class="info-item">
-                            <div class="info-icon-wrapper icon-blue"><i class="fas fa-file-signature"></i></div>
+                            <div class="info-icon-wrapper icon-blue"><i class="ti ti-file-pencil"></i></div>
                             <span class="info-label">Total Staff Kontrak</span>
                             <span class="info-value">{{ $totalContractStaff ?? 0 }}</span>
                         </li>
                         <li class="info-item">
-                            <div class="info-icon-wrapper icon-purple"><i class="fas fa-id-card"></i></div>
+                            <div class="info-icon-wrapper icon-purple"><i class="ti ti-id-badge-2"></i></div>
                             <span class="info-label">Total Staff PAS Aktif</span>
                             <span class="info-value">{{ $totalPasStaff ?? 0 }}</span>
                         </li>
                         <li class="info-item">
-                            <div class="info-icon-wrapper icon-green"><i class="fas fa-user-check"></i></div>
+                            <div class="info-icon-wrapper icon-green"><i class="ti ti-user-check"></i></div>
                             <span class="info-label">Kehadiran Hari Ini</span>
                             <span class="info-value">{{ $presentToday ?? 0 }}</span>
                         </li>
                         <li class="info-item">
-                            <div class="info-icon-wrapper icon-red"><i class="fas fa-user-times"></i></div>
+                            <div class="info-icon-wrapper icon-red"><i class="ti ti-user-x"></i></div>
                             <span class="info-label">Tidak Hadir</span>
                             <span class="info-value">{{ $totalAbsent ?? 0 }}</span>
-                        </li>
-                        <li class="info-item">
-                            <div class="info-icon-wrapper icon-yellow"><i class="fas fa-percentage"></i></div>
-                            <span class="info-label">Persentase Kehadiran</span>
-                            <span class="info-value">{{ $attendancePercentage ?? 0 }}%</span>
                         </li>
                     </ul>
                 </div>
@@ -570,9 +1204,9 @@
                     <div
                         class="card-header chart-header d-flex justify-content-between align-items-center pb-3 border-bottom">
                         <div class="d-flex align-items-center">
-                            <div class="bg-primary rounded p-2 me-2 text-white d-flex align-items-center justify-content-center"
-                                style="width: 32px; height: 32px;">
-                                <i class="bx bx-list-ul"></i>
+                            <div class="rounded-3 p-2 me-2 text-primary d-flex align-items-center justify-content-center"
+                                style="width: 34px; height: 34px; background-color: var(--primary-soft);">
+                                <i class="bx bx-list-ul fs-5"></i>
                             </div>
                             <h6 class="mb-0 fw-bold text-dark">Data Penerbangan Hari Ini</h6>
                         </div>
@@ -668,13 +1302,182 @@
             const barChartLabels = @json($barChartLabels ?? []);
             const sickData = @json($sickData ?? []);
             const leaveData = @json($leaveData ?? []);
+            const lineAverage = lineChartData.length
+                ? lineChartData.reduce((sum, value) => sum + Number(value || 0), 0) / lineChartData.length
+                : 0;
+            const lineComparisonData = lineChartData.map(() => Number(lineAverage.toFixed(1)));
 
             // Global Chart Defaults
             Chart.defaults.font.family = "'Public Sans', sans-serif";
-            Chart.defaults.color = '#6B7280';
+            Chart.defaults.color = '#64748B';
+
+            const dashboardPalette = {
+                primary: '#2F80ED',
+                primaryDark: '#2368C8',
+                sky: '#38BDF8',
+                teal: '#10B981',
+                amber: '#F59E0B',
+                rose: '#EF4444',
+                purple: '#8B5CF6',
+                slate: '#64748B',
+                text: '#1F2937',
+                muted: '#64748B',
+                grid: 'rgba(148, 163, 184, 0.16)'
+            };
+
+            const tooltipBase = {
+                backgroundColor: 'rgba(15, 23, 42, 0.92)',
+                padding: 12,
+                cornerRadius: 10,
+                titleFont: {
+                    size: 12,
+                    weight: '600'
+                },
+                bodyFont: {
+                    size: 12
+                },
+                borderColor: 'rgba(255, 255, 255, 0.08)',
+                borderWidth: 1
+            };
+
+            const createVerticalGradient = (canvas, stops) => {
+                const gradient = canvas.getContext('2d').createLinearGradient(0, 0, 0, 320);
+                stops.forEach(([offset, color]) => gradient.addColorStop(offset, color));
+                return gradient;
+            };
+
+            const barGradient = (baseColor, lightColor) => (context) => {
+                const {
+                    chart
+                } = context;
+                const {
+                    ctx,
+                    chartArea
+                } = chart;
+                if (!chartArea) {
+                    return baseColor;
+                }
+
+                const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                gradient.addColorStop(0, baseColor);
+                gradient.addColorStop(1, lightColor);
+                return gradient;
+            };
+
+            const stackedBarRadius = (datasetIndex) => (context) => {
+                const radius = 6;
+                const index = context.dataIndex;
+                const sick = Number(sickData[index] || 0);
+                const leave = Number(leaveData[index] || 0);
+
+                if (datasetIndex === 0) {
+                    return {
+                        topLeft: (sick > 0 && leave === 0) ? radius : 0,
+                        topRight: (sick > 0 && leave === 0) ? radius : 0,
+                        bottomLeft: sick > 0 ? radius : 0,
+                        bottomRight: sick > 0 ? radius : 0
+                    };
+                } else {
+                    return {
+                        topLeft: leave > 0 ? radius : 0,
+                        topRight: leave > 0 ? radius : 0,
+                        bottomLeft: (leave > 0 && sick === 0) ? radius : 0,
+                        bottomRight: (leave > 0 && sick === 0) ? radius : 0
+                    };
+                }
+            };
+
+            const centerDoughnutText = {
+                id: 'centerDoughnutText',
+                beforeDraw(chart) {
+                    const {
+                        ctx,
+                        chartArea
+                    } = chart;
+                    if (!chartArea) return;
+
+                    const total = chart.data.datasets[0].data.reduce((sum, value) => sum + Number(value || 0), 0);
+                    const centerX = (chartArea.left + chartArea.right) / 2;
+                    const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+                    ctx.save();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = dashboardPalette.text;
+                    ctx.font = "700 24px 'Public Sans', sans-serif";
+                    ctx.fillText(total, centerX, centerY - 6);
+                    ctx.fillStyle = dashboardPalette.muted;
+                    ctx.font = "500 11px 'Public Sans', sans-serif";
+                    ctx.fillText('Total Staff', centerX, centerY + 16);
+                    ctx.restore();
+                }
+            };
+
+            const lineGlow = {
+                id: 'lineGlow',
+                beforeDatasetDraw(chart, args) {
+                    if (chart.config.type !== 'line') return;
+                    const {
+                        ctx
+                    } = chart;
+                    if (args.index === 0) {
+                        ctx.save();
+                        ctx.shadowColor = 'rgba(47, 128, 237, 0.3)';
+                        ctx.shadowBlur = 18;
+                        ctx.shadowOffsetY = 10;
+                    }
+                },
+                afterDatasetDraw(chart, args) {
+                    if (chart.config.type !== 'line') return;
+                    if (args.index === 0) {
+                        chart.ctx.restore();
+                    }
+                }
+            };
+
+            const verticalHoverLine = {
+                id: 'verticalHoverLine',
+                afterDraw(chart) {
+                    if (chart.config.type !== 'line') return;
+                    const active = chart.tooltip && chart.tooltip.getActiveElements();
+                    if (!active || !active.length) return;
+
+                    const {
+                        ctx,
+                        chartArea
+                    } = chart;
+                    const x = active[0].element.x;
+
+                    ctx.save();
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, 'rgba(47, 128, 237, 0)');
+                    gradient.addColorStop(0.35, 'rgba(47, 128, 237, 0.16)');
+                    gradient.addColorStop(1, 'rgba(47, 128, 237, 0)');
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = 26;
+                    ctx.beginPath();
+                    ctx.moveTo(x, chartArea.top + 8);
+                    ctx.lineTo(x, chartArea.bottom);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = 'rgba(47, 128, 237, 0.28)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x, chartArea.top + 8);
+                    ctx.lineTo(x, chartArea.bottom);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            };
 
             const ctxLine = document.getElementById('lineChart');
             if (ctxLine) {
+                const lineGradient = createVerticalGradient(ctxLine, [
+                    [0, 'rgba(47, 128, 237, 0.28)'],
+                    [0.55, 'rgba(47, 128, 237, 0.10)'],
+                    [1, 'rgba(47, 128, 237, 0)']
+                ]);
+
                 new Chart(ctxLine, {
                     type: 'line',
                     data: {
@@ -682,33 +1485,73 @@
                         datasets: [{
                             label: 'Jumlah Penerbangan',
                             data: lineChartData,
-                            borderColor: '#4F46E5',
-                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            borderColor: (context) => {
+                                const {
+                                    chart
+                                } = context;
+                                const {
+                                    ctx,
+                                    chartArea
+                                } = chart;
+                                if (!chartArea) return dashboardPalette.primary;
+                                const gradient = ctx.createLinearGradient(chartArea.left, 0, chartArea.right, 0);
+                                gradient.addColorStop(0, '#38BDF8');
+                                gradient.addColorStop(0.45, dashboardPalette.primary);
+                                gradient.addColorStop(1, dashboardPalette.primaryDark);
+                                return gradient;
+                            },
+                            backgroundColor: lineGradient,
                             fill: true,
                             tension: 0.4,
                             borderWidth: 3,
+                            borderCapStyle: 'round',
+                            borderJoinStyle: 'round',
                             pointBackgroundColor: '#ffffff',
-                            pointBorderColor: '#4F46E5',
+                            pointBorderColor: dashboardPalette.primary,
                             pointBorderWidth: 2,
-                            pointRadius: 4,
-                            pointHoverRadius: 6
+                            pointRadius: 0,
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: dashboardPalette.primary,
+                            pointHoverBorderColor: '#ffffff',
+                            pointHoverBorderWidth: 3
+                        }, {
+                            label: 'Rata-rata',
+                            data: lineComparisonData,
+                            borderColor: 'rgba(148, 163, 184, 0.6)',
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.4,
+                            borderWidth: 1.5,
+                            borderDash: [6, 6],
+                            pointRadius: 0,
+                            pointHoverRadius: 0
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                suggestedMax: Math.max(...lineChartData, 0) + 2,
                                 ticks: {
-                                    stepSize: 10
+                                    precision: 0,
+                                    padding: 10,
+                                    color: '#94A3B8',
+                                    font: {
+                                        size: 11,
+                                        weight: '500'
+                                    }
                                 },
                                 border: {
                                     display: false
                                 },
                                 grid: {
-                                    color: 'rgba(0,0,0,0.04)',
-                                    drawBorder: false
+                                    color: 'rgba(148, 163, 184, 0.06)'
                                 }
                             },
                             x: {
@@ -717,6 +1560,14 @@
                                 },
                                 grid: {
                                     display: false
+                                },
+                                ticks: {
+                                    padding: 8,
+                                    color: '#94A3B8',
+                                    font: {
+                                        size: 11,
+                                        weight: '500'
+                                    }
                                 }
                             }
                         },
@@ -725,20 +1576,25 @@
                                 display: false
                             },
                             tooltip: {
-                                backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                                padding: 12,
-                                titleFont: {
-                                    size: 13,
-                                    weight: 'bold'
+                                ...tooltipBase,
+                                displayColors: true,
+                                usePointStyle: true,
+                                callbacks: {
+                                    title: function(items) {
+                                        return items[0]?.label || '';
+                                    },
+                                    label: function(context) {
+                                        const suffix = context.dataset.label === 'Rata-rata' ? 'rata-rata' : 'selesai';
+                                        return `${context.dataset.label}: ${context.parsed.y} ${suffix}`;
+                                    }
                                 },
-                                bodyFont: {
-                                    size: 13
-                                },
-                                cornerRadius: 8,
-                                displayColors: false
+                                filter: function(context) {
+                                    return context.dataset.label !== 'Rata-rata' || Number(context.parsed.y || 0) > 0;
+                                }
                             }
                         }
-                    }
+                    },
+                    plugins: [verticalHoverLine, lineGlow]
                 });
             }
 
@@ -750,39 +1606,55 @@
                         labels: doughnutChartLabels,
                         datasets: [{
                             data: doughnutChartData,
-                            backgroundColor: ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6',
-                                '#F97316', '#06B6D4'
+                            backgroundColor: [
+                                dashboardPalette.primary,
+                                dashboardPalette.sky,
+                                dashboardPalette.teal,
+                                dashboardPalette.amber,
+                                dashboardPalette.purple,
+                                dashboardPalette.rose,
+                                '#14B8A6',
+                                '#6366F1',
+                                dashboardPalette.slate
                             ],
-                            borderWidth: 0,
-                            hoverOffset: 4
+                            borderColor: '#ffffff',
+                            borderWidth: 4,
+                            borderRadius: 8,
+                            spacing: 2,
+                            hoverOffset: 8
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true
+                        },
                         plugins: {
                             legend: {
                                 position: 'bottom',
                                 labels: {
-                                    padding: 12,
+                                    padding: 14,
                                     usePointStyle: true,
                                     pointStyle: 'circle',
+                                    color: dashboardPalette.muted,
                                     font: {
-                                        size: 10
+                                        size: 10,
+                                        weight: '500'
                                     }
                                 }
                             },
                             tooltip: {
-                                backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                                padding: 12,
-                                cornerRadius: 8
+                                ...tooltipBase
                             }
                         },
                         layout: {
                             padding: 10
                         },
-                        cutout: '70%'
-                    }
+                        cutout: '72%'
+                    },
+                    plugins: [centerDoughnutText]
                 });
             }
 
@@ -795,22 +1667,36 @@
                         datasets: [{
                             label: 'Sakit',
                             data: sickData,
-                            backgroundColor: '#F59E0B',
+                            backgroundColor: 'rgba(245, 158, 11, 0.85)',
+                            hoverBackgroundColor: 'rgba(245, 158, 11, 1)',
                             stack: 'Absen',
-                            borderRadius: 4,
-                            barPercentage: 0.6
+                            borderRadius: stackedBarRadius(0),
+                            borderSkipped: false,
+                            barThickness: 26,
+                            maxBarThickness: 30,
+                            categoryPercentage: 0.6,
+                            borderWidth: 0
                         }, {
                             label: 'Cuti',
                             data: leaveData,
-                            backgroundColor: '#EF4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.85)',
+                            hoverBackgroundColor: 'rgba(239, 68, 68, 1)',
                             stack: 'Absen',
-                            borderRadius: 4,
-                            barPercentage: 0.6
+                            borderRadius: stackedBarRadius(1),
+                            borderSkipped: false,
+                            barThickness: 26,
+                            maxBarThickness: 30,
+                            categoryPercentage: 0.6,
+                            borderWidth: 0
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false
+                        },
                         scales: {
                             x: {
                                 stacked: true,
@@ -819,37 +1705,50 @@
                                 },
                                 grid: {
                                     display: false
+                                },
+                                ticks: {
+                                    padding: 8,
+                                    color: '#94A3B8',
+                                    font: {
+                                        size: 11,
+                                        weight: '500'
+                                    }
                                 }
                             },
                             y: {
                                 stacked: true,
                                 beginAtZero: true,
                                 ticks: {
-                                    stepSize: 5
+                                    precision: 0,
+                                    padding: 10,
+                                    color: '#94A3B8',
+                                    font: {
+                                        size: 11,
+                                        weight: '500'
+                                    }
                                 },
                                 border: {
                                     display: false
                                 },
                                 grid: {
-                                    color: 'rgba(0,0,0,0.04)'
+                                    color: 'rgba(148, 163, 184, 0.06)'
                                 }
                             }
                         },
                         plugins: {
                             legend: {
-                                position: 'top',
-                                align: 'end',
-                                labels: {
-                                    usePointStyle: true,
-                                    boxWidth: 8
-                                }
+                                display: false
                             },
                             tooltip: {
                                 mode: 'index',
                                 intersect: false,
-                                backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                                padding: 12,
-                                cornerRadius: 8
+                                ...tooltipBase,
+                                callbacks: {
+                                    footer: function(items) {
+                                        const total = items.reduce((sum, item) => sum + Number(item.parsed.y || 0), 0);
+                                        return `Total: ${total}`;
+                                    }
+                                }
                             }
                         }
                     }

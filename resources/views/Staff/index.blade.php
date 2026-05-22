@@ -12,16 +12,16 @@
             @if(Auth::user()->role == 'Admin')
             <div class="d-flex gap-2 flex-wrap">
                 <a href="{{ route('staff.export', ['station' => request('station')]) }}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bx bx-download me-1"></i>Export CSV
+                    <i class="ti ti-download"></i>Export CSV
                 </a>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#importModal">
-                    <i class="bx bx-upload me-1"></i>Import Staff
+                    <i class="ti ti-upload"></i>Import Staff
                 </button>
                 <a href="{{ route('stations.create') }}" class="btn btn-sm btn-outline-secondary">
-                    <i class="bx bx-plus me-1"></i>Station Baru
+                    <i class="ti ti-building-airport"></i>Station Baru
                 </a>
                 <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
-                    <i class="bx bx-plus-circle me-1"></i>Tambah Staff
+                    <i class="ti ti-user-plus"></i>Tambah Staff
                 </a>
             </div>
             @endif
@@ -33,7 +33,7 @@
                 <div class="nav-scroller">
                     <div class="nav nav-tabs">
                         <a class="nav-link {{ request('station') == null ? 'active' : '' }}" href="{{ route('staff.index') }}">
-                            <i class="fas fa-globe me-1"></i> Global
+                            <i class="ti ti-world me-1"></i> Global
                         </a>
                         @foreach($stations as $st)
                         <a class="nav-link {{ request('station') == $st->code ? 'active' : '' }}" href="{{ route('staff.index', ['station' => $st->code]) }}">
@@ -47,7 +47,7 @@
             <div class="card-body">
                 @if(request('station'))
                 <div class="d-flex align-items-center gap-2 mb-3 pb-3" style="border-bottom: 1px solid #f3f4f6;">
-                    <i class="bx bx-info-circle text-muted"></i>
+                    <i class="ti ti-info-circle text-muted"></i>
                     <small class="text-muted">Menampilkan data staff area: <strong>{{ request('station') }}</strong></small>
                 </div>
                 @endif
@@ -56,7 +56,7 @@
                 <div class="dt-toolbar">
                     <form action="{{ route('staff.index') }}" method="GET" class="dt-search">
                         <input type="hidden" name="station" value="{{ request('station') }}">
-                        <i class="bx bx-search search-icon"></i>
+                        <i class="ti ti-search search-icon"></i>
                         <input type="text" name="search" class="form-control" placeholder="Cari NIP / Nama..." value="{{ request('search') }}">
                     </form>
                 </div>
@@ -120,11 +120,11 @@
                                 <td>
                                     <div class="d-flex gap-1">
                                         <a href="{{ route('users.userProfile', $staff->id) }}" class="action-btn" title="Detail">
-                                            <i class="bx bx-show"></i>
+                                            <i class="ti ti-eye"></i>
                                         </a>
                                         @if(Auth::user()->role == 'Admin')
-                                        <button type="button" class="action-btn" onclick="openBanModal('{{ $staff->id }}', '{{ addslashes($staff->fullname) }}')" title="Blacklist" style="color:#dc2626; border-color:#fecaca;">
-                                            <i class="bx bx-block"></i>
+                                        <button type="button" class="action-btn action-delete" onclick="openBanModal('{{ $staff->id }}', '{{ addslashes($staff->fullname) }}')" title="Blacklist">
+                                            <i class="ti ti-ban"></i>
                                         </button>
                                         @endif
                                     </div>
@@ -134,7 +134,7 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="empty-state">
-                                        <i class="bx bx-user-x d-block"></i>
+                                        <i class="ti ti-user-x d-block"></i>
                                         <p>Belum ada data staff di station ini.</p>
                                     </div>
                                 </td>

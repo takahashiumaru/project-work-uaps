@@ -10,7 +10,7 @@
                 <p class="text-muted mb-0" style="font-size:0.875rem;">Daftar dan kontrol status operasional station.</p>
             </div>
             <a href="{{ route('stations.create') }}" class="btn btn-primary btn-sm">
-                <i class="bx bx-plus me-1"></i> Buka Station Baru
+                <i class="ti ti-plus"></i> Buka Station Baru
             </a>
         </div>
 
@@ -47,15 +47,14 @@
                                     <form action="{{ route('stations.toggle', $st->id) }}" method="POST">
                                         @csrf
 
-                                        <div class="form-check form-switch">
+                                        <div class="form-check form-switch d-flex align-items-center">
                                             <input class="form-check-input"
                                                 type="checkbox"
                                                 role="switch"
                                                 onchange="this.form.submit()"
-                                                style="width: 3em; height: 1.5em; cursor: pointer;"
                                                 {{ $st->is_active ? 'checked' : '' }}>
 
-                                            <label class="form-check-label ms-2 mt-1">
+                                            <label class="form-check-label ms-2">
                                                 {{ $st->is_active ? 'Matikan' : 'Hidupkan' }}
                                             </label>
                                         </div>
@@ -63,9 +62,10 @@
                                 </td>
 
                                 <td>
+                                    <div class="d-flex align-items-center gap-2">
                                     <a href="{{ route('stations.edit', $st->id) }}"
-                                        class="btn btn-sm btn-primary">
-                                        <i class="fas fa-edit me-2"></i> Edit
+                                        class="btn btn-sm btn-warning">
+                                        <i class="ti ti-pencil"></i> Edit
                                     </a>
 
                                     <form action="{{ route('stations.destroy', $st->id) }}"
@@ -77,12 +77,14 @@
                                         @method('DELETE')
 
                                         <button type="button"
-                                            class="action-btn bg-danger border-0"
+                                            class="action-btn action-delete border-0"
+                                            title="Hapus Station"
                                             onclick="confirmDeleteShift('{{ $st->id }}', '{{ $st->code }}')">
 
-                                            <i class="bx bx-trash"></i>
+                                            <i class="ti ti-trash"></i>
                                         </button>
                                     </form>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -99,6 +101,8 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
@@ -122,3 +126,4 @@
         });
     }
 </script>
+@endsection

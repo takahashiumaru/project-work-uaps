@@ -146,7 +146,7 @@
                     </h4>
                     <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-primary">
-                            <i class="bx bx-time me-1"></i>
+                            <i class="ti ti-clock me-1"></i>
                             {{ $shifts->count() }} Shifts
                         </span>
                     </div>
@@ -174,7 +174,7 @@
                         <p class="text-muted mb-0">Kelola semua shift yang tersedia</p>
                     </div>
                     <a href="{{ route('shift.create') }}" class="create-btn">
-                        <i class="bx bx-plus-circle"></i> Create New Shift
+                        <i class="ti ti-plus"></i> Create New Shift
                     </a>
                 </div>
             </div>
@@ -220,7 +220,7 @@
                                             </td>
                                             <td>
                                                 <span class="manpower-badge">
-                                                    <i class="bx bx-user me-1"></i>
+                                                    <i class="ti ti-user me-1"></i>
                                                     {{ $shift->use_manpower }} Orang
                                                 </span>
                                             </td>
@@ -236,7 +236,7 @@
                                                 @if (in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER']))
                                                     <a href="{{ route('shift.edit', $shift->id) }}" class="action-btn"
                                                         title="Edit Shift">
-                                                        <i class="bx bx-edit"></i>
+                                                        <i class="ti ti-pencil"></i>
                                                     </a>
                                                     <form action="{{ route('shift.destroy', $shift->id) }}" method="POST"
                                                         class="d-inline" id="delete-form-{{ $shift->id }}">
@@ -244,7 +244,7 @@
                                                         @method('DELETE')
                                                         <button type="button" class="action-btn bg-danger border-0"
                                                             title="Delete Shift" onclick="confirmDeleteShift('{{ $shift->id }}')">
-                                                            <i class="bx bx-trash"></i>
+                                                            <i class="ti ti-trash"></i>
                                                         </button>
                                                     </form>
                                                 @else
@@ -260,11 +260,11 @@
                         <!-- Empty State -->
                         @if ($shifts->isEmpty())
                             <div class="text-center py-5">
-                                <i class="bx bx-time bx-lg text-muted mb-3" style="font-size: 4rem;"></i>
+                                <i class="ti ti-clock-hour-4 text-muted mb-3" style="font-size: 4rem;"></i>
                                 <h5 class="text-muted">Belum ada shift</h5>
                                 <p class="text-muted">Mulai dengan membuat shift pertama Anda</p>
                                 <a href="{{ route('shift.create') }}" class="create-btn mt-3">
-                                    <i class="bx bx-plus-circle"></i> Create First Shift
+                                    <i class="ti ti-plus"></i> Create First Shift
                                 </a>
                             </div>
                         @endif

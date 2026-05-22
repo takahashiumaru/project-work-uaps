@@ -24,12 +24,12 @@
                 {{-- Toolbar --}}
                 <div class="dt-toolbar">
                     <form action="{{ route('admin.training.certificates.index') }}" method="GET" class="dt-search">
-                        <i class="bx bx-search search-icon"></i>
+                        <i class="ti ti-search search-icon"></i>
                         <input type="text" name="search" class="form-control" placeholder="Cari NIP, Nama, atau Sertifikat..." value="{{ request('search') }}">
                     </form>
                     <div class="dt-actions">
                         <a href="{{ route('admin.training.certificates.create') }}" class="btn btn-primary">
-                            <i class="bx bx-plus me-1"></i>Tambah Sertifikat
+                            <i class="ti ti-plus"></i>Tambah Sertifikat
                         </a>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                                         @if ($certificate->certificate_file)
                                             <a href="{{ Storage::url($certificate->certificate_file) }}" target="_blank"
                                                 class="action-btn" title="Lihat File">
-                                                <i class='bx bx-file'></i>
+                                                <i class="ti ti-file-text"></i>
                                             </a>
                                         @else
                                             <span class="text-muted small">-</span>
@@ -95,13 +95,13 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <a href="{{ route('admin.training.certificates.edit', $certificate->id) }}" class="action-btn" title="Edit">
-                                                <i class="bx bx-edit-alt"></i>
+                                                <i class="ti ti-pencil"></i>
                                             </a>
                                             <form action="{{ route('admin.training.certificates.destroy', $certificate->id) }}" method="POST" class="d-inline" id="delete-form-{{ $certificate->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="action-btn" style="color: #dc2626; border-color: #fecaca; background: #fef2f2;" title="Hapus" onclick="confirmDeleteCertificate('{{ $certificate->id }}')">
-                                                    <i class="bx bx-trash"></i>
+                                                <button type="button" class="action-btn action-delete" title="Hapus" onclick="confirmDeleteCertificate('{{ $certificate->id }}')">
+                                                    <i class="ti ti-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -111,7 +111,7 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
                                         <div class="empty-state">
-                                            <i class="bx bx-certification d-block"></i>
+                                            <i class="ti ti-certificate d-block"></i>
                                             <p>Tidak ada data sertifikat training.</p>
                                         </div>
                                     </td>
