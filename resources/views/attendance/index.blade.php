@@ -9,18 +9,18 @@
         border-radius: 1rem;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         border: 1px solid #f3f4f6;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         overflow: hidden;
     }
     
     .attendance-header {
         background: #ffffff;
-        padding: 1.5rem;
+        padding: 1rem 1.25rem;
         border-bottom: 1px solid #f3f4f6;
     }
     
     .attendance-body {
-        padding: 1.5rem;
+        padding: 1rem 1.25rem;
     }
     
     .status-badge {
@@ -35,8 +35,8 @@
     .badge-in-progress { background-color: #fef3c7; color: #92400e; }
     
     .btn-attendance {
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
+        padding: 0.55rem 1.5rem;
+        border-radius: 0.4rem;
         font-weight: 600;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         border: none;
@@ -44,60 +44,60 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
     }
     
     .btn-checkin {
         background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
         color: white;
-        box-shadow: 0 12px 24px rgba(47, 128, 237, 0.2);
+        box-shadow: 0 8px 16px rgba(47, 128, 237, 0.16);
     }
     .btn-checkout { background-color: #ef4444; color: white; }
     
     .btn-checkin:hover {
         background: linear-gradient(135deg, #2368c8 0%, #174ea6 100%);
         transform: translateY(-1px);
-        box-shadow: 0 14px 26px rgba(47, 128, 237, 0.26);
+        box-shadow: 0 10px 20px rgba(47, 128, 237, 0.2);
         color: #ffffff;
     }
-    .btn-checkout:hover { background-color: #dc2626; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2); }
+    .btn-checkout:hover { background-color: #dc2626; transform: translateY(-1px); box-shadow: 0 8px 12px -3px rgba(239, 68, 68, 0.2); }
     
     .attendance-info-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1.5rem;
+        gap: 1rem;
         background: #f9fafb;
         border-radius: 0.75rem;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
     }
     
     .info-item { text-align: center; }
-    .info-label { font-size: 0.75rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; }
-    .info-value { font-size: 1.125rem; font-weight: 700; color: #111827; }
+    .info-label { font-size: 0.7rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; font-weight: 600; }
+    .info-value { font-size: 0.95rem; font-weight: 700; color: #111827; }
     
     .current-time-banner {
         background: linear-gradient(135deg, #2f80ed 0%, #2368c8 58%, #174ea6 100%);
         color: white;
-        padding: 1.25rem;
+        padding: 0.8rem;
         border-radius: 0.75rem;
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         font-family: 'Inter', sans-serif;
-        font-size: 1.5rem;
+        font-size: 1.15rem;
         font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.75rem;
-        box-shadow: 0 18px 34px rgba(47, 128, 237, 0.2);
+        box-shadow: 0 12px 24px rgba(47, 128, 237, 0.16);
     }
 
     .info-section {
         background: #ffffff;
         border: 1px solid #f3f4f6;
         border-radius: 1rem;
-        padding: 1.5rem;
+        padding: 1rem 1.25rem;
     }
 
     html.aps-dark .attendance-card,

@@ -25,32 +25,32 @@
         /* --- MODERN CARDS --- */
         .modern-card {
             background: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
-            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(229, 231, 235, 0.7);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             overflow: hidden;
             position: relative;
         }
 
         .modern-card:hover {
-            box-shadow: 0 18px 42px rgba(47, 128, 237, 0.1);
+            box-shadow: 0 14px 30px rgba(47, 128, 237, 0.08);
             border-color: rgba(47, 128, 237, 0.22);
         }
 
         /* --- STAT CARDS (GRADIENT) --- */
         .stat-card {
-            border-radius: 15px;
+            border-radius: 12px;
             border: none;
             color: white;
             position: relative;
             overflow: hidden;
-            min-height: 96px;
-            box-shadow: 0 16px 34px rgba(47, 128, 237, 0.18);
+            min-height: 76px;
+            box-shadow: 0 10px 24px rgba(47, 128, 237, 0.12);
         }
 
         .stat-card .card-body {
-            padding: 18px 20px;
+            padding: 12px 16px;
             position: relative;
             z-index: 2;
         }
@@ -68,10 +68,10 @@
         .stat-card::after {
             content: "";
             position: absolute;
-            width: 72px;
-            height: 72px;
-            right: -22px;
-            top: -22px;
+            width: 60px;
+            height: 60px;
+            right: -18px;
+            top: -18px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.12);
         }
@@ -81,38 +81,38 @@
         }
 
         .stat-card-primary.shadow-sm {
-            box-shadow: 0 16px 34px rgba(47, 128, 237, 0.24) !important;
+            box-shadow: 0 10px 24px rgba(47, 128, 237, 0.16) !important;
         }
 
         .stat-card-success {
             background: linear-gradient(135deg, #10B981 0%, #0EA5E9 100%);
-            box-shadow: 0 16px 34px rgba(16, 185, 129, 0.18);
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.12);
         }
 
         .stat-card-success.shadow-sm {
-            box-shadow: 0 16px 34px rgba(16, 185, 129, 0.22) !important;
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.14) !important;
         }
 
         .stat-card-info {
             background: linear-gradient(135deg, #2563EB 0%, #2F80ED 54%, #38BDF8 100%);
-            box-shadow: 0 16px 34px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
         }
 
         .stat-card-info.shadow-sm {
-            box-shadow: 0 16px 34px rgba(37, 99, 235, 0.24) !important;
+            box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16) !important;
         }
 
         .stat-card .stat-title {
-            font-size: 0.78rem;
+            font-size: 0.68rem;
             font-weight: 600;
             opacity: 0.86;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
             text-transform: uppercase;
             letter-spacing: 0.7px;
         }
 
         .stat-card .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.45rem;
             font-weight: 750;
             margin: 0;
             line-height: 1;
@@ -121,8 +121,8 @@
         .stat-card .stat-icon {
             position: absolute;
             right: 0px;
-            bottom: -15px;
-            font-size: 4rem;
+            bottom: -10px;
+            font-size: 3rem;
             opacity: 0.16;
             transform: rotate(-15deg);
             transition: transform 0.3s ease;
@@ -136,9 +136,9 @@
         .dashboard-header {
             background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
             border: 1px solid rgba(47, 128, 237, 0.12);
-            border-radius: 16px;
-            padding: 22px 26px;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+            border-radius: 12px;
+            padding: 14px 18px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
             position: relative;
             overflow: hidden;
             margin-left: 0;
@@ -148,10 +148,10 @@
         .dashboard-header::after {
             content: "";
             position: absolute;
-            width: 200px;
-            height: 200px;
-            right: -50px;
-            top: -50px;
+            width: 150px;
+            height: 150px;
+            right: -30px;
+            top: -30px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(47, 128, 237, 0.04) 0%, transparent 70%);
             pointer-events: none;
@@ -160,7 +160,7 @@
 
         .dashboard-title {
             color: #1e293b !important;
-            font-size: 1.4rem !important;
+            font-size: 1.15rem !important;
             font-weight: 700;
             letter-spacing: -0.02em;
         }
@@ -175,44 +175,44 @@
 
         .dashboard-scope::before {
             content: "";
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 999px;
             background: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.12);
+            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
         }
 
         .station-filter-control {
-            min-width: 280px;
-            height: 42px;
+            min-width: 210px;
+            height: 36px;
             overflow: hidden;
             border: 1px solid rgba(226, 232, 240, 0.85);
-            border-radius: 10px;
+            border-radius: 8px;
             background: #ffffff;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02);
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
             transition: all 0.2s ease;
         }
 
         .station-filter-control:focus-within {
             border-color: rgba(47, 128, 237, 0.4);
-            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.08);
+            box-shadow: 0 0 0 2px rgba(47, 128, 237, 0.08);
         }
 
         .station-filter-control .input-group-text {
-            width: 40px;
+            width: 34px;
             color: #64748b !important;
             background: transparent !important;
             border: none !important;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
         }
 
         .station-filter-control .form-select {
-            min-width: 220px;
+            min-width: 160px;
             cursor: pointer;
             color: #334155;
             font-weight: 600 !important;
             background-color: #ffffff;
-            font-size: 0.88rem;
+            font-size: 0.8rem;
             padding-left: 0;
             border: none !important;
         }
@@ -223,31 +223,31 @@
 
         /* --- STATION CARDS --- */
         .monitoring-section {
-            margin-bottom: 2.25rem;
+            margin-bottom: 1.5rem;
         }
 
         .monitoring-heading {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
 
         .monitoring-icon {
-            width: 36px;
-            height: 36px;
+            width: 30px;
+            height: 30px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            border-radius: 12px;
+            border-radius: 10px;
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.22);
+            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.16);
         }
 
         .monitoring-heading h6 {
             color: var(--text-main);
-            font-size: 0.98rem;
+            font-size: 0.9rem;
             letter-spacing: 0;
         }
 
@@ -255,29 +255,29 @@
             background:
                 linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 1)),
                 #ffffff;
-            border-radius: 15px;
+            border-radius: 12px;
             border: 1px solid rgba(226, 232, 240, 0.95);
-            padding: 18px;
-            min-height: 134px;
+            padding: 12px 14px;
+            min-height: 110px;
             transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.045);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
         }
 
         .station-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 18px 40px rgba(47, 128, 237, 0.12);
-            border-color: rgba(47, 128, 237, 0.28);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(47, 128, 237, 0.08);
+            border-color: rgba(47, 128, 237, 0.22);
         }
 
         .station-card::before {
             content: "";
             position: absolute;
-            top: 16px;
-            bottom: 16px;
+            top: 12px;
+            bottom: 12px;
             left: 0;
-            width: 4px;
+            width: 3px;
             border-radius: 0 999px 999px 0;
             background: var(--success-color);
         }
@@ -285,10 +285,10 @@
         .station-card::after {
             content: "";
             position: absolute;
-            width: 96px;
-            height: 96px;
-            right: -40px;
-            top: -42px;
+            width: 76px;
+            height: 76px;
+            right: -30px;
+            top: -30px;
             border-radius: 999px;
             background: rgba(47, 128, 237, 0.07);
             pointer-events: none;
@@ -303,22 +303,22 @@
         }
 
         .station-code {
-            font-size: 1.05rem;
+            font-size: 0.9rem;
             font-weight: 800;
             color: var(--text-main);
             letter-spacing: 0;
         }
 
         .station-name {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             margin-top: 2px;
             margin-bottom: 0;
-            max-width: 150px;
+            max-width: 120px;
         }
 
         .station-count {
-            font-size: 1.55rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary-color);
             line-height: 1;
@@ -326,18 +326,18 @@
 
         .station-count-label {
             color: #94a3b8;
-            font-size: 0.73rem;
+            font-size: 0.7rem;
             font-weight: 700;
             letter-spacing: 0;
         }
 
         .station-detail-btn,
         .station-empty-btn {
-            height: 34px;
-            border-radius: 9px !important;
+            height: 30px;
+            border-radius: 6px !important;
             border: 1px solid rgba(203, 213, 225, 0.85) !important;
             background: #ffffff !important;
-            font-size: 0.82rem;
+            font-size: 0.75rem;
             box-shadow: none !important;
         }
 
@@ -358,7 +358,7 @@
         }
 
         .station-create-card {
-            min-height: 134px;
+            min-height: 110px;
             background:
                 linear-gradient(180deg, rgba(234, 244, 255, 0.58), rgba(255, 255, 255, 0.9)) !important;
             border: 1.5px dashed rgba(47, 128, 237, 0.32) !important;
@@ -370,19 +370,19 @@
         }
 
         .station-create-icon {
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             color: var(--primary-color);
             background: #ffffff;
-            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.13);
+            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.1);
         }
 
         /* --- CHARTS & INFO LAYOUT --- */
         .top-charts-container,
         .bottom-charts-container {
             display: grid;
-            gap: 24px;
-            margin-bottom: 24px;
+            gap: 16px;
+            margin-bottom: 16px;
         }
 
         @media(min-width: 1200px) {
@@ -397,31 +397,31 @@
 
         .chart-header {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: var(--text-main);
-            padding: 18px 20px 0;
+            padding: 12px 16px 0;
             border-bottom: none;
             background: transparent;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            gap: 10px;
         }
 
         .chart-heading-main {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             min-width: 0;
         }
 
         .chart-heading-icon {
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 11px;
+            border-radius: 9px;
             background: var(--primary-soft);
             color: var(--primary-color);
             flex: 0 0 auto;
@@ -430,39 +430,39 @@
         .chart-heading-title {
             display: flex;
             align-items: baseline;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             min-width: 0;
         }
 
         .chart-heading-title strong {
             color: var(--text-main);
-            font-size: 1rem;
+            font-size: 0.88rem;
             font-weight: 750;
         }
 
         .chart-period {
             color: #94a3b8;
-            font-size: 0.88rem;
+            font-size: 0.8rem;
             font-weight: 500;
         }
 
         .chart-metric-pill {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 0.42rem 0.65rem;
+            gap: 5px;
+            padding: 0.35rem 0.55rem;
             border-radius: 999px;
             background: #f8fbff;
             border: 1px solid rgba(47, 128, 237, 0.12);
             color: #2368c8;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             white-space: nowrap;
         }
 
         .chart-metric-pill i {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
         .attendance-chart-header {
@@ -472,7 +472,7 @@
         .chart-title-group {
             display: flex;
             align-items: baseline;
-            gap: 8px;
+            gap: 6px;
             min-width: 0;
             flex-wrap: wrap;
         }
@@ -480,57 +480,57 @@
         .chart-legend-inline {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex: 0 0 auto;
         }
 
         .chart-legend-item {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             color: #475569;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 650;
             line-height: 1;
             white-space: nowrap;
-            padding: 0.42rem 0.58rem;
+            padding: 0.35rem 0.5rem;
             border-radius: 999px;
             background: #f8fafc;
             border: 1px solid rgba(226, 232, 240, 0.9);
         }
 
         .chart-legend-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 999px;
             display: inline-block;
-            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.12);
         }
 
         .chart-legend-dot.sick {
             background: #F59E0B;
-            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.12);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
         }
 
         .chart-legend-dot.leave {
             background: #EF4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
         }
 
         .chart-insight-strip {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-            padding: 0 20px 8px;
+            gap: 8px;
+            padding: 0 16px 6px;
         }
 
         .chart-insight-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
             background: #f8fbff;
             border: 1px solid rgba(226, 232, 240, 0.9);
         }
@@ -538,21 +538,21 @@
         .chart-insight-label {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: #64748b;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 650;
         }
 
         .chart-insight-value {
             color: var(--text-main);
-            font-size: 0.96rem;
+            font-size: 0.88rem;
             font-weight: 800;
         }
 
         .chart-insight-indicator {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             display: inline-block;
             flex-shrink: 0;
@@ -560,22 +560,22 @@
 
         .chart-insight-indicator.sick {
             background-color: #F59E0B;
-            box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
         }
 
         .chart-insight-indicator.leave {
             background-color: #EF4444;
-            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 0 4px rgba(239, 68, 68, 0.4);
         }
 
         .chart-canvas-wrapper {
             position: relative;
-            height: 310px;
+            height: 230px;
             padding: 4px 10px 0;
         }
 
         .chart-card-aircraft .chart-canvas-wrapper {
-            height: 318px;
+            height: 240px;
             padding-top: 8px;
         }
 
@@ -588,73 +588,73 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 8px;
+            gap: 6px;
             min-width: 0;
         }
 
         .line-chart-title-block .chart-heading-title {
-            gap: 6px;
+            gap: 4px;
         }
 
         .line-chart-title-block .chart-heading-title strong {
-            font-size: 0.98rem;
+            font-size: 0.88rem;
             line-height: 1.25;
         }
 
         .line-chart-legend {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             color: #475569;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 650;
         }
 
         .line-series-item {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .line-series-dot {
-            width: 9px;
-            height: 9px;
+            width: 8px;
+            height: 8px;
             border-radius: 999px;
             display: inline-block;
         }
 
         .line-series-dot.primary {
             background: #2F80ED;
-            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.12);
+            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
         }
 
         .line-series-dot.compare {
             background: #94A3B8;
-            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.12);
         }
 
         .chart-period-select {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            height: 40px;
-            padding: 0 14px;
-            border-radius: 12px;
+            gap: 8px;
+            height: 34px;
+            padding: 0 10px;
+            border-radius: 10px;
             background: #ffffff;
             border: 1px solid rgba(226, 232, 240, 0.95);
             color: #0f172a;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 650;
-            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.03);
         }
 
         .chart-period-select i {
             color: #64748b;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .chart-card-attendance .chart-canvas-wrapper {
-            height: 286px;
+            height: 210px;
             padding-top: 0;
         }
 
@@ -664,54 +664,54 @@
         }
 
         .attendance-score {
-            margin: 0 0 14px;
-            padding: 14px;
-            border-radius: 15px;
+            margin: 0 0 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
             background: #ffffff;
             border: 1px solid rgba(226, 232, 240, 0.9);
-            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.035);
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.025);
         }
 
         .attendance-score-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 11px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
         .attendance-score-label {
             color: #64748b;
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
         }
 
         .attendance-score-value {
             color: var(--text-main);
-            font-size: 1.72rem;
+            font-size: 1.35rem;
             font-weight: 750;
             line-height: 1;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .attendance-score-badge {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 13px;
+            border-radius: 8px;
             background: var(--primary-soft);
             color: var(--primary-color);
             border: 1px solid rgba(47, 128, 237, 0.14);
             flex: 0 0 auto;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
 
         .attendance-progress {
-            height: 8px;
+            height: 6px;
             border-radius: 999px;
             background: #edf4ff;
             overflow: hidden;
@@ -722,7 +722,7 @@
             height: 100%;
             border-radius: inherit;
             background: linear-gradient(90deg, #10B981 0%, #2F80ED 100%);
-            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.18);
+            box-shadow: 0 4px 8px rgba(47, 128, 237, 0.1);
         }
 
         .info-list {
@@ -730,15 +730,15 @@
             padding: 0;
             margin: 0;
             display: grid;
-            gap: 9px;
+            gap: 6px;
         }
 
         .info-item {
             display: flex;
             align-items: center;
-            padding: 10px;
+            padding: 8px;
             border: 1px solid rgba(226, 232, 240, 0.82);
-            border-radius: 13px;
+            border-radius: 10px;
             background: #ffffff;
             transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
         }
@@ -746,18 +746,18 @@
         .info-item:hover {
             transform: translateY(-1px);
             border-color: rgba(47, 128, 237, 0.18);
-            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 8px 16px rgba(15, 23, 42, 0.03);
         }
 
         .info-icon-wrapper {
-            width: 34px;
-            height: 34px;
-            border-radius: 11px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
-            font-size: 1rem;
+            margin-right: 8px;
+            font-size: 0.85rem;
         }
 
         .icon-blue {
@@ -789,13 +789,13 @@
             flex: 1;
             font-weight: 600;
             color: #64748b;
-            font-size: 0.82rem;
+            font-size: 0.75rem;
         }
 
         .info-value {
             font-weight: 800;
             color: var(--text-main);
-            font-size: 1.05rem;
+            font-size: 0.9rem;
         }
 
         /* --- TABLE STYLES --- */
@@ -808,19 +808,19 @@
             color: var(--text-muted);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             letter-spacing: 0.5px;
             border-bottom: 2px solid #E5E7EB;
-            padding: 12px 16px;
+            padding: 8px 12px;
         }
 
         .table-custom tbody td {
-            padding: 12px 16px;
+            padding: 8px 12px;
             vertical-align: middle;
             border-bottom: 1px solid #F3F4F6;
             color: var(--text-main);
             font-weight: 500;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .clickable-row {
@@ -835,11 +835,11 @@
         .countdown {
             font-weight: 700;
             color: var(--danger-color);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.78rem;
             display: inline-block;
-            min-width: 80px;
+            min-width: 72px;
             text-align: center;
         }
 
@@ -852,23 +852,25 @@
         .btn-primary-custom {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             border: none;
-            border-radius: 10px;
-            padding: 0 20px;
+            border-radius: 8px;
+            padding: 0 14px;
             font-weight: 600;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            height: 42px;
+            height: 36px;
+            font-size: 0.8rem;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(47, 128, 237, 0.15);
+            box-shadow: 0 3px 8px rgba(47, 128, 237, 0.12);
         }
 
         .attendance-action-buttons .btn {
-            min-width: 136px;
-            border-radius: 12px;
+            min-width: 110px;
+            border-radius: 8px;
             font-weight: 700;
-            height: 42px;
+            height: 36px;
+            font-size: 0.8rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -877,7 +879,7 @@
         @media (max-width: 767.98px) {
             .attendance-action-buttons {
                 width: 100%;
-                margin-top: 12px;
+                margin-top: 10px;
             }
 
             .attendance-action-buttons .btn {
@@ -1184,8 +1186,8 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
         {{-- HEADER SECTION --}}
-        <div class="dashboard-header row mb-4 align-items-center">
-            <div class="col-md-6">
+        <div class="dashboard-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+            <div>
                 @php
                     $hour = date('H');
                     $timeGreeting = $hour < 12 ? 'Pagi' : ($hour < 18 ? 'Siang' : 'Malam');
@@ -1193,14 +1195,14 @@
                 <h4 class="fw-bold mb-1 text-dark dashboard-title">
                     Hi {{ Auth::user()->fullname }}, Selamat {{ $timeGreeting }} 👋
                 </h4>
-                <p class="text-muted mb-0" style="font-size: 0.9rem;">
+                <p class="text-muted mb-0" style="font-size: 0.8rem;">
                     Dashboard Overview &bull;
                     <span class="dashboard-scope">
                         {{ isset($selectedStation) && $selectedStation !== 'All' ? 'Station ' . $selectedStation : 'Global' }}
                     </span>
                 </p>
             </div>
-            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <div class="mt-3 mt-md-0">
                 <div class="d-flex flex-wrap justify-content-md-end align-items-center gap-3 action-buttons">
                     @if (Auth::user()->role == 'Admin')
                         <form action="{{ url()->current() }}" method="GET" id="stationFilterForm" class="m-0">
@@ -1305,7 +1307,7 @@
                             <div class="station-create-icon rounded-circle d-flex align-items-center justify-content-center mb-2">
                                 <i class="fas fa-plus"></i>
                             </div>
-                            <div class="fw-bold" style="font-size: 0.9rem;">Buka Station Baru</div>
+                            <div class="fw-bold" style="font-size: 0.8rem;">Buka Station Baru</div>
                         </a>
                     </div>
                 </div>
@@ -1313,7 +1315,7 @@
         @endif
 
         {{-- PANEL STATISTIK UTAMA --}}
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-3">
             <div class="col-md-4">
                 <div class="card stat-card stat-card-primary shadow-sm">
                     <div class="card-body">

@@ -3265,6 +3265,19 @@
                 white-space: nowrap !important;
             }
 
+            /* Enable hover styling for collapsed sidebar links when hovered/expanded */
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item > .menu-link:hover,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item > .menu-link:hover {
+                background: var(--sidebar-hover, #eaf4ff) !important;
+                color: var(--sidebar-active, #2368c8) !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item > .menu-link:hover .menu-icon,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item > .menu-link:hover .menu-icon {
+                background: #dbeafe !important;
+                color: #2f80ed !important;
+            }
+
             html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.active > .menu-link,
             html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.open > .menu-link,
             html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.active > .menu-link,
@@ -3306,11 +3319,9 @@
 
             html.sidebar-collapsed #layout-menu:hover .menu-link div,
             html.sidebar-collapsed #layout-menu:hover .menu-header,
-            html.sidebar-collapsed #layout-menu:hover .menu-toggle::after,
             html.sidebar-collapsed #layout-menu:hover .sidebar-time,
             html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-link div,
             html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-header,
-            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-toggle::after,
             html.sidebar-collapsed.sidebar-peeking #layout-menu .sidebar-time {
                 display: block !important;
                 opacity: 1 !important;
@@ -3333,6 +3344,13 @@
                 visibility: visible !important;
                 position: static !important;
                 flex: 0 0 auto !important;
+                transform: rotate(45deg) !important;
+                animation: sidebarPeekFadeIn 0.18s ease 0.1s both !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-item.open > .menu-link.menu-toggle::after,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-item.open > .menu-link.menu-toggle::after {
+                transform: rotate(135deg) !important;
             }
 
             html.sidebar-collapsed #layout-menu:hover .menu-sub,
@@ -3391,6 +3409,15 @@
             to {
                 opacity: 1;
                 transform: translateX(0);
+            }
+        }
+
+        @keyframes sidebarPeekFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 0.9;
             }
         }
 
@@ -4328,35 +4355,35 @@
 
         /* Refined command palette */
         .aps-menu-search {
-            padding: clamp(0.75rem, 5vh, 3rem) clamp(0.75rem, 3vw, 2rem) 1rem !important;
+            padding: clamp(0.5rem, 3vh, 2rem) clamp(0.5rem, 2vw, 1.5rem) 0.5rem !important;
             background: rgba(15, 23, 42, 0.34) !important;
             backdrop-filter: blur(12px) saturate(1.08) !important;
             -webkit-backdrop-filter: blur(12px) saturate(1.08) !important;
         }
 
         .aps-menu-search-panel {
-            width: min(920px, calc(100vw - 2rem)) !important;
-            max-height: min(760px, calc(100vh - 2rem)) !important;
-            border-radius: 26px !important;
+            width: min(800px, calc(100vw - 2rem)) !important;
+            max-height: min(600px, calc(100vh - 3rem)) !important;
+            border-radius: 20px !important;
             background: #ffffff !important;
             border-color: rgba(226, 232, 240, 0.96) !important;
-            box-shadow: 0 34px 90px rgba(15, 23, 42, 0.24) !important;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.22) !important;
         }
 
         .aps-menu-search-head {
-            padding: 0.85rem 0.95rem !important;
-            gap: 0.8rem !important;
+            padding: 0.65rem 0.85rem !important;
+            gap: 0.7rem !important;
             background: #fbfdff !important;
             border-bottom-color: #e8eef6 !important;
         }
 
         .aps-menu-search-icon,
         .aps-menu-search-close {
-            width: 42px !important;
-            min-width: 42px !important;
-            height: 42px !important;
+            width: 36px !important;
+            min-width: 36px !important;
+            height: 36px !important;
             border: 1px solid #e5edf8 !important;
-            box-shadow: 0 10px 20px rgba(47, 128, 237, 0.08) !important;
+            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.06) !important;
         }
 
         .aps-menu-search-close {
@@ -4370,7 +4397,7 @@
         }
 
         .aps-menu-search-input {
-            font-size: 0.98rem !important;
+            font-size: 0.92rem !important;
             color: #233044 !important;
             letter-spacing: 0 !important;
         }
@@ -4382,8 +4409,8 @@
         .aps-menu-search-body {
             display: grid !important;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.82rem;
-            padding: 0.95rem !important;
+            gap: 0.5rem;
+            padding: 0.65rem !important;
             background: #ffffff !important;
             overscroll-behavior: contain;
         }
@@ -4391,25 +4418,25 @@
         .aps-menu-search-group {
             min-width: 0;
             margin: 0 !important;
-            padding: 0.36rem !important;
+            padding: 0.25rem !important;
             border: 1px solid #edf2f8;
-            border-radius: 18px;
+            border-radius: 12px;
             background: #fbfdff;
         }
 
         .aps-menu-search-group-title {
-            padding: 0.42rem 0.5rem 0.48rem !important;
+            padding: 0.25rem 0.4rem 0.3rem !important;
             color: #8392a8 !important;
-            font-size: 0.68rem !important;
+            font-size: 0.62rem !important;
             letter-spacing: 0.04em !important;
         }
 
         .aps-menu-search-item {
-            min-height: 62px;
-            padding: 0.58rem 0.6rem !important;
-            gap: 0.74rem !important;
+            min-height: 48px;
+            padding: 0.35rem 0.5rem !important;
+            gap: 0.5rem !important;
             border: 1px solid transparent;
-            border-radius: 14px !important;
+            border-radius: 10px !important;
             color: #253247 !important;
             background: transparent;
             transform: none !important;
@@ -4420,15 +4447,15 @@
         .aps-menu-search-item:focus {
             background: #f1f7ff !important;
             border-color: rgba(47, 128, 237, 0.16);
-            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.10);
+            box-shadow: 0 8px 16px rgba(47, 128, 237, 0.06);
             color: #2368c8 !important;
             outline: none;
         }
 
         .aps-menu-search-item .aps-menu-search-item-icon {
-            width: 40px !important;
-            min-width: 40px !important;
-            height: 40px !important;
+            width: 32px !important;
+            min-width: 32px !important;
+            height: 32px !important;
             background: #eaf4ff !important;
             color: #2f80ed !important;
             box-shadow: inset 0 0 0 1px rgba(47, 128, 237, 0.06);
@@ -4444,9 +4471,9 @@
         .aps-menu-search-copy strong {
             display: block;
             color: #243044 !important;
-            font-size: 0.88rem !important;
+            font-size: 0.8rem !important;
             font-weight: 700 !important;
-            line-height: 1.2 !important;
+            line-height: 1.15 !important;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -4454,11 +4481,11 @@
 
         .aps-menu-search-copy span {
             display: block;
-            margin-top: 0.16rem !important;
+            margin-top: 0.1rem !important;
             color: #7c8ca4 !important;
-            font-size: 0.73rem !important;
+            font-size: 0.65rem !important;
             font-weight: 550 !important;
-            line-height: 1.25 !important;
+            line-height: 1.2 !important;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -4498,19 +4525,19 @@
         }
 
         .aps-menu-search-foot {
-            padding: 0.7rem 1rem !important;
+            padding: 0.55rem 0.85rem !important;
             background: #fbfdff !important;
             border-top-color: #e8eef6 !important;
         }
 
         .aps-menu-search-empty {
             grid-column: 1 / -1;
-            min-height: 220px;
+            min-height: 150px;
             display: none;
             align-items: center;
             justify-content: center;
             border: 1px dashed #dbe7f4;
-            border-radius: 18px;
+            border-radius: 14px;
             background: #fbfdff;
         }
 
@@ -4576,12 +4603,12 @@
 
         @media (max-width: 991.98px) {
             .aps-menu-search {
-                padding: 1rem !important;
+                padding: 0.8rem !important;
             }
 
             .aps-menu-search-panel {
-                width: min(620px, calc(100vw - 2rem)) !important;
-                max-height: min(680px, calc(100vh - 2rem)) !important;
+                width: min(620px, calc(100vw - 1.5rem)) !important;
+                max-height: min(540px, calc(100vh - 2rem)) !important;
             }
 
             .aps-menu-search-body {
@@ -4592,46 +4619,46 @@
         @media (max-width: 575.98px) {
             .aps-menu-search {
                 align-items: flex-start !important;
-                padding: 0.85rem 0.72rem !important;
+                padding: 0.5rem !important;
             }
 
             .aps-menu-search-panel {
-                width: min(100%, calc(100vw - 1.44rem)) !important;
-                max-height: calc(100vh - 1.7rem) !important;
+                width: min(100%, calc(100vw - 1rem)) !important;
+                max-height: calc(100vh - 1.2rem) !important;
                 min-height: 0 !important;
                 border: 1px solid rgba(226, 232, 240, 0.96) !important;
-                border-radius: 22px !important;
+                border-radius: 16px !important;
             }
 
             .aps-menu-search-head {
-                padding: 0.78rem 0.8rem !important;
+                padding: 0.5rem !important;
             }
 
             .aps-menu-search-icon,
             .aps-menu-search-close {
-                width: 38px !important;
-                min-width: 38px !important;
-                height: 38px !important;
+                width: 32px !important;
+                min-width: 32px !important;
+                height: 32px !important;
             }
 
             .aps-menu-search-input {
-                font-size: 0.9rem !important;
+                font-size: 0.85rem !important;
             }
 
             .aps-menu-search-body {
                 display: block !important;
-                padding: 0.72rem !important;
+                padding: 0.5rem !important;
             }
 
             .aps-menu-search-group {
-                margin-bottom: 0.72rem !important;
-                padding: 0.3rem !important;
-                border-radius: 16px;
+                margin-bottom: 0.5rem !important;
+                padding: 0.2rem !important;
+                border-radius: 12px;
             }
 
             .aps-menu-search-item {
-                min-height: 58px;
-                padding: 0.54rem !important;
+                min-height: 42px;
+                padding: 0.3rem !important;
             }
 
             .aps-menu-search-copy strong,
