@@ -290,19 +290,27 @@
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            padding: 1rem 1.15rem;
             margin-bottom: 1.25rem;
-            background: #ffffff;
-            border: 1px solid var(--aps-line);
-            border-radius: 18px;
-            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.045);
+            padding: 0;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        html.aps-dark .profile-page .profile-page-header {
+            background: transparent !important;
+            background-color: transparent !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+            color: inherit !important;
         }
 
         .profile-page-title {
             margin: 0;
             color: var(--aps-ink);
-            font-size: 1.06rem !important;
-            font-weight: 650;
+            font-size: 1.25rem !important;
+            font-weight: 700;
             line-height: 1.25;
         }
 
@@ -573,12 +581,12 @@
             }
 
             .profile-page-header {
-                padding: 0.9rem;
-                border-radius: 16px;
+                padding: 0;
+                border-radius: 0;
             }
 
             .profile-page-title {
-                font-size: 0.98rem !important;
+                font-size: 1.1rem !important;
             }
 
             .profile-page .profile-card {
