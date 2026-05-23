@@ -874,6 +874,17 @@
             justify-content: center;
         }
 
+        @media (max-width: 767.98px) {
+            .attendance-action-buttons {
+                width: 100%;
+                margin-top: 12px;
+            }
+
+            .attendance-action-buttons .btn {
+                width: 100%;
+            }
+        }
+
         .attendance-action-buttons .btn[disabled] {
             background: #eef2f7;
             color: #64748b !important;
@@ -1219,27 +1230,28 @@
                             <i class="bx bx-plus-circle me-1"></i> Tambah Flight
                         </button>
                     @endif
-                </div>
-                <div class="attendance-action-buttons mt-3 d-flex flex-wrap gap-2 justify-content-md-end">
-                    @if ($todayAttendance)
-                        @if (!$todayAttendance->check_in_time)
-                            <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
+
+                    <div class="attendance-action-buttons d-flex flex-wrap gap-2 justify-content-md-end">
+                        @if ($todayAttendance)
+                            @if (!$todayAttendance->check_in_time)
+                                <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm">
+                                    <i class="bx bx-log-in me-1"></i> Absen In
+                                </a>
+                            @elseif ($todayAttendance->check_in_time && !$todayAttendance->check_out_time)
+                                <a href="{{ route('attendance.camera', ['type' => 'out']) }}" class="btn btn-primary-custom text-white shadow-sm">
+                                    <i class="bx bx-log-out me-1"></i> Absen Out
+                                </a>
+                            @else
+                                <button class="btn btn-outline-secondary shadow-sm" disabled>
+                                    <i class="bx bx-check-circle me-1"></i> Sudah Absen
+                                </button>
+                            @endif
+                        @else
+                            <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm">
                                 <i class="bx bx-log-in me-1"></i> Absen In
                             </a>
-                        @elseif ($todayAttendance->check_in_time && !$todayAttendance->check_out_time)
-                            <a href="{{ route('attendance.camera', ['type' => 'out']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
-                                <i class="bx bx-log-out me-1"></i> Absen Out
-                            </a>
-                        @else
-                            <button class="btn btn-outline-secondary text-white shadow-sm flex-1" disabled>
-                                <i class="bx bx-check-circle me-1"></i> Sudah Absen
-                            </button>
                         @endif
-                    @else
-                        <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
-                            <i class="bx bx-log-in me-1"></i> Absen In
-                        </a>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
