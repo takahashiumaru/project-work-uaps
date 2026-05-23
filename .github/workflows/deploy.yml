@@ -23,8 +23,9 @@ jobs:
             git pull origin main
 
             echo "[2/6] Rapikan permission storage & cache"
-            sudo chown -R ubuntu:www-data storage bootstrap/cache
-            sudo chmod -R 775 storage bootstrap/cache
+            sudo chgrp -R www-data storage bootstrap/cache
+            sudo chmod -R ug+rwX storage bootstrap/cache
+            sudo find storage bootstrap/cache -type d -exec chmod g+s {} \;
 
             echo "[3/6] Refresh storage link"
             rm -f public/storage
