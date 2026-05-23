@@ -4,67 +4,6 @@
 
 @section('styles')
 <style>
-    .schedule-card {
-        background: #fff;
-        border-radius: 0.75rem;
-        box-shadow: 0 0.125rem 0.375rem rgba(161, 172, 184, 0.12);
-        border: 1px solid #d9dee3;
-        margin-bottom: 1.5rem;
-    }
-
-    .schedule-header {
-        background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.75rem 0.75rem 0 0;
-    }
-
-    .schedule-body {
-        padding: 1.5rem;
-    }
-
-    .staff-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #e9ecef;
-    }
-
-    .staff-item:last-child {
-        border-bottom: none;
-    }
-
-    .staff-info {
-        flex: 1;
-    }
-
-    .staff-name {
-        font-weight: 600;
-        color: #566a7f;
-        margin-bottom: 0.25rem;
-    }
-
-    .staff-details {
-        font-size: 0.875rem;
-        color: #697a8d;
-    }
-
-    .badge-qantas {
-        background-color: #e53e3e;
-        color: white;
-    }
-
-    .badge-active {
-        background-color: #48bb78;
-        color: white;
-    }
-
-    .badge-inactive {
-        background-color: #a0aec0;
-        color: white;
-    }
-
     /* Switch Toggle */
     .switch {
         position: relative;
@@ -111,71 +50,512 @@
         transform: translateX(26px);
     }
 
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #697a8d;
+    .schedule-now-page {
+        --sn-surface: #ffffff;
+        --sn-surface-soft: #f8fbff;
+        --sn-surface-muted: #eef5ff;
+        --sn-border: #e5edf7;
+        --sn-border-strong: #d8e4f2;
+        --sn-text: #28364a;
+        --sn-muted: #718096;
+        --sn-faint: #9aa8bb;
+        --sn-blue: #2f80ed;
+        --sn-blue-deep: #2368c8;
+        --sn-green: #16a163;
+        --sn-green-soft: #e9f8f0;
+        --sn-red: #e34d4d;
+        --sn-red-soft: #fdecec;
+        --sn-shadow: 0 18px 42px rgba(31, 49, 78, 0.075);
     }
 
-    .empty-state i {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        color: #d9dee3;
+    .schedule-now-page .schedule-page-header {
+        margin-bottom: 1.35rem;
     }
 
-    .shift-info {
+    .schedule-now-page .date-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-height: 32px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--sn-blue), var(--sn-blue-deep));
+        color: #ffffff;
+        font-size: 0.76rem;
+        font-weight: 700;
+        box-shadow: 0 10px 22px rgba(47, 128, 237, 0.18);
+        white-space: nowrap;
+    }
+
+    .schedule-now-page .today-overview {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+        gap: 1rem;
+        margin-bottom: 1.35rem;
+    }
+
+    .schedule-now-page .today-overview-main,
+    .schedule-now-page .today-stat,
+    .schedule-now-page .schedule-card,
+    .schedule-now-page .empty-state {
+        border: 1px solid var(--sn-border);
+        border-radius: 16px;
+        background: var(--sn-surface);
+        box-shadow: var(--sn-shadow);
+    }
+
+    .schedule-now-page .today-overview-main {
+        position: relative;
+        overflow: hidden;
+        padding: 1.25rem;
+        background:
+            radial-gradient(circle at 94% 8%, rgba(22, 161, 99, 0.14), transparent 24%),
+            linear-gradient(135deg, #2f80ed 0%, #2368c8 52%, #184fa8 100%);
+        color: #ffffff;
+    }
+
+    .schedule-now-page .today-overview-main::after {
+        content: "";
+        position: absolute;
+        inset: auto -6% -42% auto;
+        width: 260px;
+        height: 260px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 999px;
+        pointer-events: none;
+    }
+
+    .schedule-now-page .overview-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 0.8rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.78);
+    }
+
+    .schedule-now-page .today-overview-main h5 {
+        position: relative;
+        margin: 0 0 0.35rem;
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+
+    .schedule-now-page .today-overview-main p {
+        position: relative;
+        max-width: 680px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 0.88rem;
+        line-height: 1.55;
+    }
+
+    .schedule-now-page .today-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .schedule-now-page .today-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        min-height: 92px;
+        padding: 1rem;
+    }
+
+    .schedule-now-page .today-stat-icon,
+    .schedule-now-page .shift-icon,
+    .schedule-now-page .staff-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+    .schedule-now-page .today-stat-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: var(--sn-surface-muted);
+        color: var(--sn-blue);
+        font-size: 1.15rem;
+    }
+
+    .schedule-now-page .today-stat-value {
+        color: var(--sn-text);
+        font-size: 1.25rem;
+        font-weight: 750;
+        line-height: 1.1;
+    }
+
+    .schedule-now-page .today-stat-label {
+        margin-top: 0.25rem;
+        color: var(--sn-muted);
+        font-size: 0.78rem;
+        font-weight: 650;
+    }
+
+    .schedule-now-page .schedule-card {
+        overflow: hidden;
+        margin-bottom: 1.15rem;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .schedule-now-page .schedule-card:hover {
+        transform: translateY(-2px);
+        border-color: var(--sn-border-strong);
+        box-shadow: 0 22px 48px rgba(31, 49, 78, 0.1);
+    }
+
+    .schedule-now-page .schedule-card.is-current {
+        border-color: rgba(47, 128, 237, 0.34);
+    }
+
+    .schedule-now-page .schedule-header {
+        padding: 1.1rem 1.25rem;
+        background:
+            linear-gradient(135deg, rgba(47, 128, 237, 0.1), rgba(22, 161, 99, 0.06)),
+            var(--sn-surface-soft);
+        border-bottom: 1px solid var(--sn-border);
+        border-radius: 0;
+        color: var(--sn-text);
+    }
+
+    .schedule-now-page .schedule-body {
+        padding: 1.1rem;
+    }
+
+    .schedule-now-page .shift-info {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 0.5rem;
+        gap: 1rem;
+        margin-bottom: 0;
     }
 
-    .shift-time {
-        font-size: 0.875rem;
-        opacity: 0.9;
+    .schedule-now-page .shift-title-group {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        min-width: 0;
     }
 
-    .manpower-count {
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.25rem 0.75rem;
-        border-radius: 1rem;
-        font-size: 0.875rem;
+    .schedule-now-page .shift-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--sn-blue), var(--sn-blue-deep));
+        color: #ffffff;
+        font-size: 1.22rem;
+        box-shadow: 0 12px 22px rgba(47, 128, 237, 0.18);
     }
 
-    @media (max-width: 768px) {
-        .staff-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.75rem;
+    .schedule-now-page .shift-kicker {
+        margin-bottom: 0.15rem;
+        color: var(--sn-blue);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .schedule-now-page .shift-title {
+        margin: 0;
+        color: var(--sn-text);
+        font-size: 1.03rem;
+        font-weight: 750;
+        line-height: 1.3;
+        word-break: break-word;
+    }
+
+    .schedule-now-page .shift-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.45rem;
+    }
+
+    .schedule-now-page .shift-time,
+    .schedule-now-page .manpower-count,
+    .schedule-now-page .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+    }
+
+    .schedule-now-page .shift-time {
+        padding: 0.42rem 0.65rem;
+        background: var(--sn-surface);
+        border: 1px solid var(--sn-border);
+        color: var(--sn-muted);
+        font-family: 'Courier New', monospace;
+        opacity: 1;
+    }
+
+    .schedule-now-page .manpower-count {
+        padding: 0.5rem 0.75rem;
+        background: rgba(47, 128, 237, 0.1);
+        color: var(--sn-blue-deep);
+    }
+
+    .schedule-now-page .staff-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .schedule-now-page .staff-item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 0.85rem;
+        align-items: center;
+        min-height: 76px;
+        padding: 0.8rem;
+        border: 1px solid var(--sn-border);
+        border-radius: 14px;
+        background: var(--sn-surface);
+        transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    }
+
+    .schedule-now-page .staff-item:hover {
+        transform: translateY(-1px);
+        border-color: rgba(47, 128, 237, 0.24);
+        background: var(--sn-surface-soft);
+    }
+
+    .schedule-now-page .staff-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: var(--sn-surface-muted);
+        color: var(--sn-blue);
+        font-size: 1.12rem;
+    }
+
+    .schedule-now-page .staff-title-row {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-width: 0;
+        margin-bottom: 0.4rem;
+    }
+
+    .schedule-now-page .staff-id {
+        flex: 0 0 auto;
+        color: var(--sn-faint);
+        font-size: 0.76rem;
+        font-weight: 700;
+    }
+
+    .schedule-now-page .staff-info {
+        min-width: 0;
+    }
+
+    .schedule-now-page .staff-name {
+        min-width: 0;
+        overflow: hidden;
+        color: var(--sn-text);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 650;
+        margin-bottom: 0;
+    }
+
+    .schedule-now-page .staff-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .schedule-now-page .status-badge {
+        padding: 0.38rem 0.58rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .schedule-now-page .badge-qantas {
+        background: var(--sn-red-soft);
+        color: var(--sn-red);
+    }
+
+    .schedule-now-page .badge-active {
+        background: var(--sn-green-soft);
+        color: var(--sn-green);
+    }
+
+    .schedule-now-page .badge-inactive {
+        background: #edf2f7;
+        color: #718096;
+    }
+
+    .schedule-now-page input:checked + .slider {
+        background-color: var(--sn-green);
+    }
+
+    .schedule-now-page .empty-state {
+        text-align: center;
+        padding: 3.5rem 1.5rem;
+        color: var(--sn-muted);
+    }
+
+    .schedule-now-page .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--sn-blue);
+        opacity: 0.55;
+    }
+
+    .schedule-now-page .empty-state h4 {
+        color: var(--sn-text);
+    }
+
+    html.aps-dark .schedule-now-page {
+        --sn-surface: #111c31;
+        --sn-surface-soft: #16243a;
+        --sn-surface-muted: #162842;
+        --sn-border: #263653;
+        --sn-border-strong: #315071;
+        --sn-text: #e7f0fb;
+        --sn-muted: #a5b7cf;
+        --sn-faint: #72849d;
+        --sn-green: #6ee7a8;
+        --sn-green-soft: rgba(34, 197, 94, 0.14);
+        --sn-red: #fb7185;
+        --sn-red-soft: rgba(239, 68, 68, 0.14);
+        --sn-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
+    }
+
+    html.aps-dark .schedule-now-page .today-overview-main {
+        background:
+            radial-gradient(circle at 94% 8%, rgba(110, 231, 168, 0.14), transparent 26%),
+            linear-gradient(135deg, #172942 0%, #132039 58%, #111c31 100%);
+        border-color: #315071;
+    }
+
+    html.aps-dark .schedule-now-page .schedule-header {
+        background:
+            linear-gradient(135deg, rgba(47, 128, 237, 0.14), rgba(110, 231, 168, 0.07)),
+            var(--sn-surface-soft);
+    }
+
+    html.aps-dark .schedule-now-page .badge-inactive {
+        background: rgba(148, 163, 184, 0.14);
+        color: #c5d2e3;
+    }
+
+    html.aps-dark .schedule-now-page .slider {
+        background-color: #344760;
+    }
+
+    @media (max-width: 1199.98px) {
+        .schedule-now-page .today-overview {
+            grid-template-columns: 1fr;
         }
-        
-        .switch {
-            align-self: flex-end;
+    }
+
+    @media (max-width: 991.98px) {
+        .schedule-now-page .staff-list {
+            grid-template-columns: 1fr;
         }
-        
-        .shift-info {
-            flex-direction: column;
+    }
+
+    @media (max-width: 767.98px) {
+        .schedule-now-page .today-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .schedule-now-page .shift-info {
             align-items: flex-start;
-            gap: 0.5rem;
+            flex-direction: column;
+        }
+
+        .schedule-now-page .manpower-count {
+            align-self: flex-start;
+        }
+
+        .schedule-now-page .staff-item {
+            grid-template-columns: auto minmax(0, 1fr);
+        }
+
+        .schedule-now-page .switch {
+            grid-column: 2;
+            justify-self: flex-start;
         }
     }
 </style>
 @endsection
 
 @section('content')
-<div class="container-xxl flex-grow-1 container-p-y">
+@php
+    $shiftCount = $shiftsGrouped->count();
+    $totalStaff = $shiftsGrouped->sum(fn ($group) => $group['schedules']->count());
+    $activeStaff = $shiftsGrouped->sum(fn ($group) => $group['schedules']->where('is_active', 1)->count());
+    $qantasStaff = $shiftsGrouped->sum(fn ($group) => $group['schedules']->filter(fn ($schedule) => optional($schedule->user)->is_qantas == 1)->count());
+    $nowTime = now('Asia/Jakarta')->format('H:i:s');
+@endphp
+
+<div class="container-xxl flex-grow-1 container-p-y schedule-now-page">
     <!-- Header -->
-    <div class="row">
-        <div class="col-lg-12 mb-4">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
-                <h4 class="fw-bold pt-3 pb-1 mb-0">
-                    <span class="text-muted fw-light">Schedule /</span> Jadwal Hari Ini
-                </h4>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary">
-                        <i class="bx bx-calendar me-1"></i>
-                        {{ $today->format('d M Y') }}
-                    </span>
+    <div class="schedule-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+        <h4 class="fw-bold pt-3 pb-1 mb-0">
+            <span class="text-muted fw-light">Schedule /</span> Jadwal Hari Ini
+        </h4>
+        <span class="date-pill">
+            <i class="bx bx-calendar"></i>
+            {{ $today->format('d M Y') }}
+        </span>
+    </div>
+
+    <div class="today-overview">
+        <section class="today-overview-main" aria-label="Ringkasan jadwal hari ini">
+            <div class="overview-kicker">
+                <i class="bx bx-calendar-check"></i>
+                Operasional Hari Ini
+            </div>
+            <h5>{{ $today->format('l, d F Y') }}</h5>
+            <p>
+                Ada {{ $shiftCount }} shift dengan {{ $totalStaff }} staff terjadwal. Pantau status aktif dan kebutuhan tenaga kerja dari satu tampilan.
+            </p>
+        </section>
+
+        <div class="today-stats" aria-label="Statistik jadwal hari ini">
+            <div class="today-stat">
+                <span class="today-stat-icon"><i class="bx bx-time-five"></i></span>
+                <div>
+                    <div class="today-stat-value">{{ $shiftCount }}</div>
+                    <div class="today-stat-label">Shift</div>
+                </div>
+            </div>
+            <div class="today-stat">
+                <span class="today-stat-icon"><i class="bx bx-group"></i></span>
+                <div>
+                    <div class="today-stat-value">{{ $totalStaff }}</div>
+                    <div class="today-stat-label">Staff</div>
+                </div>
+            </div>
+            <div class="today-stat">
+                <span class="today-stat-icon"><i class="bx bx-check-circle"></i></span>
+                <div>
+                    <div class="today-stat-value">{{ $activeStaff }}</div>
+                    <div class="today-stat-label">Aktif</div>
+                </div>
+            </div>
+            <div class="today-stat">
+                <span class="today-stat-icon"><i class="bx bx-star"></i></span>
+                <div>
+                    <div class="today-stat-value">{{ $qantasStaff }}</div>
+                    <div class="today-stat-label">Qantas</div>
                 </div>
             </div>
         </div>
@@ -185,37 +565,58 @@
     <div class="row">
         <div class="col-12">
             @forelse ($shiftsGrouped as $group)
-            <div class="schedule-card">
+            @php
+                $shift = $group['shift'];
+                $startTime = $shift->start_time;
+                $endTime = $shift->end_time;
+                $isCurrentShift = $startTime <= $endTime
+                    ? ($nowTime >= $startTime && $nowTime <= $endTime)
+                    : ($nowTime >= $startTime || $nowTime <= $endTime);
+            @endphp
+            <div class="schedule-card {{ $isCurrentShift ? 'is-current' : '' }}">
                 <div class="schedule-header">
                     <div class="shift-info">
-                        <div>
-                            <h5 class="mb-1">Shift {{ $group['shift']->id }} - {{ $group['shift']->description }}</h5>
-                            <div class="shift-time">
-                                {{ $group['shift']->start_time }} - {{ $group['shift']->end_time }}
+                        <div class="shift-title-group">
+                            <span class="shift-icon">
+                                <i class="bx bx-calendar-event"></i>
+                            </span>
+                            <div>
+                                <div class="shift-kicker">{{ $isCurrentShift ? 'Sedang Berjalan' : 'Shift Terjadwal' }}</div>
+                                <h5 class="shift-title">Shift {{ $shift->id }} - {{ $shift->description }}</h5>
+                                <div class="shift-meta">
+                                    <span class="shift-time">
+                                        <i class="bx bx-time-five"></i>
+                                        {{ $startTime }} - {{ $endTime }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="manpower-count">
-                            <i class="bx bx-user me-1"></i>
-                            {{ $group['shift']->use_manpower }} Orang
+                            <i class="bx bx-user"></i>
+                            {{ $shift->use_manpower }} Orang
                         </div>
                     </div>
                 </div>
                 <div class="schedule-body">
+                    <div class="staff-list">
                     @foreach ($group['schedules'] as $schedule)
                     <div class="staff-item">
+                        <span class="staff-avatar">
+                            <i class="bx bx-user"></i>
+                        </span>
                         <div class="staff-info">
-                            <div class="staff-name">
-                                {{ $schedule->user->fullname ?? 'Tidak ditemukan' }}
-                                <small class="text-muted">({{ $schedule->user_id }})</small>
+                            <div class="staff-title-row">
+                                <div class="staff-name">{{ $schedule->user->fullname ?? 'Tidak ditemukan' }}</div>
+                                <span class="staff-id">#{{ $schedule->user_id }}</span>
                             </div>
                             <div class="staff-details">
                                 @if ($schedule->user && $schedule->user->is_qantas == 1)
-                                <span class="badge badge-qantas me-2">Qantas</span>
+                                <span class="status-badge badge-qantas">Qantas</span>
                                 @endif
                                 @if ($schedule->user && $schedule->is_active == 1)
-                                <span class="badge badge-active">Active</span>
+                                <span class="status-badge badge-active">Aktif</span>
                                 @elseif ($schedule->user && $schedule->is_active == 0)
-                                <span class="badge badge-inactive">Non Active</span>
+                                <span class="status-badge badge-inactive">Nonaktif</span>
                                 @endif
                             </div>
                         </div>
@@ -231,6 +632,7 @@
                         @endif
                     </div>
                     @endforeach
+                    </div>
                 </div>
             </div>
             @empty
@@ -304,18 +706,6 @@
                 $('.alert').alert('close');
             }, 3000);
         }
-
-        // Add hover effects to schedule cards
-        $('.schedule-card').hover(
-            function() {
-                $(this).css('transform', 'translateY(-2px)');
-                $(this).css('box-shadow', '0 4px 12px rgba(161, 172, 184, 0.2)');
-            },
-            function() {
-                $(this).css('transform', 'translateY(0)');
-                $(this).css('box-shadow', '0 0.125rem 0.375rem rgba(161, 172, 184, 0.12)');
-            }
-        );
     });
 </script>
 @endsection
