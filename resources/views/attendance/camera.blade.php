@@ -346,6 +346,50 @@
             display: none !important;
         }
 
+        /* SweetAlert Custom Theme Integration */
+        .swal2-container {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .swal2-popup {
+            background-color: var(--cam-surface) !important;
+            color: var(--cam-text) !important;
+            border: 1px solid var(--cam-border) !important;
+            border-radius: 28px !important;
+            font-family: inherit !important;
+            box-shadow: var(--cam-shadow) !important;
+        }
+
+        .swal2-title {
+            color: var(--cam-text) !important;
+            font-weight: 780 !important;
+        }
+
+        .swal2-html-container {
+            color: var(--cam-muted) !important;
+            font-size: 0.88rem !important;
+            line-height: 1.55 !important;
+        }
+
+        .swal2-styled.swal2-confirm {
+            background: linear-gradient(135deg, var(--cam-blue), var(--cam-blue-dark)) !important;
+            border-radius: 16px !important;
+            font-weight: 750 !important;
+            font-size: 0.9rem !important;
+            padding: 0.65rem 1.8rem !important;
+            box-shadow: 0 10px 24px rgba(47, 128, 237, 0.22) !important;
+            border: 0 !important;
+        }
+
+        .swal2-loader {
+            border-color: var(--cam-blue) transparent var(--cam-blue) transparent !important;
+        }
+
+        body.aps-camera-dark .swal2-timer-progress-bar {
+            background: var(--cam-blue) !important;
+        }
+
         @media (max-width: 767.98px) {
             html,
             body {
