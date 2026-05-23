@@ -202,7 +202,7 @@
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Clock In</div>
+                            <div class="info-label">Absen In</div>
                             <div class="info-value">
                                 @if($todayAttendance && $todayAttendance->check_in_time)
                                     {{ \Carbon\Carbon::parse($todayAttendance->check_in_time)->format('H:i') }}
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Clock Out</div>
+                            <div class="info-label">Absen Out</div>
                             <div class="info-value">
                                 @if($todayAttendance && $todayAttendance->check_out_time)
                                     {{ \Carbon\Carbon::parse($todayAttendance->check_out_time)->format('H:i') }}
@@ -228,12 +228,12 @@
                         @if(!$todayAttendance)
                             <a href="{{ route('attendance.camera', ['type' => 'in']) }}" 
                                class="btn-attendance btn-checkin">
-                                <i class="bx bx-log-in"></i> Clock In Now
+                                <i class="bx bx-log-in"></i> Absen In Sekarang
                             </a>
                         @elseif($todayAttendance && $todayAttendance->check_in_time && !$todayAttendance->check_out_time)
                             <a href="{{ route('attendance.camera', ['type' => 'out']) }}" 
                                class="btn-attendance btn-checkout">
-                                <i class="bx bx-log-out"></i> Clock Out Now
+                                <i class="bx bx-log-out"></i> Absen Out Sekarang
                             </a>
                         @elseif($todayAttendance && $todayAttendance->check_in_time && $todayAttendance->check_out_time)
                             <div class="bg-light p-3 rounded-pill d-inline-flex align-items-center gap-2 px-4 border">
@@ -262,8 +262,8 @@
                                 <span class="avatar-initial rounded bg-label-success"><i class="bx bx-check-circle"></i></span>
                             </div>
                             <div>
-                                <h6 class="mb-1 fw-bold">Check In</h6>
-                                <p class="mb-0 small text-muted">Clock in when you start your shift.</p>
+                                <h6 class="mb-1 fw-bold">Absen In</h6>
+                                <p class="mb-0 small text-muted">Lakukan absensi saat mulai shift.</p>
                             </div>
                         </div>
                     </div>
@@ -273,8 +273,8 @@
                                 <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-time"></i></span>
                             </div>
                             <div>
-                                <h6 class="mb-1 fw-bold">Check Out</h6>
-                                <p class="mb-0 small text-muted">Clock out once shift ends.</p>
+                                <h6 class="mb-1 fw-bold">Absen Out</h6>
+                                <p class="mb-0 small text-muted">Lakukan absensi saat shift selesai.</p>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 @php
     $isCheckOut = $type === 'out';
-    $actionTitle = $isCheckOut ? 'Clock Out' : 'Clock In';
+    $actionTitle = $isCheckOut ? 'Absen Out' : 'Absen In';
     $actionSub = $isCheckOut ? 'Akhiri shift dengan verifikasi wajah dan GPS.' : 'Mulai shift dengan verifikasi wajah dan GPS.';
     $user = auth()->user();
 @endphp
@@ -626,7 +626,7 @@
                         message = 'Lokasi tidak dapat ditentukan. Pastikan GPS dan koneksi internet Anda aktif, atau coba di area yang lebih terbuka.';
                     } else if (error.code === error.TIMEOUT) {
                         title = 'Waktu Permintaan Habis';
-                        message = 'Gagal mendapatkan lokasi tepat waktu. Silakan coba klik tombol Clock In lagi.';
+                        message = 'Gagal mendapatkan lokasi tepat waktu. Silakan coba klik tombol Absen In lagi.';
                     }
 
                     Swal.fire({
