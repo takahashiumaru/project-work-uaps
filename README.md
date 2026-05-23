@@ -334,6 +334,23 @@ Website production:
 https://apsone.web.id
 ```
 
+### Dokumentasi Singkat GitHub Actions Deploy
+
+![GitHub Actions Deploy Flow](docs/images/workflow-deploy-flow.png)
+
+Workflow deploy akan berjalan otomatis setiap ada `push` ke branch `main`.
+
+Alur singkatnya:
+
+1. Developer melakukan push atau merge ke `main`.
+2. GitHub Actions membaca file `.github/workflows/deploy.yml`.
+3. Action login ke VPS menggunakan secret `VPS_IP`, `VPS_USERNAME`, dan `VPS_SSH_KEY`.
+4. Server masuk ke folder project lalu menjalankan `git pull origin main`.
+5. Laravel merapikan permission, refresh `storage:link`, lalu clear/cache/optimize.
+6. PHP-FPM direstart dan Nginx direload agar update langsung aktif di production.
+
+Jadi fungsi workflow ini adalah membuat deploy production lebih cepat, konsisten, dan tidak perlu upload manual file satu per satu.
+
 ---
 
 ## Backup Otomatis
@@ -371,6 +388,23 @@ Dokumentasi detail backup ada di:
 ```text
 backup/README.md
 ```
+
+### Dokumentasi Singkat Alur Backup Harian
+
+![Backup Flow](docs/images/backup-flow.png)
+
+Backup berjalan otomatis setiap hari pukul 00.00 melalui cron.
+
+Alur singkatnya:
+
+1. Cron menjalankan script `backup_apsone.sh` setiap pukul 00.00.
+2. Script membaca konfigurasi database dari file `.env` Laravel.
+3. Database di-dump menggunakan `mysqldump` lalu dikompresi menjadi `.sql.gz`.
+4. Folder `public/` dan `storage/app/` dikemas menjadi arsip `.tar.gz` untuk assets.
+5. Source code project dibackup tanpa file `.env`, `vendor/`, `node_modules/`, dan `.git/`.
+6. Semua file backup diunggah ke Google Drive menggunakan `rclone` ke folder `Backups/apsone/YYYY-MM-DD/`.
+
+Jadi fungsi backup ini adalah menjaga data production tetap aman dan bisa dipulihkan kapan saja jika terjadi masalah server atau human error.
 
 ---
 
