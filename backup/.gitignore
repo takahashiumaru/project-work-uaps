@@ -1,0 +1,6 @@
+files/
+logs/
+gdrive-service-account.json
+*.log
+*.sql.gz
+*.tar.gz
