@@ -665,10 +665,11 @@
 
         .attendance-score {
             margin: 0 0 14px;
-            padding: 16px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, #EAF4FF 0%, #F3F8FF 100%);
-            border: 1px solid rgba(47, 128, 237, 0.16);
+            padding: 14px;
+            border-radius: 15px;
+            background: #ffffff;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.035);
         }
 
         .attendance-score-top {
@@ -676,41 +677,43 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 11px;
         }
 
         .attendance-score-label {
-            color: #4E6178;
-            font-size: 0.78rem;
+            color: #64748b;
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.06em;
         }
 
         .attendance-score-value {
             color: var(--text-main);
-            font-size: 1.5rem;
+            font-size: 1.72rem;
             font-weight: 750;
             line-height: 1;
+            margin-top: 4px;
         }
 
         .attendance-score-badge {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 14px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: #ffffff;
-            box-shadow: 0 14px 28px rgba(47, 128, 237, 0.2);
+            border-radius: 13px;
+            background: var(--primary-soft);
+            color: var(--primary-color);
+            border: 1px solid rgba(47, 128, 237, 0.14);
             flex: 0 0 auto;
+            font-size: 1.1rem;
         }
 
         .attendance-progress {
-            height: 9px;
+            height: 8px;
             border-radius: 999px;
-            background: rgba(47, 128, 237, 0.12);
+            background: #edf4ff;
             overflow: hidden;
         }
 
@@ -926,6 +929,217 @@
             font-weight: 600;
             color: var(--text-main);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        html.aps-dark {
+            --primary-soft: rgba(47, 128, 237, 0.16);
+            --bg-light: #0b1220;
+            --text-main: #e6edf7;
+            --text-muted: #96a8bf;
+            --card-border: #263653;
+        }
+
+        html.aps-dark body {
+            background-color: #0b1220;
+        }
+
+        html.aps-dark .dashboard-header {
+            background:
+                radial-gradient(circle at 95% 0%, rgba(47, 128, 237, 0.16), transparent 28%),
+                linear-gradient(135deg, #101a2c 0%, #121f35 100%) !important;
+            border-color: #263653 !important;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24) !important;
+        }
+
+        html.aps-dark .dashboard-header::after {
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+        }
+
+        html.aps-dark .dashboard-title,
+        html.aps-dark .dashboard-header .text-dark {
+            color: #edf5ff !important;
+        }
+
+        html.aps-dark .dashboard-header .text-muted,
+        html.aps-dark .dashboard-header p {
+            color: #96a8bf !important;
+        }
+
+        html.aps-dark .dashboard-scope {
+            color: #7db6ff !important;
+        }
+
+        html.aps-dark .station-filter-control {
+            background: #0f1a2d !important;
+            border-color: #2a3a55 !important;
+            box-shadow: none !important;
+        }
+
+        html.aps-dark .station-filter-control .form-select,
+        html.aps-dark .station-filter-control .input-group-text {
+            background: transparent !important;
+            color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .monitoring-heading h6,
+        html.aps-dark .chart-heading-title strong,
+        html.aps-dark .station-code,
+        html.aps-dark .chart-insight-value,
+        html.aps-dark .info-value {
+            color: #edf5ff !important;
+        }
+
+        html.aps-dark .station-card {
+            background:
+                radial-gradient(circle at 96% 0%, rgba(47, 128, 237, 0.12), transparent 30%),
+                linear-gradient(180deg, #111c31 0%, #101a2c 100%) !important;
+            border-color: #263653 !important;
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24) !important;
+        }
+
+        html.aps-dark .station-card:hover {
+            border-color: rgba(47, 128, 237, 0.48) !important;
+            box-shadow: 0 22px 52px rgba(47, 128, 237, 0.14) !important;
+        }
+
+        html.aps-dark .station-card::after {
+            background: rgba(47, 128, 237, 0.1);
+        }
+
+        html.aps-dark .station-card-active::after {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        html.aps-dark .station-name,
+        html.aps-dark .station-count-label,
+        html.aps-dark .chart-period,
+        html.aps-dark .chart-legend-item,
+        html.aps-dark .line-chart-legend,
+        html.aps-dark .chart-insight-label,
+        html.aps-dark .info-label {
+            color: #9fb0c8 !important;
+        }
+
+        html.aps-dark .station-detail-btn,
+        html.aps-dark .station-empty-btn {
+            background: #0f1a2d !important;
+            border-color: #2a3a55 !important;
+        }
+
+        html.aps-dark .station-detail-btn {
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .station-detail-btn:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+            color: #ffffff !important;
+        }
+
+        html.aps-dark .station-empty-btn {
+            color: #61738c !important;
+        }
+
+        html.aps-dark .station-create-card {
+            background:
+                radial-gradient(circle at 92% 0%, rgba(47, 128, 237, 0.18), transparent 30%),
+                linear-gradient(180deg, #111c31 0%, #101a2c 100%) !important;
+            border-color: rgba(47, 128, 237, 0.42) !important;
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .station-create-icon {
+            background: #16243a !important;
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .modern-card {
+            background: #111c31 !important;
+            border-color: #263653 !important;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24) !important;
+        }
+
+        html.aps-dark .modern-card:hover {
+            border-color: rgba(47, 128, 237, 0.42) !important;
+            box-shadow: 0 24px 56px rgba(47, 128, 237, 0.12) !important;
+        }
+
+        html.aps-dark .chart-header,
+        html.aps-dark .modern-card .card-header {
+            background: transparent !important;
+            border-color: #263653 !important;
+        }
+
+        html.aps-dark .chart-heading-icon,
+        html.aps-dark .chart-metric-pill,
+        html.aps-dark .chart-legend-item,
+        html.aps-dark .chart-insight-item,
+        html.aps-dark .chart-period-select,
+        html.aps-dark .info-item {
+            background: #0f1a2d !important;
+            border-color: #253650 !important;
+        }
+
+        html.aps-dark .chart-metric-pill,
+        html.aps-dark .chart-period-select {
+            color: #8fc2ff !important;
+            box-shadow: none !important;
+        }
+
+        html.aps-dark .attendance-score {
+            background: #0f1a2d !important;
+            border-color: #253650 !important;
+            box-shadow: none !important;
+        }
+
+        html.aps-dark .attendance-score-label {
+            color: #a8b9ce !important;
+        }
+
+        html.aps-dark .attendance-score-badge {
+            background: rgba(47, 128, 237, 0.16) !important;
+            border-color: rgba(47, 128, 237, 0.28) !important;
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .attendance-progress {
+            background: rgba(47, 128, 237, 0.18) !important;
+        }
+
+        html.aps-dark .info-item:hover {
+            border-color: rgba(47, 128, 237, 0.42) !important;
+            box-shadow: 0 18px 38px rgba(47, 128, 237, 0.1) !important;
+        }
+
+        html.aps-dark .icon-blue { background: rgba(47, 128, 237, 0.16); color: #8fc2ff; }
+        html.aps-dark .icon-green { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+        html.aps-dark .icon-yellow { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        html.aps-dark .icon-red { background: rgba(239, 68, 68, 0.15); color: #fb7185; }
+        html.aps-dark .icon-purple { background: rgba(139, 92, 246, 0.16); color: #c4b5fd; }
+
+        html.aps-dark .table-custom thead th {
+            background: #17233a !important;
+            color: #95a6bd !important;
+            border-color: #263653 !important;
+        }
+
+        html.aps-dark .table-custom tbody td {
+            background: #111c31 !important;
+            color: #d7e2f1 !important;
+            border-color: #24324a !important;
+        }
+
+        html.aps-dark .clickable-row:hover,
+        html.aps-dark .clickable-row:hover td {
+            background: #172942 !important;
+        }
+
+        html.aps-dark .countdown:not(:empty) {
+            background: rgba(239, 68, 68, 0.16) !important;
+            border-color: rgba(239, 68, 68, 0.28) !important;
+        }
+
+        html.aps-dark canvas {
+            color-scheme: dark;
         }
     </style>
 @endsection
@@ -1166,6 +1380,9 @@
                                 <div class="attendance-score-label">Persentase Kehadiran</div>
                                 <div class="attendance-score-value">{{ $attendancePercentage ?? 0 }}%</div>
                             </div>
+                            <div class="attendance-score-badge">
+                                <i class="ti ti-chart-donut-3"></i>
+                            </div>
                         </div>
                         <div class="attendance-progress" aria-label="Persentase Kehadiran">
                             <span class="attendance-progress-bar" style="width: {{ $attendancePercentValue }}%;"></span>
@@ -1325,6 +1542,60 @@
                 grid: 'rgba(148, 163, 184, 0.16)'
             };
 
+            const dashboardCharts = [];
+            const getDashboardChartTheme = () => {
+                const dark = document.documentElement.classList.contains('aps-dark');
+
+                return {
+                    text: dark ? '#e6edf7' : '#1F2937',
+                    muted: dark ? '#9fb0c8' : '#64748B',
+                    tick: dark ? '#8fa1b8' : '#94A3B8',
+                    grid: dark ? 'rgba(148, 163, 184, 0.12)' : 'rgba(148, 163, 184, 0.06)',
+                    card: dark ? '#111c31' : '#ffffff'
+                };
+            };
+            const syncDashboardPalette = () => {
+                const theme = getDashboardChartTheme();
+                dashboardPalette.text = theme.text;
+                dashboardPalette.muted = theme.muted;
+                dashboardPalette.grid = theme.grid;
+                Chart.defaults.color = theme.muted;
+                return theme;
+            };
+            const applyDashboardChartTheme = (chart) => {
+                if (!chart) return;
+
+                const theme = syncDashboardPalette();
+                const scales = chart.options.scales || {};
+
+                Object.values(scales).forEach((scale) => {
+                    if (scale.ticks) {
+                        scale.ticks.color = theme.tick;
+                    }
+                    if (scale.grid && scale.grid.display !== false) {
+                        scale.grid.color = theme.grid;
+                    }
+                });
+
+                if (chart.options.plugins?.legend?.labels) {
+                    chart.options.plugins.legend.labels.color = theme.muted;
+                }
+
+                if (chart.config.type === 'doughnut') {
+                    chart.data.datasets.forEach((dataset) => {
+                        dataset.borderColor = theme.card;
+                    });
+                }
+
+                chart.update('none');
+            };
+            const registerDashboardChart = (chart) => {
+                dashboardCharts.push(chart);
+                applyDashboardChartTheme(chart);
+                return chart;
+            };
+            syncDashboardPalette();
+
             const tooltipBase = {
                 backgroundColor: 'rgba(15, 23, 42, 0.92)',
                 padding: 12,
@@ -1478,7 +1749,7 @@
                     [1, 'rgba(47, 128, 237, 0)']
                 ]);
 
-                new Chart(ctxLine, {
+                registerDashboardChart(new Chart(ctxLine, {
                     type: 'line',
                     data: {
                         labels: lineChartLabels,
@@ -1595,12 +1866,12 @@
                         }
                     },
                     plugins: [verticalHoverLine, lineGlow]
-                });
+                }));
             }
 
             const ctxDoughnut = document.getElementById('doughnutChart');
             if (ctxDoughnut) {
-                new Chart(ctxDoughnut, {
+                registerDashboardChart(new Chart(ctxDoughnut, {
                     type: 'doughnut',
                     data: {
                         labels: doughnutChartLabels,
@@ -1655,12 +1926,12 @@
                         cutout: '72%'
                     },
                     plugins: [centerDoughnutText]
-                });
+                }));
             }
 
             const ctxBar = document.getElementById('barChart');
             if (ctxBar) {
-                new Chart(ctxBar, {
+                registerDashboardChart(new Chart(ctxBar, {
                     type: 'bar',
                     data: {
                         labels: barChartLabels,
@@ -1752,8 +2023,12 @@
                             }
                         }
                     }
-                });
+                }));
             }
+
+            window.addEventListener('aps:theme-changed', function() {
+                dashboardCharts.forEach(applyDashboardChartTheme);
+            });
 
             document.querySelectorAll('.countdown').forEach(function(el) {
                 let timeData = el.getAttribute('data-time');

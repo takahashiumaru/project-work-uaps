@@ -16,21 +16,21 @@
         }
 
         .shift-table th {
-            background: #f8f9fa;
+            background: #f8fbff;
             font-weight: 600;
-            color: #566a7f;
+            color: #718096;
             padding: 1rem;
-            border-bottom: 2px solid #e9ecef;
+            border-bottom: 1px solid #e5edf7;
         }
 
         .shift-table td {
             padding: 1rem;
             vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #edf2f7;
         }
 
         .shift-table tr:hover {
-            background-color: #f8f9fa;
+            background-color: #f8fbff;
         }
 
         .action-btn {
@@ -40,24 +40,25 @@
             width: 36px;
             height: 36px;
             border-radius: 6px;
-            background: #667eea;
+            background: #2f80ed;
             color: white;
             text-decoration: none;
             transition: all 0.2s ease;
         }
 
         .action-btn:hover {
-            background: #5a6fd8;
+            background: #2368c8;
             transform: translateY(-1px);
             color: white;
         }
 
         .stats-card {
-            background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
+            background: linear-gradient(135deg, #2f80ed 0%, #2368c8 52%, #174ea6 100%);
             color: white;
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
+            box-shadow: 0 18px 38px rgba(47, 128, 237, 0.2);
         }
 
         .stats-number {
@@ -72,9 +73,9 @@
         }
 
         .create-btn {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 0.65rem;
             padding: 0.75rem 1.5rem;
             color: white;
             font-weight: 600;
@@ -87,12 +88,12 @@
 
         .create-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+            box-shadow: 0 14px 24px rgba(47, 128, 237, 0.24);
             color: white;
         }
 
         .badge-shift {
-            background: #667eea;
+            background: linear-gradient(135deg, #2f80ed, #2368c8);
             color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
@@ -101,8 +102,8 @@
         }
 
         .time-badge {
-            background: #e9ecef;
-            color: #566a7f;
+            background: #eef5ff;
+            color: #35506d;
             padding: 0.375rem 0.75rem;
             border-radius: 0.375rem;
             font-family: 'Courier New', monospace;
@@ -110,11 +111,22 @@
         }
 
         .manpower-badge {
-            background: #ffeaa7;
-            color: #2d3436;
+            background: #eaf4ff;
+            color: #2368c8;
             padding: 0.375rem 0.75rem;
             border-radius: 0.375rem;
             font-weight: 600;
+        }
+
+        html.aps-dark .shift-table tr:hover td {
+            background-color: #172942 !important;
+        }
+
+        html.aps-dark .time-badge,
+        html.aps-dark .manpower-badge {
+            background: #162842 !important;
+            color: #8fc2ff !important;
+            border: 1px solid rgba(47, 128, 237, 0.24);
         }
 
         @media (max-width: 768px) {

@@ -268,31 +268,387 @@
             background-color: #667eea;
             color: white;
         }
+
+        /* APS profile refresh */
+        .profile-page {
+            --aps-blue: #2f80ed;
+            --aps-blue-deep: #2368c8;
+            --aps-blue-soft: #eaf4ff;
+            --aps-ink: #1f2937;
+            --aps-muted: #64748b;
+            --aps-line: #e6edf5;
+        }
+
+        .profile-page .text-primary,
+        .profile-page .profile-card .nav-link:hover,
+        .profile-page .profile-card .nav-link.active {
+            color: var(--aps-blue) !important;
+        }
+
+        .profile-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 1.15rem;
+            margin-bottom: 1.25rem;
+            background: #ffffff;
+            border: 1px solid var(--aps-line);
+            border-radius: 18px;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.045);
+        }
+
+        .profile-page-title {
+            margin: 0;
+            color: var(--aps-ink);
+            font-size: 1.06rem !important;
+            font-weight: 650;
+            line-height: 1.25;
+        }
+
+        .profile-page-title .text-muted {
+            color: #94a3b8 !important;
+            font-weight: 400 !important;
+        }
+
+        .profile-page-badges,
+        .profile-meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .profile-page-badges {
+            justify-content: flex-end;
+        }
+
+        .profile-page-badges .badge,
+        .profile-meta-badges .badge {
+            border-radius: 999px;
+            padding: 0.38rem 0.68rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .profile-page-badges .bg-primary,
+        .profile-meta-badges .bg-label-primary {
+            background: linear-gradient(135deg, var(--aps-blue) 0%, var(--aps-blue-deep) 100%) !important;
+            color: #ffffff !important;
+            box-shadow: 0 8px 18px rgba(47, 128, 237, 0.18);
+        }
+
+        .profile-page-badges .bg-label-secondary,
+        .profile-meta-badges .bg-label-info {
+            background: #eef2f7 !important;
+            color: #64748b !important;
+        }
+
+        .profile-page .profile-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--aps-line);
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 18px 44px rgba(15, 23, 42, 0.055);
+        }
+
+        .profile-summary-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 118px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(47, 128, 237, 0.14), transparent 35%),
+                linear-gradient(135deg, rgba(47, 128, 237, 0.11), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        .profile-page .card-body {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-photo-container {
+            width: 124px;
+            height: 124px;
+            margin-bottom: 1rem;
+            border: 5px solid #ffffff;
+            box-shadow: 0 18px 34px rgba(47, 128, 237, 0.16);
+        }
+
+        .profile-photo-container:hover {
+            transform: translateY(-2px) scale(1.015);
+            box-shadow: 0 22px 42px rgba(47, 128, 237, 0.2);
+        }
+
+        .profile-summary-name {
+            max-width: 100%;
+            color: var(--aps-ink) !important;
+            font-size: 1.08rem !important;
+            line-height: 1.25;
+        }
+
+        .profile-summary-title {
+            color: #7a8797 !important;
+            font-size: 0.82rem !important;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .profile-info-list {
+            margin-top: 1.25rem;
+        }
+
+        .profile-info-item {
+            gap: 0.7rem;
+            min-height: 50px;
+            margin-bottom: 0.55rem;
+            padding: 0.72rem 0.78rem;
+            border: 1px solid #eef2f7;
+            border-radius: 14px;
+            background: #ffffff;
+        }
+
+        .profile-info-item:last-child {
+            margin-bottom: 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .profile-info-item:hover {
+            padding-left: 0.78rem;
+            padding-right: 0.78rem;
+            background: #f8fbff;
+            border-color: rgba(47, 128, 237, 0.16);
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+        }
+
+        .info-icon-wrapper {
+            width: 34px;
+            height: 34px;
+            margin-right: 0;
+            border-radius: 999px;
+            background: var(--aps-blue-soft);
+            color: var(--aps-blue);
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+        .info-label {
+            color: #64748b;
+            font-size: 0.82rem;
+            font-weight: 560;
+        }
+
+        .info-value {
+            color: var(--aps-ink);
+            font-size: 0.82rem;
+            font-weight: 620;
+            word-break: break-word;
+        }
+
+        .profile-updated {
+            margin-top: 1rem !important;
+            padding: 0.85rem !important;
+            border: 1px dashed #dbe7f6 !important;
+            border-radius: 14px;
+            background: #f8fbff;
+        }
+
+        .profile-page .profile-card .nav-tabs {
+            display: inline-flex;
+            gap: 0.4rem;
+            margin: 1rem;
+            padding: 0.35rem;
+            border: 1px solid #eef2f7;
+            border-radius: 999px;
+            background: #f8fafc;
+        }
+
+        .profile-page .profile-card .nav-link {
+            min-height: 42px;
+            padding: 0.55rem 1rem;
+            border-radius: 999px;
+            color: #64748b;
+            font-size: 0.86rem;
+            font-weight: 600;
+            gap: 0.35rem;
+        }
+
+        .profile-page .profile-card .nav-link.active {
+            background: #ffffff;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, 0.07);
+        }
+
+        .profile-page .profile-card .nav-link.active::after {
+            display: none;
+            content: none;
+        }
+
+        .profile-page .profile-card .nav-link i {
+            font-size: 1.05rem;
+            color: currentColor;
+        }
+
+        .profile-page .profile-card .card-body {
+            padding: 1rem 1.35rem 1.35rem !important;
+        }
+
+        .info-tile {
+            min-height: 82px;
+            align-items: center;
+            padding: 0.9rem;
+            border: 1px solid #eef2f7;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: none;
+        }
+
+        .info-tile:hover {
+            transform: translateY(-2px);
+            background: #fbfdff;
+            border-color: rgba(47, 128, 237, 0.2);
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.055);
+        }
+
+        .tile-icon-wrapper {
+            width: 42px;
+            height: 42px;
+            margin-right: 0.85rem;
+            border-radius: 999px;
+            background: var(--aps-blue-soft);
+            color: var(--aps-blue);
+            font-size: 1.08rem;
+        }
+
+        .info-tile:hover .tile-icon-wrapper {
+            background: linear-gradient(135deg, var(--aps-blue) 0%, var(--aps-blue-deep) 100%);
+            color: #ffffff;
+            box-shadow: 0 10px 20px rgba(47, 128, 237, 0.18);
+        }
+
+        .tile-label {
+            margin-bottom: 0.22rem;
+            color: #94a3b8;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .tile-value {
+            color: #334155;
+            font-size: 0.9rem;
+            font-weight: 650;
+            line-height: 1.35;
+        }
+
+        @media (min-width: 1200px) {
+            .profile-page .profile-sidebar-col {
+                width: 330px;
+                flex: 0 0 330px;
+            }
+
+            .profile-page .profile-detail-col {
+                width: calc(100% - 330px);
+                flex: 0 0 calc(100% - 330px);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .profile-page-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .profile-page-badges {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .profile-page {
+                padding-left: 0.85rem !important;
+                padding-right: 0.85rem !important;
+            }
+
+            .profile-page-header {
+                padding: 0.9rem;
+                border-radius: 16px;
+            }
+
+            .profile-page-title {
+                font-size: 0.98rem !important;
+            }
+
+            .profile-page .profile-card {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                border-radius: 16px !important;
+                border-left: 1px solid var(--aps-line) !important;
+                border-right: 1px solid var(--aps-line) !important;
+            }
+
+            .profile-page .card-body {
+                padding: 1rem !important;
+            }
+
+            .profile-photo-container {
+                width: 108px;
+                height: 108px;
+            }
+
+            .profile-page .profile-card .nav-tabs {
+                display: grid;
+                grid-template-columns: 1fr;
+                width: auto;
+                margin: 0.85rem;
+                border-radius: 16px;
+            }
+
+            .profile-page .profile-card .nav-link {
+                justify-content: center;
+                width: 100%;
+                min-height: 40px;
+                padding: 0.55rem 0.8rem;
+                font-size: 0.82rem;
+            }
+
+            .info-tile {
+                min-height: 74px;
+                padding: 0.78rem;
+            }
+
+            .tile-icon-wrapper {
+                width: 38px;
+                height: 38px;
+                margin-right: 0.7rem;
+            }
+
+            .profile-info-item {
+                align-items: flex-start;
+            }
+        }
     </style>
 @endsection
 
 @section('content')
-    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="container-xxl flex-grow-1 container-p-y profile-page">
         <!-- Header -->
-        <div class="row">
-            <div class="col-lg-12 mb-4">
-                <div
-                    class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
-                    <h4 class="fw-bold pt-3 pb-1 mb-0">
-                        <span class="text-muted fw-light">Profile /</span> {{ $user->fullname }}
-                    </h4>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-primary">{{ $user->role }}</span>
-                        <span class="badge bg-label-secondary">{{ $user->station }}</span>
-                    </div>
-                </div>
+        <div class="profile-page-header">
+            <h4 class="profile-page-title">
+                <span class="text-muted fw-light">Profile /</span> {{ $user->fullname }}
+            </h4>
+            <div class="profile-page-badges">
+                <span class="badge bg-primary">{{ $user->role }}</span>
+                <span class="badge bg-label-secondary">{{ $user->station }}</span>
             </div>
         </div>
 
         <!-- Profile Card -->
         <div class="row">
-            <div class="col-lg-4 col-md-5">
-                <div class="card profile-card mb-4">
+            <div class="col-lg-4 col-md-5 profile-sidebar-col">
+                <div class="card profile-card profile-summary-card mb-4">
                     <div class="card-body">
                         <!-- Photo Form -->
                         <form id="photoForm" method="POST" enctype="multipart/form-data"
@@ -312,9 +668,9 @@
                                         </div>
                                     </label>
                                 </div>
-                                <h4 class="mt-3 mb-1 fw-bold text-dark">{{ $user->fullname }}</h4>
-                                <p class="text-muted mb-3 fs-7">{{ $user->job_title ?? 'Staff' }}</p>
-                                <div class="d-flex justify-content-center gap-2 mb-2">
+                                <h4 class="profile-summary-name mt-3 mb-1 fw-bold text-dark">{{ $user->fullname }}</h4>
+                                <p class="profile-summary-title text-muted mb-3 fs-7">{{ $user->job_title ?? 'Staff' }}</p>
+                                <div class="profile-meta-badges d-flex justify-content-center gap-2 mb-2">
                                     <span class="badge bg-label-primary px-2.5 py-1">{{ $user->cluster ?? 'N/A' }}</span>
                                     <span class="badge bg-label-info px-2.5 py-1">{{ $user->unit ?? 'N/A' }}</span>
                                 </div>
@@ -384,7 +740,7 @@
                         </div>
 
                         <!-- Last Updated Footnote -->
-                        <div class="mt-4 pt-3 border-top text-center">
+                        <div class="profile-updated mt-4 pt-3 border-top text-center">
                             <small class="text-muted d-block">
                                 <i class="bx bx-time-five me-1"></i> Terakhir diperbarui:
                             </small>
@@ -396,7 +752,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-8 col-md-7">
+            <div class="col-lg-8 col-md-7 profile-detail-col">
                 <div class="card profile-card">
                     <div class="card-header bg-transparent border-bottom-0 p-0">
                         <ul class="nav nav-tabs card-header-tabs" id="profileTab" role="tablist">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Blacklist;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class BlacklistController extends Controller
@@ -30,7 +31,9 @@ class BlacklistController extends Controller
     // PROSES BAN USER (DARI HALAMAN USER)
     public function store(Request $request)
     {
-        if (Auth::user()->role !== 'Admin') { abort(403); }
+        if (strtoupper((string) Auth::user()->role) !== 'ADMIN') {
+            abort(403);
+        }
 
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -38,19 +41,34 @@ class BlacklistController extends Controller
         ]);
 
         $user = User::findOrFail($request->user_id);
+        $blacklistKey = trim((string) ($user->no_nik ?: $user->id));
 
-        // 1. Simpan ke Tabel Blacklist
-        Blacklist::create([
-            'nik'       => $user->no_nik, // Asumsi ID User adalah NIK/NIP
-            'fullname'  => $user->fullname,
-            'reason'    => $request->reason,
-            'station'   => $user->station,
-            'banned_by' => Auth::user()->fullname
-        ]);
+        if ($blacklistKey === '') {
+            Alert::error('Gagal', 'NIK/NIP staff tidak ditemukan, blacklist tidak dapat diproses.');
+            return back();
+        }
 
-        // 2. Nonaktifkan Akun User (Kill Switch)
-        $user->is_active = 0;
-        $user->save();
+        $alreadyBlacklisted = Blacklist::where('nik', $blacklistKey)->first();
+
+        if ($alreadyBlacklisted) {
+            $user->forceFill(['is_active' => 0])->save();
+            Alert::warning('Sudah Blacklist', "{$user->fullname} sudah ada di daftar blacklist dan akun sudah dinonaktifkan.");
+            return back();
+        }
+
+        DB::transaction(function () use ($user, $request, $blacklistKey) {
+            // 1. Simpan ke Tabel Blacklist. Jika NIK kosong, gunakan NIP/user id.
+            Blacklist::create([
+                'nik'       => $blacklistKey,
+                'fullname'  => $user->fullname,
+                'reason'    => trim($request->reason),
+                'station'   => $user->station ?: '-',
+                'banned_by' => Auth::user()->fullname
+            ]);
+
+            // 2. Nonaktifkan Akun User (Kill Switch)
+            $user->forceFill(['is_active' => 0])->save();
+        });
 
         // Opsional: Hapus user permanen jika tidak ingin menuh-menuhin tabel users
         // $user->delete();

@@ -47,10 +47,19 @@
         font-size: 0.875rem;
     }
     
-    .btn-checkin { background-color: #10b981; color: white; }
+    .btn-checkin {
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
+        color: white;
+        box-shadow: 0 12px 24px rgba(47, 128, 237, 0.2);
+    }
     .btn-checkout { background-color: #ef4444; color: white; }
     
-    .btn-checkin:hover { background-color: #059669; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2); }
+    .btn-checkin:hover {
+        background: linear-gradient(135deg, #2368c8 0%, #174ea6 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 14px 26px rgba(47, 128, 237, 0.26);
+        color: #ffffff;
+    }
     .btn-checkout:hover { background-color: #dc2626; transform: translateY(-1px); box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.2); }
     
     .attendance-info-container {
@@ -68,7 +77,7 @@
     .info-value { font-size: 1.125rem; font-weight: 700; color: #111827; }
     
     .current-time-banner {
-        background: #111827;
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 58%, #174ea6 100%);
         color: white;
         padding: 1.25rem;
         border-radius: 0.75rem;
@@ -81,7 +90,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.75rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 18px 34px rgba(47, 128, 237, 0.2);
     }
 
     .info-section {
@@ -89,6 +98,39 @@
         border: 1px solid #f3f4f6;
         border-radius: 1rem;
         padding: 1.5rem;
+    }
+
+    html.aps-dark .attendance-card,
+    html.aps-dark .info-section {
+        background: #111c31 !important;
+        border-color: #24324a !important;
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.24) !important;
+    }
+
+    html.aps-dark .attendance-header {
+        background: #111c31 !important;
+        border-color: #24324a !important;
+    }
+
+    html.aps-dark .attendance-info-container {
+        background: #101a2c !important;
+        border: 1px solid #24324a;
+    }
+
+    html.aps-dark .info-label {
+        color: #8fa1b8 !important;
+    }
+
+    html.aps-dark .info-value,
+    html.aps-dark .info-section h6,
+    html.aps-dark .attendance-header h5 {
+        color: #e6edf7 !important;
+    }
+
+    html.aps-dark .current-time-banner {
+        background: linear-gradient(135deg, #13213a 0%, #172b4d 100%) !important;
+        border: 1px solid rgba(47, 128, 237, 0.26);
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
     }
 </style>
 @endsection

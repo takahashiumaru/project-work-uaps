@@ -35,73 +35,207 @@
         justify-content: center;
         width: 36px;
         height: 36px;
-        border-radius: 6px;
-        background: #667eea;
-        color: white;
+        border-radius: 0.7rem;
+        background: #eaf4ff;
+        border: 1px solid rgba(47, 128, 237, 0.18);
+        color: #2368c8;
+        box-shadow: none;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease, color 0.18s ease;
     }
 
     .action-btn:hover {
-        background: #5a6fd8;
-        transform: translateY(-1px);
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
         color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(47, 128, 237, 0.22);
+    }
+
+    .action-btn i {
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .schedule-toolbar {
+        align-items: stretch;
+        row-gap: 0.85rem;
     }
 
     .search-box {
-        max-width: 300px;
+        max-width: 320px;
+        margin-left: auto;
+        border-radius: 0.9rem;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .search-box .form-control {
+        height: 44px;
+        border-radius: 0.9rem 0 0 0.9rem;
+        background: #f9fafb;
+        border-color: #e6edf5;
+        font-size: 0.86rem;
+    }
+
+    .search-box .btn {
+        width: 46px;
+        border-radius: 0 0.9rem 0.9rem 0;
+        box-shadow: none !important;
     }
 
     .stats-card {
-        background: linear-gradient(135deg, #667eea 0%, #4180c3 100%);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 62%, #174ea6 100%);
         color: white;
-        border-radius: 0.75rem;
-        padding: 1.5rem;
+        border-radius: 1rem;
+        padding: 1.35rem 1.45rem;
         margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 16px 34px rgba(47, 128, 237, 0.22);
+    }
+
+    .stats-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.28), transparent 24%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 45%);
+        pointer-events: none;
+    }
+
+    .stats-card > * {
+        position: relative;
+        z-index: 1;
     }
 
     .stats-number {
         font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
+        font-weight: 750;
+        margin-bottom: 0.35rem;
+        line-height: 1;
     }
 
     .stats-label {
-        opacity: 0.9;
-        font-size: 0.875rem;
+        opacity: 0.92;
+        font-size: 0.86rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+    }
+
+    .stats-card small {
+        color: rgba(255, 255, 255, 0.78) !important;
     }
 
     .auto-create-btn {
-        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        border: none;
-        border-radius: 0.5rem;
-        padding: 0.75rem 1.5rem;
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
+        border: 1px solid rgba(47, 128, 237, 0.18);
+        border-radius: 0.85rem;
+        min-height: 44px;
+        padding: 0.72rem 1.2rem;
         color: white;
-        font-weight: 600;
-        transition: all 0.2s ease;
+        font-weight: 650;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+        box-shadow: 0 12px 24px rgba(47, 128, 237, 0.22);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .auto-create-btn:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        box-shadow: 0 16px 30px rgba(47, 128, 237, 0.28);
+        color: white;
+    }
+
+    .role-badge {
+        font-size: 0.74rem;
+        padding: 0.34rem 0.62rem;
+        border-radius: 999px;
+        font-weight: 600;
     }
 
     .user-avatar {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 0.75rem;
+        border: 2px solid rgba(47, 128, 237, 0.14);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
     }
 
     .user-info {
         display: flex;
         align-items: center;
+        min-width: 0;
     }
 
-    .role-badge {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
+    .user-info span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    html.aps-dark .stats-card {
+        background:
+            radial-gradient(circle at 92% 10%, rgba(47, 128, 237, 0.22), transparent 28%),
+            linear-gradient(135deg, #111c31 0%, #132039 100%);
+        border-color: #263653;
+        box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+    }
+
+    html.aps-dark .action-btn {
+        background: rgba(47, 128, 237, 0.16);
+        border-color: rgba(47, 128, 237, 0.28);
+        color: #8fc2ff;
+    }
+
+    html.aps-dark .action-btn:hover {
+        background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%);
+        color: #ffffff;
+    }
+
+    html.aps-dark .search-box {
+        box-shadow: none;
+    }
+
+    html.aps-dark .search-box .form-control {
+        background: #101a2c !important;
+        border-color: #2a3a55 !important;
+        color: #e6edf7 !important;
+    }
+
+    html.aps-dark .user-avatar {
+        border-color: #2a3a55;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    html.aps-dark .card-title,
+    html.aps-dark .user-info span,
+    html.aps-dark .table strong {
+        color: #edf5ff !important;
+    }
+
+    html.aps-dark .table tbody tr.schedule-hover td {
+        background: #172942 !important;
+    }
+
+    @media (max-width: 768px) {
+        .schedule-toolbar {
+            gap: 0.85rem;
+        }
+
+        .search-box {
+            max-width: 100%;
+            margin-left: 0;
+        }
+
+        .auto-create-btn {
+            width: 100%;
+        }
     }
 
     @media (max-width: 768px) {
@@ -119,9 +253,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .search-box {
-            max-width: 100%;
-        }
     }
 </style>
 @endsection
@@ -157,7 +288,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="row mb-4">
+    <div class="row mb-4 schedule-toolbar">
         <div class="col-md-6">
             <form id="autoCreateForm" action="{{ route('schedule.autoCreate') }}" method="POST">
                 @csrf
@@ -311,12 +442,12 @@
         const tableRows = document.querySelectorAll('tbody tr');
         tableRows.forEach(row => {
             row.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#f8f9fa';
+                this.classList.add('schedule-hover');
                 this.style.transform = 'translateX(2px)';
             });
 
             row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
+                this.classList.remove('schedule-hover');
                 this.style.transform = 'translateX(0)';
             });
         });
@@ -352,8 +483,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             title: 'Pencarian',
-            text: 'Menampilkan hasil untuk: "{{ request('
-            search ') }}"',
+            text: @json('Menampilkan hasil untuk: ' . request('search')),
             icon: 'info',
             timer: 3000,
             showConfirmButton: false
