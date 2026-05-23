@@ -5140,8 +5140,11 @@
             document.addEventListener('click', function(event) {
                 const link = event.target.closest('#layout-menu a.menu-link, .aps-menu-search-item');
                 if (!shouldHandleLink(event, link)) return;
-
                 event.preventDefault();
+                // Auto-close sidebar on mobile when menu link clicked
+                if (window.innerWidth < 1200) {
+                    document.documentElement.classList.remove('sidebar-mobile-open');
+                }
                 if (typeof window.apsCloseMenuSearch === 'function') {
                     window.apsCloseMenuSearch();
                 }
