@@ -10,13 +10,13 @@ Aplikasi ini dibuat agar aktivitas operasional station lebih mudah dipantau oleh
 
 ### Login Page
 
-![Login Page AP3 SIAPS](docs/images/login-page.jpg)
+![Login Page AP3 SIAPS](docs/images/login-page.png)
 
 Halaman login digunakan oleh employee untuk masuk menggunakan NIP dan password. Di halaman ini tersedia informasi singkat sistem, total staff, monitoring 24/7, dan akses forgot password.
 
 ### Dashboard Overview
 
-![Dashboard Overview AP3 SIAPS](docs/images/dashboard-overview.jpg)
+![Dashboard Overview AP3 SIAPS](docs/images/dashboard-overview.png)
 
 Dashboard utama menampilkan ringkasan operasional station, jumlah staff aktif per station, total staff global, staff bertugas, penerbangan selesai, grafik performa pengerjaan pesawat, dan distribusi staff berdasarkan role.
 
