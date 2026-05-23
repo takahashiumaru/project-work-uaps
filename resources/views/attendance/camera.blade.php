@@ -557,7 +557,7 @@
                     didOpen: () => Swal.showLoading()
                 });
 
-                navigator.geolocation.getCurrentPosition(function(position) {
+                const handleSuccess = (position) => {
                     const context = canvas.getContext('2d');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
@@ -568,16 +568,49 @@
                     document.getElementById('longitude').value = position.coords.longitude;
 
                     document.getElementById('attendanceForm').submit();
-                }, function() {
+                };
+
+                const handleFailure = (error) => {
+                    let title = 'GPS tidak tersedia';
+                    let message = 'Aktifkan izin lokasi agar absensi dapat diverifikasi.';
+
+                    if (error.code === error.PERMISSION_DENIED) {
+                        title = 'Izin Lokasi Ditolak';
+                        message = 'Aktifkan izin lokasi di pengaturan browser untuk melakukan absensi.';
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                        title = 'Sinyal GPS Lemah';
+                        message = 'Lokasi tidak dapat ditentukan. Pastikan GPS dan koneksi internet Anda aktif, atau coba di area yang lebih terbuka.';
+                    } else if (error.code === error.TIMEOUT) {
+                        title = 'Waktu Permintaan Habis';
+                        message = 'Gagal mendapatkan lokasi tepat waktu. Silakan coba klik tombol Clock In lagi.';
+                    }
+
                     Swal.fire({
                         icon: 'error',
-                        title: 'GPS tidak tersedia',
-                        text: 'Aktifkan izin lokasi agar absensi dapat diverifikasi.',
+                        title: title,
+                        text: message,
                         confirmButtonColor: '#2f80ed'
                     });
+                };
+
+                // Coba dapatkan lokasi dengan akurasi tinggi terlebih dahulu
+                navigator.geolocation.getCurrentPosition(handleSuccess, function(error) {
+                    // Jika izin lokasi ditolak oleh pengguna, langsung tampilkan error
+                    if (error.code === error.PERMISSION_DENIED) {
+                        handleFailure(error);
+                    } else {
+                        // Jika error berupa timeout atau posisi tidak tersedia, lakukan fallback dengan akurasi standar
+                        navigator.geolocation.getCurrentPosition(handleSuccess, function(error2) {
+                            handleFailure(error2);
+                        }, {
+                            enableHighAccuracy: false,
+                            timeout: 10000,
+                            maximumAge: 10000
+                        });
+                    }
                 }, {
                     enableHighAccuracy: true,
-                    timeout: 12000,
+                    timeout: 6000, // Timeout 6 detik untuk pencarian presisi tinggi
                     maximumAge: 0
                 });
             });
