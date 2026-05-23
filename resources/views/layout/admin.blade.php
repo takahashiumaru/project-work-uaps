@@ -4575,8 +4575,13 @@
         }
 
         @media (max-width: 991.98px) {
+            .aps-menu-search {
+                padding: 1rem !important;
+            }
+
             .aps-menu-search-panel {
-                width: min(720px, calc(100vw - 1.5rem)) !important;
+                width: min(620px, calc(100vw - 2rem)) !important;
+                max-height: min(680px, calc(100vh - 2rem)) !important;
             }
 
             .aps-menu-search-body {
