@@ -4326,6 +4326,323 @@
             color: #ffffff !important;
         }
 
+        /* Refined command palette */
+        .aps-menu-search {
+            padding: clamp(0.75rem, 5vh, 3rem) clamp(0.75rem, 3vw, 2rem) 1rem !important;
+            background: rgba(15, 23, 42, 0.34) !important;
+            backdrop-filter: blur(12px) saturate(1.08) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(1.08) !important;
+        }
+
+        .aps-menu-search-panel {
+            width: min(920px, calc(100vw - 2rem)) !important;
+            max-height: min(760px, calc(100vh - 2rem)) !important;
+            border-radius: 26px !important;
+            background: #ffffff !important;
+            border-color: rgba(226, 232, 240, 0.96) !important;
+            box-shadow: 0 34px 90px rgba(15, 23, 42, 0.24) !important;
+        }
+
+        .aps-menu-search-head {
+            padding: 0.85rem 0.95rem !important;
+            gap: 0.8rem !important;
+            background: #fbfdff !important;
+            border-bottom-color: #e8eef6 !important;
+        }
+
+        .aps-menu-search-icon,
+        .aps-menu-search-close {
+            width: 42px !important;
+            min-width: 42px !important;
+            height: 42px !important;
+            border: 1px solid #e5edf8 !important;
+            box-shadow: 0 10px 20px rgba(47, 128, 237, 0.08) !important;
+        }
+
+        .aps-menu-search-close {
+            transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease !important;
+        }
+
+        .aps-menu-search-close:hover {
+            background: #eaf4ff !important;
+            color: #2f80ed !important;
+            transform: scale(1.03);
+        }
+
+        .aps-menu-search-input {
+            font-size: 0.98rem !important;
+            color: #233044 !important;
+            letter-spacing: 0 !important;
+        }
+
+        .aps-menu-search-input::placeholder {
+            color: #8a9ab2 !important;
+        }
+
+        .aps-menu-search-body {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.82rem;
+            padding: 0.95rem !important;
+            background: #ffffff !important;
+            overscroll-behavior: contain;
+        }
+
+        .aps-menu-search-group {
+            min-width: 0;
+            margin: 0 !important;
+            padding: 0.36rem !important;
+            border: 1px solid #edf2f8;
+            border-radius: 18px;
+            background: #fbfdff;
+        }
+
+        .aps-menu-search-group-title {
+            padding: 0.42rem 0.5rem 0.48rem !important;
+            color: #8392a8 !important;
+            font-size: 0.68rem !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        .aps-menu-search-item {
+            min-height: 62px;
+            padding: 0.58rem 0.6rem !important;
+            gap: 0.74rem !important;
+            border: 1px solid transparent;
+            border-radius: 14px !important;
+            color: #253247 !important;
+            background: transparent;
+            transform: none !important;
+            transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease !important;
+        }
+
+        .aps-menu-search-item:hover,
+        .aps-menu-search-item:focus {
+            background: #f1f7ff !important;
+            border-color: rgba(47, 128, 237, 0.16);
+            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.10);
+            color: #2368c8 !important;
+            outline: none;
+        }
+
+        .aps-menu-search-item .aps-menu-search-item-icon {
+            width: 40px !important;
+            min-width: 40px !important;
+            height: 40px !important;
+            background: #eaf4ff !important;
+            color: #2f80ed !important;
+            box-shadow: inset 0 0 0 1px rgba(47, 128, 237, 0.06);
+        }
+
+        .aps-menu-search-copy {
+            display: block !important;
+            min-width: 0;
+            flex: 1 1 auto;
+            color: inherit !important;
+        }
+
+        .aps-menu-search-copy strong {
+            display: block;
+            color: #243044 !important;
+            font-size: 0.88rem !important;
+            font-weight: 700 !important;
+            line-height: 1.2 !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .aps-menu-search-copy span {
+            display: block;
+            margin-top: 0.16rem !important;
+            color: #7c8ca4 !important;
+            font-size: 0.73rem !important;
+            font-weight: 550 !important;
+            line-height: 1.25 !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .aps-menu-search-item:hover .aps-menu-search-copy strong,
+        .aps-menu-search-item:focus .aps-menu-search-copy strong {
+            color: #2368c8 !important;
+        }
+
+        .aps-menu-search-item:hover .aps-menu-search-copy span,
+        .aps-menu-search-item:focus .aps-menu-search-copy span {
+            color: #5f7fa9 !important;
+        }
+
+        .aps-menu-search-arrow {
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            color: #9aa8bb;
+            background: transparent;
+            opacity: 0;
+            transform: translateX(-3px);
+            transition: opacity 0.16s ease, transform 0.16s ease, background-color 0.16s ease, color 0.16s ease;
+        }
+
+        .aps-menu-search-item:hover .aps-menu-search-arrow,
+        .aps-menu-search-item:focus .aps-menu-search-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            color: #2f80ed;
+            background: #ffffff;
+        }
+
+        .aps-menu-search-foot {
+            padding: 0.7rem 1rem !important;
+            background: #fbfdff !important;
+            border-top-color: #e8eef6 !important;
+        }
+
+        .aps-menu-search-empty {
+            grid-column: 1 / -1;
+            min-height: 220px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #dbe7f4;
+            border-radius: 18px;
+            background: #fbfdff;
+        }
+
+        .aps-menu-search-empty.is-visible {
+            display: flex !important;
+        }
+
+        html.aps-dark .aps-menu-search-panel,
+        html.aps-dark .aps-menu-search-head,
+        html.aps-dark .aps-menu-search-foot {
+            background: #111c31 !important;
+            border-color: #24324a !important;
+        }
+
+        html.aps-dark .aps-menu-search-body {
+            background: #111c31 !important;
+        }
+
+        html.aps-dark .aps-menu-search-group {
+            background: #121f34 !important;
+            border-color: #263653 !important;
+        }
+
+        html.aps-dark .aps-menu-search-item {
+            color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .aps-menu-search-item:hover,
+        html.aps-dark .aps-menu-search-item:focus {
+            background: #172942 !important;
+            border-color: rgba(143, 194, 255, 0.22) !important;
+            box-shadow: none !important;
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .aps-menu-search-copy strong {
+            color: #eaf1fb !important;
+        }
+
+        html.aps-dark .aps-menu-search-copy span {
+            color: #9fb1c7 !important;
+        }
+
+        html.aps-dark .aps-menu-search-item:hover .aps-menu-search-copy strong,
+        html.aps-dark .aps-menu-search-item:focus .aps-menu-search-copy strong {
+            color: #8fc2ff !important;
+        }
+
+        html.aps-dark .aps-menu-search-arrow {
+            color: #7e91aa;
+        }
+
+        html.aps-dark .aps-menu-search-item:hover .aps-menu-search-arrow,
+        html.aps-dark .aps-menu-search-item:focus .aps-menu-search-arrow {
+            background: #22304a;
+            color: #8fc2ff;
+        }
+
+        html.aps-dark .aps-menu-search-empty {
+            background: #121f34;
+            border-color: #263653;
+        }
+
+        @media (max-width: 991.98px) {
+            .aps-menu-search-panel {
+                width: min(720px, calc(100vw - 1.5rem)) !important;
+            }
+
+            .aps-menu-search-body {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .aps-menu-search {
+                align-items: flex-start !important;
+                padding: 0.85rem 0.72rem !important;
+            }
+
+            .aps-menu-search-panel {
+                width: min(100%, calc(100vw - 1.44rem)) !important;
+                max-height: calc(100vh - 1.7rem) !important;
+                min-height: 0 !important;
+                border: 1px solid rgba(226, 232, 240, 0.96) !important;
+                border-radius: 22px !important;
+            }
+
+            .aps-menu-search-head {
+                padding: 0.78rem 0.8rem !important;
+            }
+
+            .aps-menu-search-icon,
+            .aps-menu-search-close {
+                width: 38px !important;
+                min-width: 38px !important;
+                height: 38px !important;
+            }
+
+            .aps-menu-search-input {
+                font-size: 0.9rem !important;
+            }
+
+            .aps-menu-search-body {
+                display: block !important;
+                padding: 0.72rem !important;
+            }
+
+            .aps-menu-search-group {
+                margin-bottom: 0.72rem !important;
+                padding: 0.3rem !important;
+                border-radius: 16px;
+            }
+
+            .aps-menu-search-item {
+                min-height: 58px;
+                padding: 0.54rem !important;
+            }
+
+            .aps-menu-search-copy strong,
+            .aps-menu-search-copy span {
+                white-space: normal;
+            }
+
+            .aps-menu-search-arrow {
+                display: none !important;
+            }
+
+            .aps-menu-search-foot {
+                display: none !important;
+            }
+        }
+
         /* Mid-width topbar guard: keep profile as a clean circle when space is tight */
         @media (max-width: 1440px) {
             #layout-navbar .aps-topbar {
@@ -4918,9 +5235,12 @@
                                             <span class="aps-menu-search-item-icon">
                                                 <i class="ti {{ $item['icon'] }}"></i>
                                             </span>
-                                            <span>
+                                            <span class="aps-menu-search-copy">
                                                 <strong>{{ $item['label'] }}</strong>
                                                 <span>{{ $item['hint'] }}</span>
+                                            </span>
+                                            <span class="aps-menu-search-arrow" aria-hidden="true">
+                                                <i class="ti ti-chevron-right"></i>
                                             </span>
                                         </a>
                                     @endforeach
