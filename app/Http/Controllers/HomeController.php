@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Flights; // Pastikan model ini benar
 use App\Models\User;
 use App\Models\Leave;
+use App\Models\Attendance;
 use App\Models\Station; // Tambahkan Model Station
 use Illuminate\Http\Request; // Wajib import Request untuk menangkap input filter
 use Illuminate\View\View;
@@ -22,6 +23,10 @@ class HomeController extends Controller
     public function index(Request $request): View
     {
         $user = Auth::user();
+        $todayAttendance = Attendance::where('user_id', $user->id)
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->first();
 
         // =================================================================
         // BAGIAN 0: LOGIKA FILTER STATION (BARU)
@@ -214,6 +219,7 @@ class HomeController extends Controller
             'totalFlightPerDay',
 
             // Info Card
+            'todayAttendance',
             'totalContractStaff',
             'totalPasStaff',
             'totalAbsent',

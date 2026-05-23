@@ -864,6 +864,23 @@
             box-shadow: 0 4px 12px rgba(47, 128, 237, 0.15);
         }
 
+        .attendance-action-buttons .btn {
+            min-width: 136px;
+            border-radius: 12px;
+            font-weight: 700;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .attendance-action-buttons .btn[disabled] {
+            background: #eef2f7;
+            color: #64748b !important;
+            border-color: #e2e8f0;
+            opacity: 1;
+        }
+
         /* KUSTOMISASI MOBILE RESPONSIVE */
         @media (max-width: 767.98px) {
             .dashboard-title {
@@ -898,7 +915,9 @@
             }
 
             .action-buttons form,
-            .action-buttons .btn-primary-custom {
+            .action-buttons .btn-primary-custom,
+            .attendance-action-buttons,
+            .attendance-action-buttons .btn {
                 width: 100% !important;
             }
 
@@ -963,6 +982,12 @@
         html.aps-dark .dashboard-header .text-muted,
         html.aps-dark .dashboard-header p {
             color: #96a8bf !important;
+        }
+
+        html.aps-dark .attendance-action-buttons .btn[disabled] {
+            background: rgba(148, 163, 184, 0.14);
+            color: #9fb0c8 !important;
+            border-color: rgba(148, 163, 184, 0.22);
         }
 
         html.aps-dark .dashboard-scope {
@@ -1193,6 +1218,27 @@
                             data-bs-target="#addFlightModal">
                             <i class="bx bx-plus-circle me-1"></i> Tambah Flight
                         </button>
+                    @endif
+                </div>
+                <div class="attendance-action-buttons mt-3 d-flex flex-wrap gap-2 justify-content-md-end">
+                    @if ($todayAttendance)
+                        @if (!$todayAttendance->check_in_time)
+                            <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
+                                <i class="bx bx-log-in me-1"></i> Absen In
+                            </a>
+                        @elseif ($todayAttendance->check_in_time && !$todayAttendance->check_out_time)
+                            <a href="{{ route('attendance.camera', ['type' => 'out']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
+                                <i class="bx bx-log-out me-1"></i> Absen Out
+                            </a>
+                        @else
+                            <button class="btn btn-outline-secondary text-white shadow-sm flex-1" disabled>
+                                <i class="bx bx-check-circle me-1"></i> Sudah Absen
+                            </button>
+                        @endif
+                    @else
+                        <a href="{{ route('attendance.camera', ['type' => 'in']) }}" class="btn btn-primary-custom text-white shadow-sm flex-1">
+                            <i class="bx bx-log-in me-1"></i> Absen In
+                        </a>
                     @endif
                 </div>
             </div>
