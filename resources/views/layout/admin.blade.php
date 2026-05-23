@@ -3043,14 +3043,18 @@
             max-width: 92px !important;
             border-radius: 0 26px 26px 0 !important;
             transform: none !important;
-            transition: none !important;
+            transition: width 0.28s cubic-bezier(0.22, 0.61, 0.36, 1),
+                min-width 0.28s cubic-bezier(0.22, 0.61, 0.36, 1),
+                max-width 0.28s cubic-bezier(0.22, 0.61, 0.36, 1),
+                box-shadow 0.22s ease !important;
             box-shadow: 10px 0 28px rgba(15, 23, 42, 0.05) !important;
+            will-change: width, min-width, max-width;
         }
 
         html.sidebar-collapsed .layout-page,
         html.sidebar-collapsed #layout-menu:hover + .layout-page {
             padding-left: 92px !important;
-            transition: none !important;
+            transition: padding-left 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
         }
 
         html.sidebar-collapsed #layout-menu .app-brand,
@@ -3162,6 +3166,246 @@
             display: none !important;
             opacity: 0 !important;
             visibility: hidden !important;
+        }
+
+        @media (min-width: 1200px) {
+            html.sidebar-collapsed #layout-menu:hover,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu {
+                width: var(--sidebar-width, 252px) !important;
+                min-width: var(--sidebar-width, 252px) !important;
+                max-width: var(--sidebar-width, 252px) !important;
+                border-radius: 0 26px 26px 0 !important;
+                transition: width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s,
+                    min-width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s,
+                    max-width 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) 0.08s,
+                    box-shadow 0.22s ease !important;
+                box-shadow: 10px 0 30px rgba(15, 23, 42, 0.045) !important;
+                z-index: 1060 !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover + .layout-page,
+            html.sidebar-collapsed.sidebar-peeking .layout-page {
+                padding-left: var(--sidebar-width, 252px) !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .app-brand,
+            html.sidebar-collapsed #layout-menu:hover .app-brand-link,
+            html.sidebar-collapsed #layout-menu:hover .app-brand-logo,
+            html.sidebar-collapsed #layout-menu:hover .menu-inner,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand-logo,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner {
+                width: var(--sidebar-width, 252px) !important;
+                min-width: var(--sidebar-width, 252px) !important;
+                max-width: var(--sidebar-width, 252px) !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .app-brand,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand {
+                height: 80px !important;
+                min-height: 80px !important;
+                justify-content: flex-start !important;
+                padding: 0 18px !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .app-brand-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand-link {
+                justify-content: flex-start !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .app-brand-logo,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand-logo {
+                width: auto !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                justify-content: flex-start !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .app-brand-logo img,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .app-brand-logo img {
+                width: 78px !important;
+                max-width: 78px !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner {
+                padding: 12px 0 20px !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                height: auto !important;
+                margin: 1px 0 !important;
+                padding: 0 !important;
+                display: block !important;
+                justify-content: initial !important;
+                align-items: initial !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item > .menu-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item > .menu-link {
+                width: calc(100% - 44px) !important;
+                min-width: 0 !important;
+                max-width: none !important;
+                height: auto !important;
+                min-height: 42px !important;
+                margin: 2px 24px 2px 20px !important;
+                padding: 0 9px !important;
+                border-radius: 999px !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 10px !important;
+                text-align: left !important;
+                white-space: nowrap !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.active > .menu-link,
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.open > .menu-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.active > .menu-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.open > .menu-link {
+                background: #eaf4ff !important;
+                color: #2368c8 !important;
+                box-shadow: none !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.active > .menu-link .menu-icon,
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.open > .menu-link .menu-icon,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.active > .menu-link .menu-icon,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.open > .menu-link .menu-icon {
+                background: linear-gradient(135deg, #2f80ed 0%, #2368c8 100%) !important;
+                color: #ffffff !important;
+                box-shadow: 0 8px 18px rgba(47, 128, 237, 0.22) !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.active > .menu-link div,
+            html.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.open > .menu-link div,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.active > .menu-link div,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.open > .menu-link div {
+                color: #2368c8 !important;
+                font-weight: 550 !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-link .menu-icon,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-link .menu-icon {
+                width: 30px !important;
+                min-width: 30px !important;
+                max-width: 30px !important;
+                height: 30px !important;
+                margin: 0 !important;
+                border-radius: 999px !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                font-size: 1rem !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-link div,
+            html.sidebar-collapsed #layout-menu:hover .menu-header,
+            html.sidebar-collapsed #layout-menu:hover .menu-toggle::after,
+            html.sidebar-collapsed #layout-menu:hover .sidebar-time,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-link div,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-header,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-toggle::after,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .sidebar-time {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                animation: sidebarPeekContentIn 0.18s ease 0.1s both;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-link div,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-link div {
+                flex: 1 !important;
+                min-width: 0 !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-toggle::after,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-toggle::after {
+                display: inline-block !important;
+                margin-left: auto !important;
+                color: #9ca3af !important;
+                opacity: 0.9 !important;
+                visibility: visible !important;
+                position: static !important;
+                flex: 0 0 auto !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-sub,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-sub {
+                margin: 4px 0 6px !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-sub .menu-item > .menu-link,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-sub .menu-item > .menu-link {
+                width: calc(100% - 82px) !important;
+                min-height: 33px !important;
+                margin: 1px 30px 1px 44px !important;
+                padding: 0 12px !important;
+                border-radius: 999px !important;
+                font-size: 0.76rem !important;
+                gap: 9px !important;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item.open > .menu-sub,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item.open > .menu-sub {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                animation: sidebarPeekContentIn 0.18s ease 0.12s both;
+            }
+
+            html.sidebar-collapsed #layout-menu:hover .menu-inner > .menu-item:not(.open) > .menu-sub,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item:not(.open) > .menu-sub {
+                display: none !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+
+            html.aps-dark.sidebar-collapsed #layout-menu:hover,
+            html.aps-dark.sidebar-collapsed.sidebar-peeking #layout-menu {
+                box-shadow: 0 22px 56px rgba(0, 0, 0, 0.26) !important;
+            }
+
+            html.aps-dark.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.active > .menu-link,
+            html.aps-dark.sidebar-collapsed #layout-menu:hover .menu-inner .menu-item.open > .menu-link,
+            html.aps-dark.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.active > .menu-link,
+            html.aps-dark.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner .menu-item.open > .menu-link {
+                background: rgba(47, 128, 237, 0.16) !important;
+                color: #8fc2ff !important;
+            }
+        }
+
+        @keyframes sidebarPeekContentIn {
+            from {
+                opacity: 0;
+                transform: translateX(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html.sidebar-collapsed #layout-menu {
+                transition: none !important;
+            }
+
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-link div,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-header,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-toggle::after,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .sidebar-time,
+            html.sidebar-collapsed.sidebar-peeking #layout-menu .menu-inner > .menu-item.open > .menu-sub {
+                animation: none !important;
+            }
         }
 
         /* Topbar final color tune: match the white sidebar */
@@ -4795,10 +5039,36 @@
             const toggleBtn = document.getElementById('custom-sidebar-toggle');
             const mobileCloseBtn = document.getElementById('custom-sidebar-close-mobile');
             const overlay = document.getElementById('custom-layout-overlay');
+            const layoutMenu = document.getElementById('layout-menu');
             const htmlTag = document.documentElement;
+            let sidebarPeekTimer = null;
+
+            function isDesktopSidebar() {
+                return window.innerWidth >= 1200;
+            }
+
+            function closeSidebarPeek() {
+                window.clearTimeout(sidebarPeekTimer);
+                sidebarPeekTimer = null;
+                htmlTag.classList.remove('sidebar-peeking');
+            }
+
+            function scheduleSidebarPeek() {
+                if (!isDesktopSidebar() || !htmlTag.classList.contains('sidebar-collapsed')) {
+                    return;
+                }
+
+                window.clearTimeout(sidebarPeekTimer);
+                sidebarPeekTimer = window.setTimeout(function() {
+                    if (isDesktopSidebar() && htmlTag.classList.contains('sidebar-collapsed')) {
+                        htmlTag.classList.add('sidebar-peeking');
+                    }
+                }, 130);
+            }
 
             function toggleSidebar() {
                 const isMobile = window.innerWidth < 1200;
+                closeSidebarPeek();
 
                 if (isMobile) {
                     // Logika Mobile: Toggle class sidebar-mobile-open
@@ -4816,6 +5086,19 @@
             }
 
             if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+            if (layoutMenu) {
+                layoutMenu.addEventListener('pointerenter', scheduleSidebarPeek);
+                layoutMenu.addEventListener('pointerleave', closeSidebarPeek);
+                layoutMenu.addEventListener('mouseenter', scheduleSidebarPeek);
+                layoutMenu.addEventListener('mouseleave', closeSidebarPeek);
+                layoutMenu.addEventListener('focusin', scheduleSidebarPeek);
+                layoutMenu.addEventListener('focusout', function(event) {
+                    if (!layoutMenu.contains(event.relatedTarget)) {
+                        closeSidebarPeek();
+                    }
+                });
+            }
+
             document.querySelectorAll('#custom-sidebar-toggle, .dropdown-user .nav-link, .dropdown-user img')
                 .forEach((element) => {
                     element.setAttribute('draggable', 'false');
@@ -4836,6 +5119,8 @@
 
             // Handle window resize
             window.addEventListener('resize', function() {
+                closeSidebarPeek();
+
                 if (window.innerWidth >= 1200) {
                     htmlTag.classList.remove('sidebar-mobile-open');
                 }
