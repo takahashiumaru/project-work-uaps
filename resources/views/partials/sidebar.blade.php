@@ -12,7 +12,7 @@
             <a href="{{ route('schedule.now') }}" style="padding-left: 30px;">Jadwal Schedule Hari Ini </a>
             <a href="{{ route('schedule.index') }}" style="padding-left: 30px;">Data Schedule</a>
             @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
-            <a href="{{ route('schedule.show') }}" style="padding-left: 30px;">Create / Update Schedule</a>
+            <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
             @endif
         </div>
     </div>

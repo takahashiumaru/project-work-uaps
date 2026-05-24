@@ -78,7 +78,7 @@
             @endfor
     </div>
     <div class="text-right">
-        <a href="{{ route('schedule.show', ['page' => $page]) }}" class="btn btn-warning">BACK</a>
+        <a href="{{ route('schedule.view', ['page' => $page]) }}" class="btn btn-warning">BACK</a>
     </div>
     </div>
 
