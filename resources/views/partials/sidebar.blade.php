@@ -11,15 +11,25 @@
         <div id="scheduleDropdown" class="collapse">
             <a href="{{ route('schedule.now') }}" style="padding-left: 30px;">Jadwal Schedule Hari Ini </a>
             <a href="{{ route('schedule.index') }}" style="padding-left: 30px;">Data Schedule</a>
-            @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader Bge', 'Ass Leader Apron', 'Head Of Airport Service', 'SPV', 'Bge', 'Apron']))
+            @if (in_array(strtolower((string) Auth::user()->role), [
+                    'admin',
+                    'spv bge',
+                    'ass leader bge',
+                    'leader bge',
+                    'spv apron',
+                    'ass leader apron',
+                    'leader apron',
+                ]))
             <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
             @endif
         </div>
     </div>
 
+    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'chief', 'leader']))
     <a href="{{ route('shift.index') }}">
         <i class="bi bi-clock"></i> Shift
     </a>
+    @endif
 
     <div class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#attendanceDropdown">

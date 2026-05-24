@@ -27,9 +27,16 @@
                                 <i class="bx bx-search search-icon"></i>
                                 <input type="text" name="search" class="form-control" placeholder="Cari NIP atau Nama..." value="{{ request('search') }}">
                             </div>
-                            <div>
+                             <div>
                                 <label class="form-label">Station</label>
-                                <input type="text" name="station" class="form-control" placeholder="Kode Station (CGK)" value="{{ request('station') }}" style="min-width: 160px;">
+                                <select name="station" class="form-select" style="min-width: 180px;">
+                                    <option value="">Semua Station</option>
+                                    @foreach ($stations as $st)
+                                    <option value="{{ $st->code }}" {{ request('station') == $st->code ? 'selected' : '' }}>
+                                        {{ $st->code }} - {{ $st->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div>
                                 <label class="form-label">Dari Tanggal</label>

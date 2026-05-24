@@ -152,7 +152,8 @@ class OvertimeController extends Controller
         $overtimes = $query->latest()->paginate(20)->withQueryString();
         $totalHours = $query->sum('duration'); // Total jam untuk payroll
 
-        return view('overtime.report', compact('overtimes', 'totalHours'));
+        $stations = \App\Models\Station::where('is_active', 1)->orderBy('name', 'asc')->get();
+        return view('overtime.report', compact('overtimes', 'totalHours', 'stations'));
     }
 
     public function exportExcel(Request $request)

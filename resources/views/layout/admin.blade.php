@@ -1731,6 +1731,10 @@
             max-height: none;
         }
 
+        .aps-picker.is-month-picker .aps-picker-panel {
+            width: min(280px, calc(100vw - 1.5rem));
+        }
+
         .aps-picker.is-time-picker .aps-picker-head,
         .aps-picker.is-time-picker .aps-picker-foot {
             padding: 0.36rem 0.42rem;
@@ -1840,6 +1844,44 @@
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 0.26rem;
+        }
+
+        .aps-picker-months-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+        }
+
+        .aps-picker-month-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 40px;
+            min-width: 0;
+            border: 0;
+            border-radius: 0.56rem;
+            background: transparent;
+            color: #324155;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .aps-picker-month-btn:hover {
+            background: #eef5ff;
+            color: var(--aps-blue-dark);
+        }
+
+        .aps-picker-month-btn.is-today {
+            color: var(--aps-blue);
+            background: rgba(47, 128, 237, 0.1);
+        }
+
+        .aps-picker-month-btn.is-selected {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--aps-blue), var(--aps-blue-dark));
+            box-shadow: 0 10px 20px rgba(47, 128, 237, 0.24);
         }
 
         .aps-picker-weekday {
@@ -2054,7 +2096,7 @@
                 bottom: auto !important;
                 display: none;
                 flex-direction: column;
-                width: min(318px, 100%);
+                width: min(318px, calc(100vw - 1.5rem));
                 max-width: calc(100vw - 1.5rem);
                 max-height: var(--aps-panel-max-height, min(360px, calc(100vh - 6rem)));
                 border-radius: 0.92rem;
@@ -2063,12 +2105,16 @@
             }
 
             .aps-picker.is-time-picker .aps-picker-panel {
-                width: min(238px, 100%);
+                width: min(238px, calc(100vw - 1.5rem));
                 max-height: none;
             }
 
+            .aps-picker.is-month-picker .aps-picker-panel {
+                width: min(280px, calc(100vw - 1.5rem));
+            }
+
             .aps-picker.is-datetime-picker .aps-picker-panel {
-                width: min(328px, 100%);
+                width: min(328px, calc(100vw - 1.5rem));
             }
 
             .aps-picker.is-dropup .aps-picker-panel {
@@ -3539,6 +3585,7 @@
         html.aps-dark .aps-picker-chip:hover,
         html.aps-dark .aps-picker-action:hover,
         html.aps-dark .aps-picker-day:hover,
+        html.aps-dark .aps-picker-month-btn:hover,
         html.aps-dark .aps-time-step:hover,
         html.aps-dark .aps-time-cell:hover {
             background: #172942 !important;
@@ -3548,6 +3595,7 @@
 
         html.aps-dark .aps-combobox-option,
         html.aps-dark .aps-picker-day,
+        html.aps-dark .aps-picker-month-btn,
         html.aps-dark .aps-picker-title,
         html.aps-dark .aps-time-input,
         html.aps-dark .aps-time-cell {
@@ -5592,14 +5640,14 @@
                                     <div data-i18n="Data Schedule">Data Schedule</div>
                                 </a>
                             </li>
-                            @if (in_array(Auth::user()->role, [
-                                    'Admin',
-                                    'Ass Leader Bge',
-                                    'Ass Leader Apron',
-                                    'Head Of Airport Service',
-                                    'SPV',
-                                    'Bge',
-                                    'Apron',
+                            @if (in_array(strtolower((string) Auth::user()->role), [
+                                    'admin',
+                                    'spv bge',
+                                    'ass leader bge',
+                                    'leader bge',
+                                    'spv apron',
+                                    'ass leader apron',
+                                    'leader apron',
                                 ]))
                                 <li
                                     class="menu-item {{ request()->routeIs('schedule.create') || request()->routeIs('schedule.edit') || request()->routeIs('schedule.view') || request()->routeIs('schedule.show') ? 'active' : '' }}">
@@ -5612,12 +5660,14 @@
                         </ul>
                     </li>
 
+                    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'chief', 'leader']))
                     <li class="menu-item {{ request()->routeIs('shift.*') ? 'active' : '' }}">
                         <a href="{{ route('shift.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-clock"></i>
                             <div data-i18n="Shift">Shift</div>
                         </a>
                     </li>
+                    @endif
 
 
                     <li
@@ -5833,14 +5883,14 @@
             <div class="layout-page">
                 @php
                     $currentUser = Auth::user();
-                    $canManageSchedule = in_array($currentUser->role, [
-                        'Admin',
-                        'Ass Leader Bge',
-                        'Ass Leader Apron',
-                        'Head Of Airport Service',
-                        'SPV',
-                        'Bge',
-                        'Apron',
+                    $canManageSchedule = in_array(strtolower((string) $currentUser->role), [
+                        'admin',
+                        'spv bge',
+                        'ass leader bge',
+                        'leader bge',
+                        'spv apron',
+                        'ass leader apron',
+                        'leader apron',
                     ]);
                     $canViewAdminAttendance = in_array($currentUser->role, ['Admin', 'CHIEF']);
                     $canApproveOvertime = in_array($currentUser->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']);
@@ -5857,7 +5907,9 @@
                         $topbarMenuLinks[] = ['label' => 'Create / Update Schedule', 'category' => 'Schedule', 'hint' => 'Kelola pembuatan jadwal staff', 'icon' => 'ti-calendar-plus', 'url' => route('schedule.view')];
                     }
 
-                    $topbarMenuLinks[] = ['label' => 'Shift', 'category' => 'Menu', 'hint' => 'Data shift kerja', 'icon' => 'ti-clock', 'url' => route('shift.index')];
+                    if (in_array(strtolower((string) $currentUser->role), ['admin', 'ass leader', 'chief', 'leader'])) {
+                        $topbarMenuLinks[] = ['label' => 'Shift', 'category' => 'Menu', 'hint' => 'Data shift kerja', 'icon' => 'ti-clock', 'url' => route('shift.index')];
+                    }
                     $topbarMenuLinks[] = ['label' => 'Absensi Hari Ini', 'category' => 'Attendance', 'hint' => 'Monitoring absensi staff', 'icon' => 'ti-stopwatch', 'url' => route('attendance.index')];
 
                     if ($canViewAdminAttendance) {
@@ -6159,7 +6211,7 @@
 	    <script>
 	        (function() {
 	            const enhancedSelects = 'select:not([multiple]):not([size]):not([data-aps-native]):not(.select2)';
-	            const temporalInputs = 'input[type="date"]:not([data-aps-native]), input[type="time"]:not([data-aps-native]), input[type="datetime-local"]:not([data-aps-native])';
+	            const temporalInputs = 'input[type="date"]:not([data-aps-native]), input[type="time"]:not([data-aps-native]), input[type="datetime-local"]:not([data-aps-native]), input[type="month"]:not([data-aps-native])';
 	            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 	            const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
@@ -6376,6 +6428,16 @@
 	                return new Date(parts[0], parts[1] - 1, parts[2]);
 	            }
 
+	            function parseMonth(value) {
+	                if (!value) return null;
+	                const parts = value.split('-').map(Number);
+	                if (parts.length < 2 || Number.isNaN(parts[0]) || Number.isNaN(parts[1])) return null;
+	                return {
+	                    year: parts[0],
+	                    month: parts[1] - 1
+	                };
+	            }
+
 	            function parseTime(value) {
 	                if (!value) return null;
 	                const timePart = value.includes('T') ? value.split('T')[1] : value;
@@ -6397,6 +6459,12 @@
 	                return pad(parsed.getDate()) + '/' + pad(parsed.getMonth() + 1) + '/' + parsed.getFullYear();
 	            }
 
+	            function formatMonthDisplay(value) {
+	                const parsed = parseMonth(value);
+	                if (!parsed) return '';
+	                return monthNames[parsed.month] + ' ' + parsed.year;
+	            }
+
 	            function formatTimeDisplay(value) {
 	                const parsed = parseTime(value);
 	                if (!parsed) return '';
@@ -6404,12 +6472,14 @@
 	            }
 
 	            function pickerPlaceholder(type) {
+	                if (type === 'month') return 'Pilih bulan';
 	                if (type === 'time') return 'Pilih jam';
 	                if (type === 'datetime-local') return 'Pilih tanggal & jam';
 	                return 'Pilih tanggal';
 	            }
 
 	            function pickerIcon(type) {
+	                if (type === 'month') return 'ti-calendar';
 	                if (type === 'time') return 'ti-clock-hour-4';
 	                if (type === 'datetime-local') return 'ti-calendar-time';
 	                return 'ti-calendar';
@@ -6418,6 +6488,7 @@
 	            function formatPickerDisplay(input) {
 	                const type = input.dataset.apsPickerType;
 	                if (!input.value) return '';
+	                if (type === 'month') return formatMonthDisplay(input.value);
 	                if (type === 'time') return formatTimeDisplay(input.value);
 	                if (type === 'datetime-local') {
 	                    const date = formatDateDisplay(input.value);
@@ -6440,6 +6511,15 @@
 	            function readPickerState(input) {
 	                const data = input._apsPicker;
 	                const now = new Date();
+	                if (data.type === 'month') {
+	                    const parsed = parseMonth(input.value) || {
+	                        year: now.getFullYear(),
+	                        month: now.getMonth()
+	                    };
+	                    data.viewYear = parsed.year;
+	                    data.month = parsed.month;
+	                    return;
+	                }
 	                const parsedDate = parseDate(input.value) || now;
 	                const parsedTime = parseTime(input.value) || {
 	                    hour: now.getHours(),
@@ -6455,6 +6535,9 @@
 
 	            function getPickerValue(input) {
 	                const data = input._apsPicker;
+	                if (data.type === 'month') {
+	                    return data.viewYear + '-' + pad(data.month + 1);
+	                }
 	                const includeSeconds = data.step === '1' || data.step === 'any';
 	                const time = pad(data.hour) + ':' + pad(data.minute) + (includeSeconds ? ':00' : '');
 	                const date = dateKey(data.date);
@@ -6502,6 +6585,9 @@
 
 	            function pickerFooterText(input, mode) {
 	                const data = input._apsPicker;
+	                if (mode === 'month') {
+	                    return monthNames[data.month] + ' ' + data.viewYear;
+	                }
 	                const current = data.date ? formatDateDisplay(dateKey(data.date)) : '';
 	                const time = pad(data.hour) + ':' + pad(data.minute);
 	                if (mode === 'date') return current;
@@ -6614,9 +6700,48 @@
 	                    '<span class="d-inline-flex gap-2">',
 	                    clear,
 	                    mode === 'date' ? '<button type="button" class="aps-picker-action" data-picker-now>Hari ini</button>' : '',
-	                    mode === 'date' ? '' : '<button type="button" class="aps-picker-action btn-primary text-white border-0" data-picker-apply>Terapkan</button>',
+	                    mode === 'month' ? '<button type="button" class="aps-picker-action" data-picker-now>Bulan ini</button>' : '',
+	                    (mode === 'date' || mode === 'month') ? '' : '<button type="button" class="aps-picker-action btn-primary text-white border-0" data-picker-apply>Terapkan</button>',
 	                    '</span>',
 	                    '</div>'
+	                ].join('');
+	            }
+
+	            function renderMonthCalendar(input) {
+	                const data = input._apsPicker;
+	                const isSelectedVal = input.value ? parseMonth(input.value) : null;
+	                const today = new Date();
+	                const todayYear = today.getFullYear();
+	                const todayMonth = today.getMonth();
+
+	                const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+	                let monthsHtml = '';
+	                for (let m = 0; m < 12; m++) {
+	                    const isSel = isSelectedVal && isSelectedVal.year === data.viewYear && isSelectedVal.month === m;
+	                    const isTod = todayYear === data.viewYear && todayMonth === m;
+	                    const classes = [
+	                        'aps-picker-month-btn',
+	                        isSel ? 'is-selected' : '',
+	                        isTod ? 'is-today' : ''
+	                    ].filter(Boolean).join(' ');
+	                    monthsHtml += '<button type="button" class="' + classes + '" data-picker-month-val="' + m + '">' + shortMonths[m] + '</button>';
+	                }
+
+	                return [
+	                    '<div class="aps-picker-head">',
+	                    '<div class="aps-picker-nav-group">',
+	                    '<button type="button" class="aps-picker-nav" data-picker-year-nav="-1" aria-label="Tahun sebelumnya"><i class="ti ti-chevron-left"></i></button>',
+	                    '</div>',
+	                    '<div class="aps-picker-title">' + data.viewYear + '</div>',
+	                    '<div class="aps-picker-nav-group">',
+	                    '<button type="button" class="aps-picker-nav" data-picker-year-nav="1" aria-label="Tahun berikutnya"><i class="ti ti-chevron-right"></i></button>',
+	                    '</div>',
+	                    '</div>',
+	                    '<div class="aps-picker-body">',
+	                    '<div class="aps-picker-months-grid">' + monthsHtml + '</div>',
+	                    '</div>',
+	                    renderPickerFooter(input, 'month')
 	                ].join('');
 	            }
 
@@ -6624,8 +6749,11 @@
 	                const data = input._apsPicker;
 	                data.picker.classList.toggle('is-time-picker', data.type === 'time');
 	                data.picker.classList.toggle('is-datetime-picker', data.type === 'datetime-local');
+	                data.picker.classList.toggle('is-month-picker', data.type === 'month');
 	                if (data.type === 'time') {
 	                    data.panel.innerHTML = renderTimePicker(input);
+	                } else if (data.type === 'month') {
+	                    data.panel.innerHTML = renderMonthCalendar(input);
 	                } else {
 	                    data.panel.innerHTML = renderCalendar(input, data.type === 'datetime-local');
 	                }
@@ -6634,6 +6762,7 @@
 	            function pickerPanelHeight(type) {
 	                if (type === 'time') return 320;
 	                if (type === 'datetime-local') return 420;
+	                if (type === 'month') return 250;
 	                return 350;
 	            }
 
@@ -6700,12 +6829,13 @@
 	                        input.dataset.apsInvalid = 'false';
 	                        syncPicker(input);
 	                    });
-
-	                    input._apsPicker.panel.addEventListener('click', function(event) {
+ 	                    input._apsPicker.panel.addEventListener('click', function(event) {
 	                        event.stopPropagation();
 
 	                        const nav = event.target.closest('[data-picker-nav]');
+	                        const yearNav = event.target.closest('[data-picker-year-nav]');
 	                        const day = event.target.closest('[data-picker-date]');
+	                        const monthVal = event.target.closest('[data-picker-month-val]');
 	                        const step = event.target.closest('[data-time-delta]');
 	                        const hour = event.target.closest('[data-picker-hour]');
 	                        const minute = event.target.closest('[data-picker-minute]');
@@ -6722,6 +6852,13 @@
 	                            return;
 	                        }
 
+	                        if (yearNav) {
+	                            const direction = Number(yearNav.dataset.pickerYearNav);
+	                            input._apsPicker.viewYear = input._apsPicker.viewYear + direction;
+	                            renderPicker(input);
+	                            return;
+	                        }
+
 	                        if (day) {
 	                            readTimeInputs(input);
 	                            input._apsPicker.date = parseDate(day.dataset.pickerDate);
@@ -6733,6 +6870,16 @@
 	                            } else {
 	                                renderPicker(input);
 	                            }
+	                            return;
+	                        }
+
+	                        if (monthVal) {
+	                            const m = Number(monthVal.dataset.pickerMonthVal);
+	                            input._apsPicker.month = m;
+	                            setPickerValue(input, getPickerValue(input));
+	                            picker.classList.remove('is-open');
+	                            setControlHost(picker, false);
+	                            input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
 	                            return;
 	                        }
 
@@ -6760,11 +6907,16 @@
 
 	                        if (now) {
 	                            const current = new Date();
-	                            input._apsPicker.date = new Date(current.getFullYear(), current.getMonth(), current.getDate());
-	                            input._apsPicker.viewYear = current.getFullYear();
-	                            input._apsPicker.viewMonth = current.getMonth();
-	                            input._apsPicker.hour = current.getHours();
-	                            input._apsPicker.minute = current.getMinutes();
+	                            if (input._apsPicker.type === 'month') {
+	                                input._apsPicker.viewYear = current.getFullYear();
+	                                input._apsPicker.month = current.getMonth();
+	                            } else {
+	                                input._apsPicker.date = new Date(current.getFullYear(), current.getMonth(), current.getDate());
+	                                input._apsPicker.viewYear = current.getFullYear();
+	                                input._apsPicker.viewMonth = current.getMonth();
+	                                input._apsPicker.hour = current.getHours();
+	                                input._apsPicker.minute = current.getMinutes();
+	                            }
 	                            setPickerValue(input, getPickerValue(input));
 	                            picker.classList.remove('is-open');
 	                            setControlHost(picker, false);

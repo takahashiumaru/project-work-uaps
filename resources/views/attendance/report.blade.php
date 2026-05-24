@@ -30,7 +30,7 @@
                     <form action="{{ route('attendance.reports') }}" method="GET" class="d-flex flex-wrap gap-3 align-items-end flex-grow-1" style="margin:0;">
                         <div>
                             <label class="form-label">Periode</label>
-                            <input type="month" name="month" class="form-control" value="{{ request('month') }}" style="min-width: 160px;">
+                            <input type="month" name="month" class="form-control" value="{{ request('month') ?: date('Y-m') }}" style="min-width: 160px;">
                         </div>
                         <div>
                             <label class="form-label">Station</label>

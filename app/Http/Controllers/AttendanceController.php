@@ -333,9 +333,11 @@ class AttendanceController extends Controller
 
         $stations = Station::where('is_active', 1)->get();
 
-        if ($request->filled('month')) {
+        $selectedMonth = $request->filled('month') ? $request->input('month') : Carbon::now()->format('Y-m');
+
+        if ($selectedMonth) {
             try {
-                $period = \Carbon\Carbon::parse($request->month . '-01');
+                $period = \Carbon\Carbon::parse($selectedMonth . '-01');
                 $startDate = $period->copy()->startOfMonth();
                 $endDate = $period->copy()->endOfMonth();
 
