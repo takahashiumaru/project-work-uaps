@@ -1,7 +1,41 @@
 @extends('layout.admin')
 
+@section('styles')
+<style>
+    /* Enforce uniform borders, shadows, and rounded corners for all FAQ card items */
+    #faqAccordion .accordion-item.card {
+        border: 1px solid #d9dee3 !important;
+        border-radius: 0.5rem !important;
+        overflow: hidden !important;
+        box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12) !important;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    /* Dark mode border and shadow adjustments */
+    html.aps-dark #faqAccordion .accordion-item.card {
+        border-color: #263653 !important;
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24) !important;
+    }
+
+    /* Force all sides to have border even if Bootstrap tries to collapse it */
+    #faqAccordion .accordion-item.card:not(:first-of-type) {
+        border-top: 1px solid #d9dee3 !important;
+    }
+    html.aps-dark #faqAccordion .accordion-item.card:not(:first-of-type) {
+        border-top: 1px solid #263653 !important;
+    }
+    
+    /* Interactive hover state */
+    #faqAccordion .accordion-item.card:hover {
+        border-color: rgba(47, 128, 237, 0.45) !important;
+        box-shadow: 0 4px 12px 0 rgba(47, 128, 237, 0.15) !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
+
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Bantuan /</span> FAQ
     </h4>

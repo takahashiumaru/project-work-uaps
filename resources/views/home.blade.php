@@ -574,8 +574,9 @@
             padding: 4px 10px 0;
         }
 
-        .chart-card-aircraft .chart-canvas-wrapper {
-            height: 240px;
+        .chart-card-aircraft .chart-canvas-wrapper,
+        .chart-card-doughnut .chart-canvas-wrapper {
+            height: 340px;
             padding-top: 8px;
         }
 
@@ -1369,7 +1370,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modern-card">
+            <div class="modern-card chart-card-doughnut">
                 <div class="card-header chart-header">
                     <div class="chart-heading-main">
                         <div class="chart-heading-title">
