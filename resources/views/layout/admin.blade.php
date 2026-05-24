@@ -1490,6 +1490,715 @@
             margin-bottom: 0.375rem;
         }
 
+        .aps-control-hidden {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            min-width: 1px !important;
+            min-height: 1px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            overflow: hidden !important;
+        }
+
+        .aps-combobox,
+        .aps-picker {
+            position: relative;
+            width: 100%;
+        }
+
+        .aps-control-host-open {
+            overflow: visible !important;
+        }
+
+        .aps-combobox-trigger,
+        .aps-picker-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+            width: 100%;
+            min-height: 40px;
+            padding: 0.55rem 0.78rem;
+            border: 1px solid var(--aps-line);
+            border-radius: 0.78rem;
+            background: #ffffff;
+            color: #374151;
+            font-size: 0.84rem;
+            line-height: 1.3;
+            text-align: left;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+        }
+
+        .aps-combobox-trigger:hover,
+        .aps-picker-trigger:hover {
+            border-color: rgba(47, 128, 237, 0.28);
+            background: #fbfdff;
+        }
+
+        .aps-combobox.is-open .aps-combobox-trigger,
+        .aps-picker.is-open .aps-picker-trigger,
+        .aps-combobox-trigger:focus,
+        .aps-picker-trigger:focus {
+            outline: none;
+            border-color: rgba(47, 128, 237, 0.45);
+            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.1);
+        }
+
+        .aps-combobox.is-invalid .aps-combobox-trigger,
+        .aps-picker.is-invalid .aps-picker-trigger {
+            border-color: rgba(239, 68, 68, 0.62);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.08);
+        }
+
+        .aps-combobox-trigger:disabled,
+        .aps-picker-trigger:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            background: #f8fafc;
+        }
+
+        .aps-combobox-value,
+        .aps-picker-value {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .aps-combobox-placeholder,
+        .aps-picker-placeholder {
+            color: #a5afbd;
+        }
+
+        .aps-combobox-icon,
+        .aps-picker-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            color: #7b8ca3;
+            font-size: 1.05rem;
+            transition: transform 0.18s ease, color 0.18s ease;
+        }
+
+        .aps-combobox.is-open .aps-combobox-icon {
+            transform: rotate(180deg);
+            color: var(--aps-blue);
+        }
+
+        .aps-combobox-panel,
+        .aps-picker-panel {
+            position: absolute;
+            top: calc(100% + 0.38rem);
+            left: 0;
+            right: 0;
+            z-index: 2060;
+            display: none;
+            flex-direction: column;
+            max-height: var(--aps-panel-max-height, min(70vh, 440px));
+            overflow: hidden;
+            border: 1px solid #dce7f4;
+            border-radius: 0.88rem;
+            background: #ffffff;
+            box-shadow: 0 16px 38px rgba(31, 49, 78, 0.16);
+        }
+
+        .aps-combobox.is-dropup .aps-combobox-panel,
+        .aps-picker.is-dropup .aps-picker-panel {
+            top: auto;
+            bottom: calc(100% + 0.38rem);
+        }
+
+        .aps-combobox.is-open .aps-combobox-panel,
+        .aps-picker.is-open .aps-picker-panel {
+            display: flex;
+        }
+
+        .aps-combobox-search-wrap {
+            position: relative;
+            padding: 0.55rem;
+            border-bottom: 1px solid #edf2f7;
+            background: #fbfdff;
+        }
+
+        .aps-combobox-search-wrap i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            color: #94a3b8;
+            transform: translateY(-50%);
+        }
+
+        .aps-combobox-search {
+            width: 100%;
+            height: 34px;
+            padding: 0 0.75rem 0 1.95rem;
+            border: 1px solid #e4edf7;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #26364b;
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .aps-combobox-search:focus {
+            border-color: rgba(47, 128, 237, 0.45);
+            box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.08);
+        }
+
+        .aps-combobox-options {
+            flex: 1 1 auto;
+            min-height: 0;
+            max-height: 190px;
+            overflow: auto;
+            padding: 0.35rem;
+        }
+
+        .aps-combobox-options,
+        .aps-time-grid {
+            scrollbar-width: none;
+        }
+
+        .aps-combobox-options::-webkit-scrollbar,
+        .aps-time-grid::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        .aps-combobox-option {
+            display: grid;
+            grid-template-columns: 20px minmax(0, 1fr);
+            align-items: center;
+            gap: 0.45rem;
+            width: 100%;
+            min-height: 34px;
+            padding: 0.42rem 0.55rem;
+            border: 0;
+            border-radius: 0.62rem;
+            background: transparent;
+            color: #374151;
+            font-size: 0.82rem;
+            text-align: left;
+        }
+
+        .aps-combobox-option:hover,
+        .aps-combobox-option.is-active {
+            background: #eef5ff;
+            color: var(--aps-blue-dark);
+        }
+
+        .aps-combobox-option[disabled] {
+            cursor: not-allowed;
+            opacity: 0.52;
+        }
+
+        .aps-combobox-check {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            color: transparent;
+        }
+
+        .aps-combobox-option.is-selected .aps-combobox-check {
+            color: var(--aps-blue);
+        }
+
+        .aps-combobox-empty {
+            display: none;
+            padding: 1rem;
+            color: #94a3b8;
+            font-size: 0.84rem;
+            text-align: center;
+        }
+
+        .aps-combobox-empty.is-visible {
+            display: block;
+        }
+
+        .aps-picker-panel {
+            width: min(318px, calc(100vw - 1.5rem));
+            right: auto;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-panel {
+            width: min(238px, calc(100vw - 1.5rem));
+            max-height: none;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-head,
+        .aps-picker.is-time-picker .aps-picker-foot {
+            padding: 0.36rem 0.42rem;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-title {
+            font-size: 0.78rem;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-chip {
+            min-height: 24px;
+            padding: 0.16rem 0.4rem;
+            font-size: 0.68rem;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-current {
+            font-size: 0.7rem;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-action {
+            min-height: 27px;
+            padding: 0.18rem 0.48rem;
+            font-size: 0.72rem;
+        }
+
+        .aps-picker.is-time-picker .aps-picker-body {
+            padding: 0.4rem;
+        }
+
+        .aps-picker-head,
+        .aps-picker-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 0 0 auto;
+            gap: 0.6rem;
+            padding: 0.62rem;
+            border-bottom: 1px solid #edf2f7;
+            background: #fbfdff;
+        }
+
+        .aps-picker-foot {
+            border-top: 1px solid #edf2f7;
+            border-bottom: 0;
+        }
+
+        .aps-picker-title {
+            flex: 1 1 auto;
+            min-width: 0;
+            color: #243247;
+            font-size: 0.84rem;
+            font-weight: 750;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .aps-picker-nav-group {
+            display: inline-flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 0.28rem;
+        }
+
+        .aps-picker-nav,
+        .aps-picker-chip,
+        .aps-picker-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            border: 1px solid #dce7f4;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #456179;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .aps-picker-nav {
+            width: 30px;
+            padding: 0;
+        }
+
+        .aps-picker-chip,
+        .aps-picker-action {
+            padding: 0.3rem 0.6rem;
+        }
+
+        .aps-picker-nav:hover,
+        .aps-picker-chip:hover,
+        .aps-picker-action:hover {
+            border-color: rgba(47, 128, 237, 0.35);
+            color: var(--aps-blue-dark);
+            background: #eef5ff;
+        }
+
+        .aps-picker-body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.62rem;
+        }
+
+        .aps-picker-weekdays,
+        .aps-picker-days {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 0.26rem;
+        }
+
+        .aps-picker-weekday {
+            color: #8b9ab0;
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .aps-picker-day {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: auto;
+            min-height: 32px;
+            min-width: 0;
+            border: 0;
+            border-radius: 0.56rem;
+            background: transparent;
+            color: #324155;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .aps-picker-day:hover {
+            background: #eef5ff;
+            color: var(--aps-blue-dark);
+        }
+
+        .aps-picker-day.is-today {
+            color: var(--aps-blue);
+            background: rgba(47, 128, 237, 0.1);
+        }
+
+        .aps-picker-day.is-selected {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--aps-blue), var(--aps-blue-dark));
+            box-shadow: 0 10px 20px rgba(47, 128, 237, 0.24);
+        }
+
+        .aps-picker-day.is-empty {
+            pointer-events: none;
+        }
+
+        .aps-time-board {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: start;
+            gap: 0.3rem;
+        }
+
+        .aps-time-column-title {
+            margin-bottom: 0.22rem;
+            color: #718096;
+            font-size: 0.62rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .aps-time-separator {
+            display: none;
+        }
+
+        .aps-time-control {
+            display: grid;
+            grid-template-columns: 22px minmax(0, 1fr) 22px;
+            align-items: center;
+            gap: 0.16rem;
+            padding: 0.16rem;
+            border: 1px solid #e4edf7;
+            border-radius: 0.62rem;
+            background: #fbfdff;
+        }
+
+        .aps-time-step {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            min-height: 22px;
+            border: 1px solid #e4edf7;
+            border-radius: 0.48rem;
+            background: #ffffff;
+            color: #51657d;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        .aps-time-step:hover {
+            border-color: rgba(47, 128, 237, 0.32);
+            background: #eef5ff;
+            color: var(--aps-blue-dark);
+        }
+
+        .aps-time-input {
+            width: 100%;
+            height: 27px;
+            border: 0;
+            border-radius: 0.5rem;
+            background: #ffffff;
+            color: #243247;
+            font-size: 0.86rem;
+            font-weight: 800;
+            text-align: center;
+            outline: none;
+        }
+
+        .aps-time-input:focus {
+            box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
+        }
+
+        .aps-time-input::-webkit-outer-spin-button,
+        .aps-time-input::-webkit-inner-spin-button {
+            margin: 0;
+            appearance: none;
+        }
+
+        .aps-time-input {
+            appearance: textfield;
+        }
+
+        .aps-time-quick {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.18rem;
+            margin-top: 0.32rem;
+        }
+
+        .aps-time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.26rem;
+            max-height: 150px;
+            overflow: auto;
+            padding-right: 0.12rem;
+        }
+
+        .aps-time-cell {
+            min-height: 28px;
+            border: 1px solid #e4edf7;
+            border-radius: 0.56rem;
+            background: #ffffff;
+            color: #324155;
+            font-size: 0.74rem;
+            font-weight: 750;
+        }
+
+        .aps-time-cell:hover {
+            border-color: rgba(47, 128, 237, 0.32);
+            background: #eef5ff;
+            color: var(--aps-blue-dark);
+        }
+
+        .aps-time-cell.is-selected {
+            border-color: transparent;
+            background: linear-gradient(135deg, var(--aps-blue), var(--aps-blue-dark));
+            color: #ffffff;
+            box-shadow: 0 10px 18px rgba(47, 128, 237, 0.2);
+        }
+
+        .aps-datetime-time {
+            margin-top: 0.85rem;
+            padding-top: 0.65rem;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .aps-picker-current {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            min-width: 0;
+            color: #60728a;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .select2-container--default .select2-selection--single,
+        .select2-container--bootstrap-5 .select2-selection,
+        .select2-container--bootstrap-5 .select2-selection--single {
+            min-height: 44px !important;
+            border-color: var(--aps-line) !important;
+            border-radius: 0.78rem !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        .select2-dropdown {
+            border-color: #dce7f4 !important;
+            border-radius: 1rem !important;
+            overflow: hidden !important;
+            box-shadow: 0 22px 54px rgba(31, 49, 78, 0.18) !important;
+        }
+
+        @media (max-width: 767.98px) {
+            .aps-combobox-panel {
+                position: absolute;
+                top: calc(100% + 0.35rem) !important;
+                left: 0;
+                right: 0;
+                bottom: auto !important;
+                width: 100%;
+                max-height: var(--aps-panel-max-height, min(220px, calc(100vh - 7rem)));
+                border-radius: 0.85rem;
+            }
+
+            .aps-picker-panel {
+                position: absolute;
+                top: calc(100% + 0.35rem) !important;
+                left: 0;
+                right: auto;
+                bottom: auto !important;
+                display: none;
+                flex-direction: column;
+                width: min(318px, 100%);
+                max-width: calc(100vw - 1.5rem);
+                max-height: var(--aps-panel-max-height, min(360px, calc(100vh - 6rem)));
+                border-radius: 0.92rem;
+                overflow: hidden;
+                transform: none;
+            }
+
+            .aps-picker.is-time-picker .aps-picker-panel {
+                width: min(238px, 100%);
+                max-height: none;
+            }
+
+            .aps-picker.is-datetime-picker .aps-picker-panel {
+                width: min(328px, 100%);
+            }
+
+            .aps-picker.is-dropup .aps-picker-panel {
+                top: auto !important;
+                bottom: calc(100% + 0.35rem) !important;
+            }
+
+            .aps-combobox.is-open .aps-combobox-panel,
+            .aps-picker.is-open .aps-picker-panel {
+                display: flex;
+            }
+
+            .aps-combobox-search-wrap,
+            .aps-picker-head,
+            .aps-picker-foot {
+                flex: 0 0 auto;
+                padding: 0.62rem;
+            }
+
+            .aps-combobox-options,
+            .aps-picker-body {
+                flex: 1 1 auto;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .aps-combobox-option {
+                min-height: 38px;
+                border-radius: 0.7rem;
+                font-size: 0.84rem;
+            }
+
+            .aps-picker-body {
+                padding: 0.65rem;
+            }
+
+            .aps-picker.is-time-picker .aps-picker-head,
+            .aps-picker.is-time-picker .aps-picker-foot {
+                padding: 0.36rem 0.42rem;
+            }
+
+            .aps-picker.is-time-picker .aps-picker-body {
+                padding: 0.4rem;
+            }
+
+            .aps-picker-days {
+                gap: 0.28rem;
+            }
+
+            .aps-picker-day {
+                min-height: 34px;
+                aspect-ratio: auto;
+                border-radius: 0.65rem;
+            }
+
+            .aps-time-board {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.36rem;
+            }
+
+            .aps-picker.is-time-picker .aps-time-board {
+                gap: 0.3rem;
+            }
+
+            .aps-time-control {
+                grid-template-columns: 23px minmax(0, 1fr) 23px;
+                gap: 0.18rem;
+                padding: 0.18rem;
+            }
+
+            .aps-picker.is-time-picker .aps-time-control {
+                grid-template-columns: 22px minmax(0, 1fr) 22px;
+                gap: 0.16rem;
+                padding: 0.16rem;
+            }
+
+            .aps-time-step {
+                width: 23px;
+                min-height: 23px;
+            }
+
+            .aps-picker.is-time-picker .aps-time-step {
+                width: 22px;
+                min-height: 22px;
+            }
+
+            .aps-time-input {
+                height: 29px;
+                font-size: 0.86rem;
+            }
+
+            .aps-picker.is-time-picker .aps-time-input {
+                height: 27px;
+            }
+
+            .aps-time-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                max-height: 136px;
+                overflow: auto;
+                padding-right: 0.08rem;
+            }
+
+            .aps-time-cell {
+                min-height: 30px;
+                border-radius: 0.6rem;
+                font-size: 0.76rem;
+            }
+
+            .aps-picker.is-time-picker .aps-time-cell {
+                min-height: 28px;
+                font-size: 0.74rem;
+            }
+
+            .aps-picker-foot {
+                background: #ffffff;
+                box-shadow: 0 -8px 20px rgba(31, 49, 78, 0.06);
+            }
+
+            .aps-picker-current {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .aps-picker-action,
+            .aps-picker-chip {
+                min-height: 32px;
+            }
+        }
+
         /* --- 8. BUTTONS (Clean style) --- */
         .btn {
             font-size: 0.875rem;
@@ -2795,6 +3504,67 @@
             background-color: #111c31 !important;
             border-color: #2a3a55 !important;
             color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .aps-combobox-trigger,
+        html.aps-dark .aps-picker-trigger,
+        html.aps-dark .aps-combobox-panel,
+        html.aps-dark .aps-picker-panel,
+        html.aps-dark .aps-combobox-search,
+        html.aps-dark .aps-time-input,
+        html.aps-dark .aps-time-step,
+        html.aps-dark .aps-picker-nav,
+        html.aps-dark .aps-picker-chip,
+        html.aps-dark .aps-picker-action,
+        html.aps-dark .aps-time-cell {
+            background: #111c31 !important;
+            background-color: #111c31 !important;
+            border-color: #2a3a55 !important;
+            color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .aps-combobox-search-wrap,
+        html.aps-dark .aps-time-control,
+        html.aps-dark .aps-picker-head,
+        html.aps-dark .aps-picker-foot {
+            background: #0f1a2d !important;
+            border-color: #263653 !important;
+        }
+
+        html.aps-dark .aps-combobox-trigger:hover,
+        html.aps-dark .aps-picker-trigger:hover,
+        html.aps-dark .aps-combobox-option:hover,
+        html.aps-dark .aps-combobox-option.is-active,
+        html.aps-dark .aps-picker-nav:hover,
+        html.aps-dark .aps-picker-chip:hover,
+        html.aps-dark .aps-picker-action:hover,
+        html.aps-dark .aps-picker-day:hover,
+        html.aps-dark .aps-time-step:hover,
+        html.aps-dark .aps-time-cell:hover {
+            background: #172942 !important;
+            color: #8fc2ff !important;
+            border-color: rgba(47, 128, 237, 0.42) !important;
+        }
+
+        html.aps-dark .aps-combobox-option,
+        html.aps-dark .aps-picker-day,
+        html.aps-dark .aps-picker-title,
+        html.aps-dark .aps-time-input,
+        html.aps-dark .aps-time-cell {
+            color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .aps-combobox-placeholder,
+        html.aps-dark .aps-picker-placeholder,
+        html.aps-dark .aps-combobox-empty,
+        html.aps-dark .aps-picker-current,
+        html.aps-dark .aps-time-column-title,
+        html.aps-dark .aps-picker-weekday {
+            color: #9fb0c8 !important;
+        }
+
+        html.aps-dark .aps-datetime-time {
+            border-color: #263653 !important;
         }
 
         @media (max-width: 1199.98px) {
@@ -4842,7 +5612,7 @@
                         </ul>
                     </li>
 
-                    <li class="menu-item {{ request()->routeIs('shift.index') ? 'active' : '' }}">
+                    <li class="menu-item {{ request()->routeIs('shift.*') ? 'active' : '' }}">
                         <a href="{{ route('shift.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-clock"></i>
                             <div data-i18n="Shift">Shift</div>
@@ -5315,7 +6085,7 @@
 
     <script src="{{ asset('template/') }}/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
-    <script src="{{ asset('template/') }}/assets/js/main.js"></script>
+    <script src="{{ asset('template/') }}/assets/js/main.js?v={{ filemtime(public_path('template/assets/js/main.js')) }}"></script>
 
     <script src="{{ asset('template/') }}/assets/js/dashboards-analytics.js"></script>
 
@@ -5382,13 +6152,737 @@
         })();
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <div id="pjax-page-scripts" hidden>
-        @yield('scripts')
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('custom-sidebar-toggle');
+	    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	    <div id="pjax-page-scripts" hidden>
+	        @yield('scripts')
+	    </div>
+	    <script>
+	        (function() {
+	            const enhancedSelects = 'select:not([multiple]):not([size]):not([data-aps-native]):not(.select2)';
+	            const temporalInputs = 'input[type="date"]:not([data-aps-native]), input[type="time"]:not([data-aps-native]), input[type="datetime-local"]:not([data-aps-native])';
+	            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+	            const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+
+	            function pad(value) {
+	                return String(value).padStart(2, '0');
+	            }
+
+	            function escapeKey(value) {
+	                return String(value || '').replace(/"/g, '&quot;');
+	            }
+
+	            function closeAllComboboxes(except) {
+	                document.querySelectorAll('.aps-combobox.is-open').forEach(function(combo) {
+	                    if (combo !== except) {
+	                        combo.classList.remove('is-open');
+	                        combo.querySelector('.aps-combobox-trigger')?.setAttribute('aria-expanded', 'false');
+	                        setControlHost(combo, false);
+	                    }
+	                });
+	            }
+
+	            function closeAllPickers(except) {
+	                document.querySelectorAll('.aps-picker.is-open').forEach(function(picker) {
+	                    if (picker !== except) {
+	                        picker.classList.remove('is-open');
+	                        picker.querySelector('.aps-picker-trigger')?.setAttribute('aria-expanded', 'false');
+	                        setControlHost(picker, false);
+	                    }
+	                });
+	            }
+
+	            function setControlHost(wrapper, isOpen) {
+	                wrapper.closest('.card, .form-card, .modal-content, .offcanvas, .dropdown-menu')?.classList.toggle('aps-control-host-open', isOpen);
+	            }
+
+	            function placePanel(wrapper, panel, estimatedHeight, options = {}) {
+	                wrapper.classList.remove('is-dropup');
+	                if (!panel) return;
+	                panel.style.removeProperty('--aps-panel-max-height');
+
+	                const rect = wrapper.getBoundingClientRect();
+	                const below = window.innerHeight - rect.bottom;
+	                const above = rect.top;
+	                const needed = estimatedHeight || 320;
+	                const allowDropup = !(options.preferBelow && window.innerWidth <= 767);
+	                if (allowDropup && below < needed && above > below) {
+	                    wrapper.classList.add('is-dropup');
+	                }
+	                const available = wrapper.classList.contains('is-dropup') ? above : below;
+	                const minHeight = options.minHeight || 160;
+	                const maxHeight = Math.max(minHeight, Math.min(needed, available - 12));
+	                panel.style.setProperty('--aps-panel-max-height', maxHeight + 'px');
+	            }
+
+	            function getSelectedText(select) {
+	                const selected = select.options[select.selectedIndex];
+	                return selected ? selected.text.trim() : '';
+	            }
+
+	            function syncCombobox(select) {
+	                const data = select._apsCombobox;
+	                if (!data) return;
+
+	                const text = getSelectedText(select);
+	                const hasValue = select.value !== '';
+	                data.value.textContent = text || data.placeholder;
+	                data.value.classList.toggle('aps-combobox-placeholder', !hasValue);
+	                data.trigger.disabled = select.disabled;
+	                data.combo.classList.toggle('is-invalid', select.classList.contains('is-invalid'));
+	            }
+
+	            function renderComboboxOptions(select, query) {
+	                const data = select._apsCombobox;
+	                if (!data) return;
+
+	                const normalized = (query || '').trim().toLowerCase();
+	                data.options.innerHTML = '';
+	                let visible = 0;
+
+	                Array.from(select.options).forEach(function(option) {
+	                    const text = option.text.trim();
+	                    const matches = !normalized || text.toLowerCase().includes(normalized) || String(option.value).toLowerCase().includes(normalized);
+	                    if (!matches) return;
+
+	                    visible += 1;
+	                    const item = document.createElement('button');
+	                    item.type = 'button';
+	                    item.className = 'aps-combobox-option';
+	                    item.dataset.value = option.value;
+	                    item.disabled = option.disabled;
+	                    item.classList.toggle('is-selected', option.selected);
+	                    item.classList.toggle('is-active', option.selected);
+	                    item.innerHTML = '<span class="aps-combobox-check"><i class="ti ti-check"></i></span><span class="text-truncate"></span>';
+	                    item.querySelector('.text-truncate').textContent = text;
+	                    data.options.appendChild(item);
+	                });
+
+	                data.empty.classList.toggle('is-visible', visible === 0);
+	            }
+
+	            function openCombobox(select) {
+	                const data = select._apsCombobox;
+	                if (!data || select.disabled) return;
+
+	                closeAllComboboxes(data.combo);
+	                closeAllPickers();
+	                renderComboboxOptions(select, '');
+	                placePanel(data.combo, data.combo.querySelector('.aps-combobox-panel'), 240, {
+	                    preferBelow: true,
+	                    minHeight: 140
+	                });
+	                data.search.value = '';
+	                data.combo.classList.add('is-open');
+	                setControlHost(data.combo, true);
+	                data.trigger.setAttribute('aria-expanded', 'true');
+	                window.setTimeout(function() {
+	                    data.search.focus();
+	                }, 20);
+	            }
+
+	            function initComboboxes(root) {
+	                root.querySelectorAll(enhancedSelects).forEach(function(select) {
+	                    if (select.dataset.apsEnhanced === 'combobox') return;
+	                    if (select.closest('.aps-combobox')) return;
+
+	                    select.dataset.apsEnhanced = 'combobox';
+	                    select.classList.add('aps-control-hidden');
+
+	                    const combo = document.createElement('div');
+	                    combo.className = 'aps-combobox';
+	                    combo.innerHTML = [
+	                        '<button type="button" class="aps-combobox-trigger" aria-haspopup="listbox" aria-expanded="false">',
+	                        '<span class="aps-combobox-value"></span>',
+	                        '<span class="aps-combobox-icon"><i class="ti ti-chevron-down"></i></span>',
+	                        '</button>',
+	                        '<div class="aps-combobox-panel">',
+	                        '<div class="aps-combobox-search-wrap">',
+	                        '<i class="ti ti-search"></i>',
+	                        '<input type="search" class="aps-combobox-search" placeholder="Cari pilihan..." autocomplete="off">',
+	                        '</div>',
+	                        '<div class="aps-combobox-options" role="listbox"></div>',
+	                        '<div class="aps-combobox-empty">Pilihan tidak ditemukan.</div>',
+	                        '</div>'
+	                    ].join('');
+
+	                    select.insertAdjacentElement('afterend', combo);
+
+	                    const data = {
+	                        combo: combo,
+	                        trigger: combo.querySelector('.aps-combobox-trigger'),
+	                        value: combo.querySelector('.aps-combobox-value'),
+	                        search: combo.querySelector('.aps-combobox-search'),
+	                        options: combo.querySelector('.aps-combobox-options'),
+	                        empty: combo.querySelector('.aps-combobox-empty'),
+	                        placeholder: getSelectedText(select) || 'Pilih data'
+	                    };
+
+	                    select._apsCombobox = data;
+	                    syncCombobox(select);
+
+	                    data.trigger.addEventListener('click', function() {
+	                        if (data.combo.classList.contains('is-open')) {
+	                            data.combo.classList.remove('is-open');
+	                            setControlHost(data.combo, false);
+	                            data.trigger.setAttribute('aria-expanded', 'false');
+	                        } else {
+	                            openCombobox(select);
+	                        }
+	                    });
+
+	                    data.search.addEventListener('input', function() {
+	                        renderComboboxOptions(select, data.search.value);
+	                    });
+
+	                    data.search.addEventListener('keydown', function(event) {
+	                        if (event.key === 'Escape') {
+	                            event.preventDefault();
+	                            data.combo.classList.remove('is-open');
+	                            setControlHost(data.combo, false);
+	                            data.trigger.focus();
+	                        }
+	                    });
+
+	                    data.options.addEventListener('click', function(event) {
+	                        const item = event.target.closest('.aps-combobox-option');
+	                        if (!item || item.disabled) return;
+
+	                        select.value = item.dataset.value;
+	                        data.combo.classList.remove('is-invalid', 'is-open');
+	                        setControlHost(data.combo, false);
+	                        data.trigger.setAttribute('aria-expanded', 'false');
+	                        select.dispatchEvent(new Event('input', { bubbles: true }));
+	                        select.dispatchEvent(new Event('change', { bubbles: true }));
+	                        syncCombobox(select);
+	                        data.trigger.focus();
+	                    });
+
+	                    select.addEventListener('change', function() {
+	                        syncCombobox(select);
+	                    });
+
+	                    select.addEventListener('invalid', function() {
+	                        data.combo.classList.add('is-invalid');
+	                        data.trigger.focus();
+	                    });
+	                });
+	            }
+
+	            function parseDate(value) {
+	                if (!value) return null;
+	                const datePart = value.split('T')[0];
+	                const parts = datePart.split('-').map(Number);
+	                if (parts.length < 3 || parts.some(Number.isNaN)) return null;
+	                return new Date(parts[0], parts[1] - 1, parts[2]);
+	            }
+
+	            function parseTime(value) {
+	                if (!value) return null;
+	                const timePart = value.includes('T') ? value.split('T')[1] : value;
+	                const parts = timePart.split(':').map(Number);
+	                if (parts.length < 2 || Number.isNaN(parts[0]) || Number.isNaN(parts[1])) return null;
+	                return {
+	                    hour: Math.min(Math.max(parts[0], 0), 23),
+	                    minute: Math.min(Math.max(parts[1], 0), 59)
+	                };
+	            }
+
+	            function dateKey(date) {
+	                return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
+	            }
+
+	            function formatDateDisplay(value) {
+	                const parsed = parseDate(value);
+	                if (!parsed) return '';
+	                return pad(parsed.getDate()) + '/' + pad(parsed.getMonth() + 1) + '/' + parsed.getFullYear();
+	            }
+
+	            function formatTimeDisplay(value) {
+	                const parsed = parseTime(value);
+	                if (!parsed) return '';
+	                return pad(parsed.hour) + ':' + pad(parsed.minute);
+	            }
+
+	            function pickerPlaceholder(type) {
+	                if (type === 'time') return 'Pilih jam';
+	                if (type === 'datetime-local') return 'Pilih tanggal & jam';
+	                return 'Pilih tanggal';
+	            }
+
+	            function pickerIcon(type) {
+	                if (type === 'time') return 'ti-clock-hour-4';
+	                if (type === 'datetime-local') return 'ti-calendar-time';
+	                return 'ti-calendar';
+	            }
+
+	            function formatPickerDisplay(input) {
+	                const type = input.dataset.apsPickerType;
+	                if (!input.value) return '';
+	                if (type === 'time') return formatTimeDisplay(input.value);
+	                if (type === 'datetime-local') {
+	                    const date = formatDateDisplay(input.value);
+	                    const time = formatTimeDisplay(input.value);
+	                    return [date, time].filter(Boolean).join(' ');
+	                }
+	                return formatDateDisplay(input.value);
+	            }
+
+	            function syncPicker(input) {
+	                const data = input._apsPicker;
+	                if (!data) return;
+
+	                const display = formatPickerDisplay(input);
+	                data.value.textContent = display || pickerPlaceholder(data.type);
+	                data.value.classList.toggle('aps-picker-placeholder', !display);
+	                data.picker.classList.toggle('is-invalid', input.classList.contains('is-invalid') || input.dataset.apsInvalid === 'true');
+	            }
+
+	            function readPickerState(input) {
+	                const data = input._apsPicker;
+	                const now = new Date();
+	                const parsedDate = parseDate(input.value) || now;
+	                const parsedTime = parseTime(input.value) || {
+	                    hour: now.getHours(),
+	                    minute: now.getMinutes()
+	                };
+
+	                data.date = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
+	                data.viewYear = data.date.getFullYear();
+	                data.viewMonth = data.date.getMonth();
+	                data.hour = parsedTime.hour;
+	                data.minute = parsedTime.minute;
+	            }
+
+	            function getPickerValue(input) {
+	                const data = input._apsPicker;
+	                const includeSeconds = data.step === '1' || data.step === 'any';
+	                const time = pad(data.hour) + ':' + pad(data.minute) + (includeSeconds ? ':00' : '');
+	                const date = dateKey(data.date);
+
+	                if (data.type === 'time') return time;
+	                if (data.type === 'datetime-local') return date + 'T' + time;
+	                return date;
+	            }
+
+	            function setPickerValue(input, value) {
+	                input.value = value;
+	                input.dataset.apsInvalid = 'false';
+	                input.dispatchEvent(new Event('input', { bubbles: true }));
+	                input.dispatchEvent(new Event('change', { bubbles: true }));
+	                syncPicker(input);
+	            }
+
+	            function clampTimePart(field, value, wrap = false) {
+	                const max = field === 'hour' ? 23 : 59;
+	                let next = Number(value);
+	                if (Number.isNaN(next)) next = 0;
+
+	                if (wrap) {
+	                    const range = max + 1;
+	                    return ((next % range) + range) % range;
+	                }
+
+	                return Math.min(Math.max(next, 0), max);
+	            }
+
+	            function setTimePart(input, field, value, wrap = false) {
+	                const data = input._apsPicker;
+	                if (!data) return;
+	                data[field] = clampTimePart(field, value, wrap);
+	            }
+
+	            function readTimeInputs(input) {
+	                const data = input._apsPicker;
+	                if (!data) return;
+	                const hourInput = data.panel.querySelector('[data-time-input="hour"]');
+	                const minuteInput = data.panel.querySelector('[data-time-input="minute"]');
+	                if (hourInput) setTimePart(input, 'hour', hourInput.value);
+	                if (minuteInput) setTimePart(input, 'minute', minuteInput.value);
+	            }
+
+	            function pickerFooterText(input, mode) {
+	                const data = input._apsPicker;
+	                const current = data.date ? formatDateDisplay(dateKey(data.date)) : '';
+	                const time = pad(data.hour) + ':' + pad(data.minute);
+	                if (mode === 'date') return current;
+	                if (mode === 'time') return time;
+	                return current + ' ' + time;
+	            }
+
+	            function updatePickerCurrent(input, mode) {
+	                const current = input._apsPicker?.panel.querySelector('[data-picker-current]');
+	                if (!current) return;
+	                current.innerHTML = '<i class="ti ti-point-filled"></i>' + pickerFooterText(input, mode);
+	            }
+
+	            function renderCalendar(input, includeTime) {
+	                const data = input._apsPicker;
+	                const first = new Date(data.viewYear, data.viewMonth, 1);
+	                const daysInMonth = new Date(data.viewYear, data.viewMonth + 1, 0).getDate();
+	                const selected = data.date ? dateKey(data.date) : '';
+	                const today = dateKey(new Date());
+	                let daysHtml = '';
+
+	                for (let i = 0; i < first.getDay(); i += 1) {
+	                    daysHtml += '<span class="aps-picker-day is-empty"></span>';
+	                }
+
+	                for (let day = 1; day <= daysInMonth; day += 1) {
+	                    const itemDate = new Date(data.viewYear, data.viewMonth, day);
+	                    const key = dateKey(itemDate);
+	                    const classes = [
+	                        'aps-picker-day',
+	                        key === selected ? 'is-selected' : '',
+	                        key === today ? 'is-today' : ''
+	                    ].filter(Boolean).join(' ');
+	                    daysHtml += '<button type="button" class="' + classes + '" data-picker-date="' + key + '">' + day + '</button>';
+	                }
+
+	                return [
+	                    '<div class="aps-picker-head">',
+	                    '<div class="aps-picker-nav-group">',
+	                    '<button type="button" class="aps-picker-nav" data-picker-nav="-12" aria-label="Tahun sebelumnya"><i class="ti ti-chevrons-left"></i></button>',
+	                    '<button type="button" class="aps-picker-nav" data-picker-nav="-1" aria-label="Bulan sebelumnya"><i class="ti ti-chevron-left"></i></button>',
+	                    '</div>',
+	                    '<div class="aps-picker-title">' + monthNames[data.viewMonth] + ' ' + data.viewYear + '</div>',
+	                    '<div class="aps-picker-nav-group">',
+	                    '<button type="button" class="aps-picker-nav" data-picker-nav="1" aria-label="Bulan berikutnya"><i class="ti ti-chevron-right"></i></button>',
+	                    '<button type="button" class="aps-picker-nav" data-picker-nav="12" aria-label="Tahun berikutnya"><i class="ti ti-chevrons-right"></i></button>',
+	                    '</div>',
+	                    '</div>',
+	                    '<div class="aps-picker-body">',
+	                    '<div class="aps-picker-weekdays">' + dayNames.map(function(day) {
+	                        return '<span class="aps-picker-weekday">' + day + '</span>';
+	                    }).join('') + '</div>',
+	                    '<div class="aps-picker-days mt-2">' + daysHtml + '</div>',
+	                    includeTime ? '<div class="aps-datetime-time">' + renderTimeBoard(input) + '</div>' : '',
+	                    '</div>',
+	                    renderPickerFooter(input, includeTime ? 'datetime' : 'date')
+	                ].join('');
+	            }
+
+	            function renderTimeBoard(input) {
+	                const data = input._apsPicker;
+	                const quickMinutes = [0, 15, 30, 45].map(function(minute) {
+	                    const selected = minute === data.minute ? ' is-selected' : '';
+	                    return '<button type="button" class="aps-time-cell' + selected + '" data-picker-minute="' + minute + '">' + pad(minute) + '</button>';
+	                }).join('');
+
+	                function unit(label, field, value) {
+	                    return [
+	                        '<div class="aps-time-unit">',
+	                        '<div class="aps-time-column-title">' + label + '</div>',
+	                        '<div class="aps-time-control">',
+	                        '<button type="button" class="aps-time-step" data-time-field="' + field + '" data-time-delta="-1" aria-label="Kurangi ' + label.toLowerCase() + '"><i class="ti ti-minus"></i></button>',
+	                        '<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" class="aps-time-input" data-time-input="' + field + '" value="' + pad(value) + '" aria-label="' + label + '">',
+	                        '<button type="button" class="aps-time-step" data-time-field="' + field + '" data-time-delta="1" aria-label="Tambah ' + label.toLowerCase() + '"><i class="ti ti-plus"></i></button>',
+	                        '</div>',
+	                        '</div>'
+	                    ].join('');
+	                }
+
+	                return [
+	                    '<div class="aps-time-board">',
+	                    unit('Jam', 'hour', data.hour),
+	                    unit('Menit', 'minute', data.minute),
+	                    '</div>',
+	                    '<div class="aps-time-quick">' + quickMinutes + '</div>'
+	                ].join('');
+	            }
+
+	            function renderTimePicker(input) {
+	                return [
+	                    '<div class="aps-picker-head">',
+	                    '<span class="aps-picker-title">Pilih Jam</span>',
+	                    '<button type="button" class="aps-picker-chip" data-picker-now><i class="ti ti-clock"></i>&nbsp;Sekarang</button>',
+	                    '</div>',
+	                    '<div class="aps-picker-body">',
+	                    renderTimeBoard(input),
+	                    '</div>',
+	                    renderPickerFooter(input, 'time')
+	                ].join('');
+	            }
+
+	            function renderPickerFooter(input, mode) {
+	                const data = input._apsPicker;
+	                const text = pickerFooterText(input, mode);
+	                const clear = data.required ? '' : '<button type="button" class="aps-picker-action" data-picker-clear>Bersihkan</button>';
+
+	                return [
+	                    '<div class="aps-picker-foot">',
+	                    '<span class="aps-picker-current" data-picker-current><i class="ti ti-point-filled"></i>' + text + '</span>',
+	                    '<span class="d-inline-flex gap-2">',
+	                    clear,
+	                    mode === 'date' ? '<button type="button" class="aps-picker-action" data-picker-now>Hari ini</button>' : '',
+	                    mode === 'date' ? '' : '<button type="button" class="aps-picker-action btn-primary text-white border-0" data-picker-apply>Terapkan</button>',
+	                    '</span>',
+	                    '</div>'
+	                ].join('');
+	            }
+
+	            function renderPicker(input) {
+	                const data = input._apsPicker;
+	                data.picker.classList.toggle('is-time-picker', data.type === 'time');
+	                data.picker.classList.toggle('is-datetime-picker', data.type === 'datetime-local');
+	                if (data.type === 'time') {
+	                    data.panel.innerHTML = renderTimePicker(input);
+	                } else {
+	                    data.panel.innerHTML = renderCalendar(input, data.type === 'datetime-local');
+	                }
+	            }
+
+	            function pickerPanelHeight(type) {
+	                if (type === 'time') return 320;
+	                if (type === 'datetime-local') return 420;
+	                return 350;
+	            }
+
+	            function openPicker(input) {
+	                const data = input._apsPicker;
+	                if (!data || input.disabled) return;
+	                closeAllPickers(data.picker);
+	                closeAllComboboxes();
+	                readPickerState(input);
+	                renderPicker(input);
+	                placePanel(data.picker, data.panel, pickerPanelHeight(data.type));
+	                data.picker.classList.add('is-open');
+	                setControlHost(data.picker, true);
+	                data.trigger.setAttribute('aria-expanded', 'true');
+	            }
+
+	            function initTemporalControls(root) {
+	                root.querySelectorAll(temporalInputs).forEach(function(input) {
+	                    if (input.dataset.apsEnhanced === 'picker') return;
+
+	                    const type = input.type;
+	                    input.dataset.apsEnhanced = 'picker';
+	                    input.dataset.apsPickerType = type;
+	                    input.dataset.apsRequired = input.required ? 'true' : 'false';
+	                    input.dataset.apsStep = input.getAttribute('step') || '';
+	                    input.required = false;
+	                    input.type = 'hidden';
+	                    input.classList.add('aps-control-hidden');
+
+	                    const picker = document.createElement('div');
+	                    picker.className = 'aps-picker';
+	                    picker.innerHTML = [
+	                        '<button type="button" class="aps-picker-trigger" aria-haspopup="dialog" aria-expanded="false">',
+	                        '<span class="aps-picker-value"></span>',
+	                        '<span class="aps-picker-icon"><i class="ti ' + pickerIcon(type) + '"></i></span>',
+	                        '</button>',
+	                        '<div class="aps-picker-panel"></div>'
+	                    ].join('');
+	                    input.insertAdjacentElement('afterend', picker);
+
+	                    input._apsPicker = {
+	                        picker: picker,
+	                        trigger: picker.querySelector('.aps-picker-trigger'),
+	                        value: picker.querySelector('.aps-picker-value'),
+	                        panel: picker.querySelector('.aps-picker-panel'),
+	                        type: type,
+	                        required: input.dataset.apsRequired === 'true',
+	                        step: input.dataset.apsStep
+	                    };
+
+	                    syncPicker(input);
+
+	                    input._apsPicker.trigger.addEventListener('click', function() {
+	                        if (picker.classList.contains('is-open')) {
+	                            picker.classList.remove('is-open');
+	                            setControlHost(picker, false);
+	                            input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
+	                        } else {
+	                            openPicker(input);
+	                        }
+	                    });
+
+	                    input.addEventListener('change', function() {
+	                        input.dataset.apsInvalid = 'false';
+	                        syncPicker(input);
+	                    });
+
+	                    input._apsPicker.panel.addEventListener('click', function(event) {
+	                        event.stopPropagation();
+
+	                        const nav = event.target.closest('[data-picker-nav]');
+	                        const day = event.target.closest('[data-picker-date]');
+	                        const step = event.target.closest('[data-time-delta]');
+	                        const hour = event.target.closest('[data-picker-hour]');
+	                        const minute = event.target.closest('[data-picker-minute]');
+	                        const apply = event.target.closest('[data-picker-apply]');
+	                        const clear = event.target.closest('[data-picker-clear]');
+	                        const now = event.target.closest('[data-picker-now]');
+
+	                        if (nav) {
+	                            const direction = Number(nav.dataset.pickerNav);
+	                            const nextView = new Date(input._apsPicker.viewYear, input._apsPicker.viewMonth + direction, 1);
+	                            input._apsPicker.viewYear = nextView.getFullYear();
+	                            input._apsPicker.viewMonth = nextView.getMonth();
+	                            renderPicker(input);
+	                            return;
+	                        }
+
+	                        if (day) {
+	                            readTimeInputs(input);
+	                            input._apsPicker.date = parseDate(day.dataset.pickerDate);
+	                            if (input._apsPicker.type === 'date') {
+	                                setPickerValue(input, getPickerValue(input));
+	                                picker.classList.remove('is-open');
+	                                setControlHost(picker, false);
+	                                input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
+	                            } else {
+	                                renderPicker(input);
+	                            }
+	                            return;
+	                        }
+
+	                        if (step) {
+	                            const field = step.dataset.timeField;
+	                            const delta = Number(step.dataset.timeDelta || 0);
+	                            if (field === 'hour' || field === 'minute') {
+	                                setTimePart(input, field, input._apsPicker[field] + delta, true);
+	                                renderPicker(input);
+	                            }
+	                            return;
+	                        }
+
+	                        if (hour) {
+	                            input._apsPicker.hour = Number(hour.dataset.pickerHour);
+	                            renderPicker(input);
+	                            return;
+	                        }
+
+	                        if (minute) {
+	                            input._apsPicker.minute = Number(minute.dataset.pickerMinute);
+	                            renderPicker(input);
+	                            return;
+	                        }
+
+	                        if (now) {
+	                            const current = new Date();
+	                            input._apsPicker.date = new Date(current.getFullYear(), current.getMonth(), current.getDate());
+	                            input._apsPicker.viewYear = current.getFullYear();
+	                            input._apsPicker.viewMonth = current.getMonth();
+	                            input._apsPicker.hour = current.getHours();
+	                            input._apsPicker.minute = current.getMinutes();
+	                            setPickerValue(input, getPickerValue(input));
+	                            picker.classList.remove('is-open');
+	                            setControlHost(picker, false);
+	                            input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
+	                            return;
+	                        }
+
+	                        if (clear) {
+	                            setPickerValue(input, '');
+	                            picker.classList.remove('is-open');
+	                            setControlHost(picker, false);
+	                            input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
+	                            return;
+	                        }
+
+	                        if (apply) {
+	                            readTimeInputs(input);
+	                            setPickerValue(input, getPickerValue(input));
+	                            picker.classList.remove('is-open');
+	                            setControlHost(picker, false);
+	                            input._apsPicker.trigger.setAttribute('aria-expanded', 'false');
+	                        }
+	                    });
+
+	                    input._apsPicker.panel.addEventListener('input', function(event) {
+	                        const timeInput = event.target.closest('[data-time-input]');
+	                        if (!timeInput) return;
+
+	                        const field = timeInput.dataset.timeInput;
+	                        timeInput.value = timeInput.value.replace(/\D/g, '').slice(0, 2);
+	                        setTimePart(input, field, timeInput.value);
+	                        updatePickerCurrent(input, input._apsPicker.type === 'time' ? 'time' : 'datetime');
+	                    });
+
+	                    input._apsPicker.panel.addEventListener('blur', function(event) {
+	                        const timeInput = event.target.closest('[data-time-input]');
+	                        if (!timeInput) return;
+
+	                        const field = timeInput.dataset.timeInput;
+	                        setTimePart(input, field, timeInput.value);
+	                        timeInput.value = pad(input._apsPicker[field]);
+	                        updatePickerCurrent(input, input._apsPicker.type === 'time' ? 'time' : 'datetime');
+	                    }, true);
+	                });
+	            }
+
+	            function initTemporalValidation(root) {
+	                root.querySelectorAll('form:not([data-aps-picker-validation])').forEach(function(form) {
+	                    form.dataset.apsPickerValidation = 'true';
+	                    form.addEventListener('submit', function(event) {
+	                        const invalid = Array.from(form.querySelectorAll('input[data-aps-picker-type]')).find(function(input) {
+	                            const required = input.dataset.apsRequired === 'true';
+	                            const missing = required && !input.value;
+	                            const customError = input.validationMessage && input.validity && input.validity.customError;
+	                            input.dataset.apsInvalid = missing || customError ? 'true' : 'false';
+	                            syncPicker(input);
+	                            return missing || customError;
+	                        });
+
+	                        if (!invalid) return;
+
+	                        event.preventDefault();
+	                        event.stopImmediatePropagation();
+
+	                        const data = invalid._apsPicker;
+	                        if (data) {
+	                            data.trigger.focus();
+	                            openPicker(invalid);
+	                        }
+
+	                        const message = invalid.validationMessage || 'Lengkapi tanggal atau jam terlebih dahulu.';
+	                        if (typeof Swal !== 'undefined') {
+	                            Swal.fire({
+	                                title: 'Data belum lengkap',
+	                                text: message,
+	                                icon: 'warning',
+	                                timer: 2800,
+	                                showConfirmButton: false
+	                            });
+	                        }
+	                    }, true);
+	                });
+	            }
+
+	            function initApsCustomControls(root) {
+	                const scope = root || document;
+	                initComboboxes(scope);
+	                initTemporalControls(scope);
+	                initTemporalValidation(scope);
+	            }
+
+	            document.addEventListener('click', function(event) {
+	                if (!event.target.closest('.aps-combobox')) closeAllComboboxes();
+	                if (!event.target.closest('.aps-picker')) closeAllPickers();
+	            });
+
+	            document.addEventListener('keydown', function(event) {
+	                if (event.key === 'Escape') {
+	                    closeAllComboboxes();
+	                    closeAllPickers();
+	                }
+	            });
+
+	            document.addEventListener('DOMContentLoaded', function() {
+	                initApsCustomControls(document);
+	            });
+
+	            window.addEventListener('aps:content-loaded', function(event) {
+	                const content = document.getElementById('pjax-content') || document;
+	                initApsCustomControls(content);
+	            });
+
+	            window.apsInitCustomControls = initApsCustomControls;
+	        })();
+	    </script>
+	    <script>
+	        document.addEventListener('DOMContentLoaded', function() {
+	            const toggleBtn = document.getElementById('custom-sidebar-toggle');
             const mobileCloseBtn = document.getElementById('custom-sidebar-close-mobile');
             const overlay = document.getElementById('custom-layout-overlay');
             const layoutMenu = document.getElementById('layout-menu');

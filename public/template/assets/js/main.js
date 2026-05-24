@@ -44,7 +44,10 @@ let menu, animate;
 
     elem.onmouseleave = function () {
       // Clear any timers set to timeout
-      document.querySelector('.layout-menu-toggle').classList.remove('d-block');
+      const layoutMenuToggle = document.querySelector('.layout-menu-toggle');
+      if (layoutMenuToggle) {
+        layoutMenuToggle.classList.remove('d-block');
+      }
       clearTimeout(timeout);
     };
   };
@@ -52,7 +55,10 @@ let menu, animate;
     delay(document.getElementById('layout-menu'), function () {
       // not for small screen
       if (!Helpers.isSmallScreen()) {
-        document.querySelector('.layout-menu-toggle').classList.add('d-block');
+        const layoutMenuToggle = document.querySelector('.layout-menu-toggle');
+        if (layoutMenuToggle) {
+          layoutMenuToggle.classList.add('d-block');
+        }
       }
     });
   }
