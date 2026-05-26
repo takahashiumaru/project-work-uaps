@@ -412,6 +412,39 @@
                 margin-bottom: 0;
             }
         }
+
+        /* Prevent custom combobox clipping & enhance styling */
+        .schedule-edit-page .card.calendar-container {
+            overflow: visible !important;
+        }
+
+        .schedule-edit-page .calendar-grid {
+            overflow: visible !important;
+        }
+
+        .schedule-edit-page .calendar-day {
+            overflow: visible !important;
+        }
+
+        .schedule-edit-page .calendar-day:has(.aps-combobox.is-open) {
+            z-index: 100 !important;
+        }
+
+        .schedule-edit-page .aps-combobox-panel {
+            min-width: 230px !important;
+            width: max-content !important;
+            max-width: 280px !important;
+            left: 0 !important;
+            right: auto !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16) !important;
+        }
+
+        /* Align Friday (6th column) and Saturday (7th column) to the right to avoid viewport overflow */
+        .schedule-edit-page .calendar-grid > *:nth-child(7n) .aps-combobox-panel,
+        .schedule-edit-page .calendar-grid > *:nth-child(7n-1) .aps-combobox-panel {
+            left: auto !important;
+            right: 0 !important;
+        }
     </style>
 @endsection
 
@@ -467,7 +500,7 @@
         </div>
 
         <!-- Calendar Card -->
-        <div class="calendar-container">
+        <div class="card calendar-container">
             <div class="calendar-topline">
                 <h5 class="calendar-heading">Atur Jadwal Kerja</h5>
                 <span class="period-pill">
@@ -511,7 +544,7 @@
                         <div class="select-wrapper">
                             <form method="POST" action="{{ route('schedule.update_details', ['userId' => $userId, 'date' => $dateString]) }}">
                                 @csrf
-                                <select name="shift_id" data-aps-native class="form-select form-select-sm" onchange="this.form.submit()">
+                                <select name="shift_id" class="form-select form-select-sm" onchange="this.form.submit()">
                                     <option value="">-- OFF --</option>
                                     @foreach($shifts as $shift)
                                         <option value="{{ $shift->id }}"
