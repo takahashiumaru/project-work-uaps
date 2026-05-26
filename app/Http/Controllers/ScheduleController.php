@@ -520,19 +520,22 @@ class ScheduleController extends Controller
 
     public function update(Request $request, $userId, $date)
     {
+        DB::beginTransaction();
         try {
             $shiftId = $request->input('shift_id');
 
-            $updated = \App\Models\Schedule::where('user_id', $userId)
-                ->where('date', $date)
-                ->update(['shift_id' => $shiftId]);
+            \App\Models\Schedule::updateOrCreate(
+                ['user_id' => $userId, 'date' => $date],
+                ['shift_id' => $shiftId]
+            );
+
             DB::commit();
-            Alert::success('Success', 'Data berhasil diupdate');
+            Alert::success('Success', 'Jadwal berhasil diperbarui.');
             return back();
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Error saat melalukan update data: ' . $e->getMessage());
-            Alert::error('Terjadi Kesalahan', 'Gagal melalukan update data.');
+            Log::error('Error saat melakukan update data: ' . $e->getMessage());
+            Alert::error('Terjadi Kesalahan', 'Gagal melakukan update data.');
             return back();
         }
     }
