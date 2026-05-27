@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'radius' => 25, //jarak dalam M
+    'radius' => 50, // jarak dalam meter
 
     'stations' => [
 

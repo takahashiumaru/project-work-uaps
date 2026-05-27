@@ -20,15 +20,15 @@
                     'ass leader apron',
                     'leader apron',
                 ]))
-            <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
+                <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
             @endif
         </div>
     </div>
 
-    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'chief', 'leader']))
-    <a href="{{ route('shift.index') }}">
-        <i class="bi bi-clock"></i> Shift
-    </a>
+    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'Head Of Airport Service', 'leader']))
+        <a href="{{ route('shift.index') }}">
+            <i class="bi bi-clock"></i> Shift
+        </a>
     @endif
 
     <div class="dropdown">
@@ -37,42 +37,43 @@
         </a>
         <div id="attendanceDropdown" class="collapse">
             <a href="{{ route('attendance.index') }}" style="padding-left: 30px;">Absensi Hari Ini</a>
-            @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-            <a href="{{ route('attendance.reports') }}" style="padding-left: 30px;">Laporan Absensi</a>
+            @if (in_array(Auth::user()->role, ['Admin', 'Head Of Airport Service']))
+                <a href="{{ route('attendance.reports') }}" style="padding-left: 30px;">Laporan Absensi</a>
             @endif
         </div>
     </div>
 
     @if (in_array(Auth::user()->role, ['Admin']))
-    <div class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#userDropdownMain">
-            <i class="fas fa-users"></i> User <i class="fas fa-caret-down pull-right"></i>
-        </a>
-
-        <div id="userDropdownMain" class="collapse ml-3">
-            {{-- ======================================================= --}}
-            {{-- MENU BARU: SHORTCUT KE DATA STAFF PER STATION --}}
-            {{-- Mengarah ke halaman tabel dengan Tab/Filter Station --}}
-            {{-- ======================================================= --}}
-            <a href="{{ route('staff.index') }}" style="padding-left: 30px; color: #f1c40f; font-weight: 600;">
-                <i class="fas fa-map-marked-alt"></i> Monitor Station (Staff)
-            </a>
-            {{-- ======================================================= --}}
-
-            <a href="{{ route('users.kontrak') }}" style="padding-left: 30px;">Kontrak</a>
-            <a href="{{ route('users.pas') }}" style="padding-left: 30px;">PAS Tahunan</a>
-
-            <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#subUserDropdown" style="padding-left: 30px;">
-                <i class="fas fa-users"></i> Daftar User <i class="fas fa-caret-down pull-right"></i>
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#userDropdownMain">
+                <i class="fas fa-users"></i> User <i class="fas fa-caret-down pull-right"></i>
             </a>
 
-            <div id="subUserDropdown" class="collapse ml-3">
-                <a href="{{ route('users.apron') }}" style="padding-left: 60px;">Porter Apron</a>
-                <a href="{{ route('users.bge') }}" style="padding-left: 60px;">Porter BGE</a>
-                <a href="{{ route('users.office') }}" style="padding-left: 60px;">Office</a>
+            <div id="userDropdownMain" class="collapse ml-3">
+                {{-- ======================================================= --}}
+                {{-- MENU BARU: SHORTCUT KE DATA STAFF PER STATION --}}
+                {{-- Mengarah ke halaman tabel dengan Tab/Filter Station --}}
+                {{-- ======================================================= --}}
+                <a href="{{ route('staff.index') }}" style="padding-left: 30px; color: #f1c40f; font-weight: 600;">
+                    <i class="fas fa-map-marked-alt"></i> Monitor Station (Staff)
+                </a>
+                {{-- ======================================================= --}}
+
+                <a href="{{ route('users.kontrak') }}" style="padding-left: 30px;">Kontrak</a>
+                <a href="{{ route('users.pas') }}" style="padding-left: 30px;">PAS Tahunan</a>
+
+                <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#subUserDropdown"
+                    style="padding-left: 30px;">
+                    <i class="fas fa-users"></i> Daftar User <i class="fas fa-caret-down pull-right"></i>
+                </a>
+
+                <div id="subUserDropdown" class="collapse ml-3">
+                    <a href="{{ route('users.apron') }}" style="padding-left: 60px;">Porter Apron</a>
+                    <a href="{{ route('users.bge') }}" style="padding-left: 60px;">Porter BGE</a>
+                    <a href="{{ route('users.office') }}" style="padding-left: 60px;">Office</a>
+                </div>
             </div>
         </div>
-    </div>
     @endif
 
     <a href="{{ route('document') }}"><i class="bi bi-files"></i> Dokumen</a>
@@ -81,11 +82,13 @@
             <i class="fas fa-certificate"></i> Training <i class="fas fa-caret-down pull-right"></i>
         </a>
         <div id="trainingDropdown" class="collapse">
-            @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
-            <a href="{{ route('admin.training.certificates.index') }}" class="dropdown-item ps-4">Manajemen Training</a>
-            <a href="{{ route('admin.training.certificates.create') }}" class="dropdown-item ps-4">Tambah Sertifikat</a>
+            @if (in_array(Auth::user()->role, ['Admin', 'Head Of Airport Service']))
+                <a href="{{ route('admin.training.certificates.index') }}" class="dropdown-item ps-4">Manajemen
+                    Training</a>
+                <a href="{{ route('admin.training.certificates.create') }}" class="dropdown-item ps-4">Tambah
+                    Sertifikat</a>
             @else
-            <a href="{{ route('my.certificates') }}" class="dropdown-item ps-4">Sertifikat Training Saya</a>
+                <a href="{{ route('my.certificates') }}" class="dropdown-item ps-4">Sertifikat Training Saya</a>
             @endif
         </div>
     </div>
@@ -96,8 +99,8 @@
         <div id="applyLeaveDropdown" class="collapse">
             <a href="{{ route('leaves.pengajuan') }}" class="dropdown-item ps-4">Pengajuan Leave</a>
             @if (in_array(Auth::user()->role, ['Leader', 'Ass Leader', 'Admin', 'SPV']))
-            <a href="{{ route('leaves.index') }}" class="dropdown-item ps-4">Approval Leave</a>
-            <a href="{{ route('leaves.laporan') }}" class="dropdown-item ps-4">Laporan Leave</a>
+                <a href="{{ route('leaves.index') }}" class="dropdown-item ps-4">Approval Leave</a>
+                <a href="{{ route('leaves.laporan') }}" class="dropdown-item ps-4">Laporan Leave</a>
             @endif
         </div>
     </div>

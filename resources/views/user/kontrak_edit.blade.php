@@ -44,12 +44,14 @@
                         
                         <div class="mb-3">
                             <label class="form-label">Kontrak Mulai</label>
-                            <input type="date" class="form-control" name="contract_start" value="{{ $user->contract_start }}">
+                            <input type="date" class="form-control" name="contract_start"
+                                value="{{ old('contract_start', $user->contract_start ? \Carbon\Carbon::parse($user->contract_start)->format('Y-m-d') : '') }}">
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Kontrak Selesai</label>
-                            <input type="date" class="form-control" name="contract_end" value="{{ $user->contract_end }}">
+                            <input type="date" class="form-control" name="contract_end"
+                                value="{{ old('contract_end', $user->contract_end ? \Carbon\Carbon::parse($user->contract_end)->format('Y-m-d') : '') }}">
                         </div>
                         
                         <div class="text-end">
@@ -77,19 +79,57 @@
         const contractStart = document.querySelector('input[name="contract_start"]');
         const contractEnd = document.querySelector('input[name="contract_end"]');
         
+        function parseContractDate(value) {
+            if (!value) return null;
+
+            const normalized = value.trim();
+            const isoMatch = normalized.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            const localMatch = normalized.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+            let year;
+            let month;
+            let day;
+
+            if (isoMatch) {
+                year = Number(isoMatch[1]);
+                month = Number(isoMatch[2]) - 1;
+                day = Number(isoMatch[3]);
+            } else if (localMatch) {
+                day = Number(localMatch[1]);
+                month = Number(localMatch[2]) - 1;
+                year = Number(localMatch[3]);
+            } else {
+                return null;
+            }
+
+            const date = new Date(year, month, day);
+
+            if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+                return null;
+            }
+
+            return date;
+        }
+
+        function validateContractDates(changedInput) {
+            const startDate = parseContractDate(contractStart.value);
+            const endDate = parseContractDate(contractEnd.value);
+
+            if (!startDate || !endDate) return;
+
+            if (startDate > endDate) {
+                alert('Tanggal mulai kontrak tidak boleh lebih besar dari tanggal selesai');
+                changedInput.value = '';
+            }
+        }
+
         if (contractStart && contractEnd) {
             contractStart.addEventListener('change', function() {
-                if (contractEnd.value && this.value > contractEnd.value) {
-                    alert('Tanggal mulai kontrak tidak boleh lebih besar dari tanggal selesai');
-                    this.value = '';
-                }
+                validateContractDates(this);
             });
-            
+
             contractEnd.addEventListener('change', function() {
-                if (contractStart.value && this.value < contractStart.value) {
-                    alert('Tanggal selesai kontrak tidak boleh lebih kecil dari tanggal mulai');
-                    this.value = '';
-                }
+                validateContractDates(this);
             });
         }
     });

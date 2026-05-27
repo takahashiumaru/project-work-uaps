@@ -143,6 +143,27 @@
         justify-content: center;
     }
 
+    .import-schedule-btn {
+        min-height: 44px;
+        padding: 0.72rem 1.2rem;
+        border-radius: 0.85rem;
+        font-weight: 650;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #2368c8;
+        border-color: rgba(47, 128, 237, 0.42);
+        background: #ffffff;
+        box-shadow: none !important;
+    }
+
+    .import-schedule-btn:hover {
+        background: #eaf4ff;
+        border-color: #2f80ed;
+        color: #1f62c4;
+        transform: translateY(-1px);
+    }
+
     .auto-create-btn:hover {
         transform: translateY(-1px);
         box-shadow: 0 16px 30px rgba(47, 128, 237, 0.28);
@@ -202,6 +223,18 @@
         box-shadow: none;
     }
 
+    html.aps-dark .import-schedule-btn {
+        background: #101a2c !important;
+        border-color: rgba(47, 128, 237, 0.36) !important;
+        color: #8fc2ff !important;
+    }
+
+    html.aps-dark .import-schedule-btn:hover {
+        background: #172942 !important;
+        border-color: rgba(47, 128, 237, 0.58) !important;
+        color: #ffffff !important;
+    }
+
     html.aps-dark .search-box .form-control {
         background: #101a2c !important;
         border-color: #2a3a55 !important;
@@ -236,6 +269,10 @@
         .auto-create-btn {
             width: 100%;
         }
+
+        .import-schedule-btn {
+            width: 100%;
+        }
     }
 
     @media (max-width: 768px) {
@@ -258,6 +295,11 @@
 @endsection
 
 @section('content')
+@php
+    $canAutoCreateSchedule = in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron', 'Admin']);
+    $canImportSchedule = in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron', 'Admin']);
+    $hasScheduleActions = $canAutoCreateSchedule || $canImportSchedule;
+@endphp
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Header -->
     <div class="row">
@@ -289,15 +331,24 @@
 
     <!-- Action Buttons -->
     <div class="row mb-4 schedule-toolbar">
-        <div class="col-md-6">
+        @if ($hasScheduleActions)
+        <div class="col-md-6 d-flex flex-column flex-sm-row gap-2">
+            @if ($canAutoCreateSchedule)
             <form id="autoCreateForm" action="{{ route('schedule.autoCreate') }}" method="POST">
                 @csrf
                 <button type="submit" class="auto-create-btn">
                     <i class="bx bx-plus-circle me-2"></i> Auto Create Schedule
                 </button>
             </form>
+            @endif
+            @if ($canImportSchedule)
+            <button type="button" class="btn btn-outline-primary import-schedule-btn" data-bs-toggle="modal" data-bs-target="#importScheduleModal">
+                <i class="bx bx-import me-2"></i> Import Schedule
+            </button>
+            @endif
         </div>
-        <div class="col-md-6">
+        @endif
+        <div class="{{ $hasScheduleActions ? 'col-md-6' : 'col-md-12' }}">
             <form action="{{ route('schedule.view') }}" method="GET">
                 <div class="input-group search-box">
                     <input type="text" name="search" class="form-control" placeholder="Cari NIP atau Nama..." value="{{ request('search') }}">
@@ -387,6 +438,12 @@
                                     <i class="bx bx-edit text-primary me-2"></i>
                                     Klik icon edit untuk mengatur jadwal individual user
                                 </li>
+                                @if ($canImportSchedule)
+                                <li class="mb-2">
+                                    <i class="bx bx-import text-primary me-2"></i>
+                                    Gunakan tombol "Import Schedule" untuk upload jadwal dari Excel
+                                </li>
+                                @endif
                             </ul>
                         </div>
                         <div class="col-md-6">
@@ -406,6 +463,35 @@
             </div>
         </div>
     </div>
+
+    @if ($canImportSchedule)
+    <div class="modal fade" id="importScheduleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('schedule.import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <p class="text-muted mb-3">Pilih file Excel (.xlsx atau .xls) untuk mengimpor jadwal.</p>
+                        <div>
+                            <label for="schedule-import-file" class="form-label">File Schedule</label>
+                            <input type="file" class="form-control" id="schedule-import-file" name="file" accept=".xlsx,.xls" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bx bx-import me-1"></i> Import
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 @endsection
 
@@ -414,29 +500,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Auto Create Schedule with SweetAlert
-        document.getElementById('autoCreateForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        const autoCreateForm = document.getElementById('autoCreateForm');
+        if (autoCreateForm) {
+            autoCreateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-            Swal.fire({
-                title: 'Auto Create Schedule',
-                text: 'Apakah Anda yakin ingin membuat jadwal secara otomatis?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#48bb78',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Proses!',
-                cancelButtonText: 'Batal',
-                showLoaderOnConfirm: true,
-                preConfirm: () => {
-                    return new Promise((resolve) => {
-                        // Submit the form
-                        e.target.submit();
-                        resolve();
-                    });
-                },
-                allowOutsideClick: () => !Swal.isLoading()
+                Swal.fire({
+                    title: 'Auto Create Schedule',
+                    text: 'Apakah Anda yakin ingin membuat jadwal secara otomatis?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#48bb78',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Proses!',
+                    cancelButtonText: 'Batal',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return new Promise((resolve) => {
+                            // Submit the form
+                            e.target.submit();
+                            resolve();
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                });
             });
-        });
+        }
 
         // Add hover effects to table rows
         const tableRows = document.querySelectorAll('tbody tr');

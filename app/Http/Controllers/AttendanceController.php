@@ -86,7 +86,7 @@ class AttendanceController extends Controller
         $targetLat = $station->latitude;
         $targetLong = $station->longitude;
 
-        $allowedRadius = 20; // meter
+        $allowedRadius = config('locations.radius', 50);
 
         $distance = $this->calculateDistance(
             $request->latitude,
@@ -218,8 +218,8 @@ class AttendanceController extends Controller
 
         $distance = $this->calculateDistance($userLat, $userLon, $targetLat, $targetLon);
 
-        // Ambil radius toleransi dari config (Default 20 meter jika tidak diatur)
-        $allowedRadius = config('locations.radius', 20);
+        // Ambil radius toleransi dari config (Default 50 meter jika tidak diatur)
+        $allowedRadius = config('locations.radius', 50);
 
         // 5. Validasi Radius (Geofencing)
         if ($distance > $allowedRadius) {

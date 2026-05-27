@@ -75,45 +75,49 @@ class ScheduleController extends Controller
 
     public function autoCreate()
     {
-        if (!in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron'])) {
+        if (!in_array(Auth::user()->role, ['SPV Bge', 'SPV Apron', 'Admin'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         try {
             $startDate = Carbon::now()->startOfMonth();
             $endDate   = Carbon::now()->endOfMonth();
             $roleSpv = Auth::user()->role;
-            $rolePorter = null;
+            $rolePorters = [];
 
             if ($roleSpv === 'SPV Bge') {
-                $rolePorter = 'Porter Bge';
+                $rolePorters = ['Porter Bge'];
             } elseif ($roleSpv === 'SPV Apron') {
-                $rolePorter = 'Porter Apron';
+                $rolePorters = ['Porter Apron'];
+            } elseif ($roleSpv === 'Admin') {
+                $rolePorters = ['Porter Bge', 'Porter Apron'];
             }
+
+            $rolePorterLabel = implode(' & ', $rolePorters);
 
             // Cegah duplikasi jadwal sebulan penuh
             $existing = DB::table('schedules')
                 ->whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])
-                ->whereIn('user_id', function ($query) use ($rolePorter) {
+                ->whereIn('user_id', function ($query) use ($rolePorters) {
                     $query->select('id')
                         ->from('users')
-                        ->where('role', $rolePorter);
+                        ->whereIn('role', $rolePorters);
                 })
                 ->exists();
 
             if ($existing) {
-                Alert::info('Informasi', "Data jadwal untuk $rolePorter bulan ini sudah ada.");
+                Alert::info('Informasi', "Data jadwal untuk $rolePorterLabel bulan ini sudah ada.");
                 return back();
             }
 
             // Users (PORTER sesuai SPV)
             $users = DB::table('users')
-                ->where('role', $rolePorter)
+                ->whereIn('role', $rolePorters)
                 ->select('id', 'is_qantas')
                 ->orderBy('id')
                 ->get();
 
             if ($users->isEmpty()) {
-                Alert::warning('Perhatian', "Tidak ada user dengan role $rolePorter.");
+                Alert::warning('Perhatian', "Tidak ada user dengan role $rolePorterLabel.");
                 return back();
             }
 
@@ -420,7 +424,7 @@ class ScheduleController extends Controller
             $rolePorter = 'Porter Bge';
         } elseif ($roleSpv === 'SPV Apron' || $roleSpv === 'Ass Leader Apron' || $roleSpv === 'Leader Apron') {
             $rolePorter = 'Porter Apron';
-        } elseif ($roleSpv === 'ADMIN') {
+        } elseif ($roleSpv === 'Admin') {
             $rolePorter = 'Porter';
         }
 

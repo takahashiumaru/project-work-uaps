@@ -10,6 +10,9 @@
             <div class="modal-body">
                 <p><strong>Nama:</strong> {{ $leave->user->fullname ?? 'N/A' }}</p>
                 <p><strong>Alasan:</strong> {{ $leave->reason }}</p>
+                @if($leave->manager_comment)
+                <p><strong>Catatan:</strong> {{ $leave->manager_comment }}</p>
+                @endif
 
                 <hr>
 
@@ -29,10 +32,19 @@
                 @endif
 
                 @if($leave->status == 'approved')
+                @php
+                    $isSelfApprovedFallback = empty($leave->approved_by);
+                    $hoApproverName = $leave->hoApprover->fullname
+                        ?? ($isSelfApprovedFallback ? ($leave->user->fullname ?? 'N/A') : 'N/A');
+                    $hoApprovedAt = $leave->approved_at
+                        ?: ($isSelfApprovedFallback ? ($leave->updated_at ?: $leave->created_at) : null);
+                @endphp
                 <p>
                     <strong>Persetujuan HO:</strong>
-                    Disetujui oleh {{ $leave->hoApprover->fullname ?? 'N/A' }}
-                    ({{ \Carbon\Carbon::parse($leave->approved_at)->format('d M Y H:i') }})
+                    Disetujui oleh {{ $hoApproverName }}
+                    @if($hoApprovedAt)
+                        ({{ \Carbon\Carbon::parse($hoApprovedAt)->format('d M Y H:i') }})
+                    @endif
                 </p>
                 @endif
             </div>

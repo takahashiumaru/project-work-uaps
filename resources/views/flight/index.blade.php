@@ -135,23 +135,23 @@
             <div id="scheduleDropdown" class="collapse">
                 <a href="{{ route('schedule.now') }}" style="padding-left: 30px;">Jadwal Schedule Hari Ini </a>
                 <a href="{{ route('schedule.index') }}" style="padding-left: 30px;">Data Schedule</a>
-                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
-                <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
+                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
+                    <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
                 @endif
             </div>
         </div>
-        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
-        <a href="{{ route('shift.index') }}"><i class="bi bi-clock"></i> Shift</a>
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#userDropdown">
-                <i class="fas fa-users"></i> User <i class="fas fa-caret-down pull-right"></i>
-            </a>
-            <div id="userDropdown" class="collapse">
-                <a href="{{ route('users.index') }}" style="padding-left: 30px;">Daftar User</a>
-                <a href="{{ route('users.kontrak') }}" style="padding-left: 30px;">Kontrak</a>
-                <a href="{{ route('users.pas') }}" style="padding-left: 30px;">PAS Tahunan</a>
+        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
+            <a href="{{ route('shift.index') }}"><i class="bi bi-clock"></i> Shift</a>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#userDropdown">
+                    <i class="fas fa-users"></i> User <i class="fas fa-caret-down pull-right"></i>
+                </a>
+                <div id="userDropdown" class="collapse">
+                    <a href="{{ route('users.index') }}" style="padding-left: 30px;">Daftar User</a>
+                    <a href="{{ route('users.kontrak') }}" style="padding-left: 30px;">Kontrak</a>
+                    <a href="{{ route('users.pas') }}" style="padding-left: 30px;">PAS Tahunan</a>
+                </div>
             </div>
-        </div>
         @endif
         <a href="{{ route('document') }}"><i class="bi bi-files"></i> Dokumen</a>
         <p id="tanggalSekarang"><i class="fas fa-clock"></i> Loading...</p>
@@ -162,12 +162,14 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <!-- Tombol toggle pindah ke sini -->
-                <button class="btn btn-primary toggle-btn-inside navbar-btn" id="toggleSidebar" style="margin-right: 15px;">
+                <button class="btn btn-primary toggle-btn-inside navbar-btn" id="toggleSidebar"
+                    style="margin-right: 15px;">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><i class="fas fa-user"></i> Welcome, {{ Auth::user()->fullname }} - {{ Auth::user()->role }}</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> Welcome, {{ Auth::user()->fullname }} -
+                        {{ Auth::user()->role }}</a></li>
                 <li><a href="{{ route('actionlogout') }}"><i class="fa fa-power-off"></i> Log Out</a></li>
             </ul>
         </div>
@@ -210,10 +212,11 @@
 
             <!-- Add Button -->
             <div class="text-right">
-                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
-                <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal" data-target="#addFlightModal">
-                    <i class="fa fa-plus-circle"></i> Add
-                </button>
+                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
+                    <button type="button" class="btn btn-primary" style="margin-bottom: 10px;" data-toggle="modal"
+                        data-target="#addFlightModal">
+                        <i class="fa fa-plus-circle"></i> Add
+                    </button>
                 @endif
             </div>
 
@@ -233,75 +236,79 @@
                     </thead>
                     <tbody>
                         @foreach ($flights as $flight)
-                        <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#viewFlightModal{{ $flight->id }}">
-                            <td>{{ $flight->id }}</td>
-                            <td>{{ $flight->airline }}</td>
-                            <td>{{ $flight->flight_number }}</td>
-                            <td>{{ $flight->registasi }}</td>
-                            <td>{{ $flight->arrival }}</td>
-                            <td><span id="countdown-{{ $flight->id }}"></span></td>
-                            <td class="no-click">
-                                @if($flight->status)
-                                Done
-                                @else
-                                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
-                                <form action="{{ route('flights.update', $flight->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> Mark as Done</button>
-                                </form>
-                                @else
-                                <span class="text-warning">In Progress</span>
-                                @endif
-                                @endif
-                            </td>
-                        </tr>
-                        @include('modal.view_flight', ['flight' => $flight])
-                        <script>
-                            document.addEventListener("DOMContentLoaded", function() {
-                                const countdownElement = document.getElementById('countdown-{{ $flight->id }}');
-                                const storageKey = 'targetTime-{{ $flight->id }}';
-                                const expiredKey = 'expired-{{ $flight->id }}';
+                            <tr class="clickable-row" data-bs-toggle="modal"
+                                data-bs-target="#viewFlightModal{{ $flight->id }}">
+                                <td>{{ $flight->id }}</td>
+                                <td>{{ $flight->airline }}</td>
+                                <td>{{ $flight->flight_number }}</td>
+                                <td>{{ $flight->registasi }}</td>
+                                <td>{{ $flight->arrival }}</td>
+                                <td><span id="countdown-{{ $flight->id }}"></span></td>
+                                <td class="no-click">
+                                    @if ($flight->status)
+                                        Done
+                                    @else
+                                        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
+                                            <form action="{{ route('flights.update', $flight->id) }}" method="POST"
+                                                style="display:inline;">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="btn btn-success btn-sm"><i
+                                                        class="fa fa-check-circle"></i> Mark as Done</button>
+                                            </form>
+                                        @else
+                                            <span class="text-warning">In Progress</span>
+                                        @endif
+                                    @endif
+                                </td>
+                            </tr>
+                            @include('modal.view_flight', ['flight' => $flight])
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    const countdownElement = document.getElementById('countdown-{{ $flight->id }}');
+                                    const storageKey = 'targetTime-{{ $flight->id }}';
+                                    const expiredKey = 'expired-{{ $flight->id }}';
 
-                                if (localStorage.getItem(expiredKey) === 'true') {
-                                    countdownElement.textContent = 'EXPIRED';
-                                    return;
-                                }
-
-                                let targetTime = localStorage.getItem(storageKey);
-
-                                if (!targetTime) {
-                                    targetTime = new Date();
-                                    const timeParts = "{{ $flight->time_count }}".split(':');
-                                    targetTime.setHours(targetTime.getHours() + parseInt(timeParts[0]));
-                                    targetTime.setMinutes(targetTime.getMinutes() + parseInt(timeParts[1]));
-                                    targetTime.setSeconds(targetTime.getSeconds() + parseInt(timeParts[2]));
-                                    localStorage.setItem(storageKey, targetTime.toISOString());
-                                } else {
-                                    targetTime = new Date(targetTime);
-                                }
-
-                                function updateCountdown() {
-                                    const now = new Date();
-                                    const diff = targetTime - now;
-
-                                    if (diff > 0) {
-                                        const hours = Math.floor((diff % 86400000) / 3600000);
-                                        const minutes = Math.floor((diff % 3600000) / 60000);
-                                        const seconds = Math.floor((diff % 60000) / 1000);
-                                        countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                                    } else {
-                                        countdownElement.textContent = "EXPIRED";
-                                        localStorage.setItem(expiredKey, 'true');
-                                        localStorage.removeItem(storageKey);
-                                        clearInterval(interval);
+                                    if (localStorage.getItem(expiredKey) === 'true') {
+                                        countdownElement.textContent = 'EXPIRED';
+                                        return;
                                     }
-                                }
 
-                                updateCountdown();
-                                const interval = setInterval(updateCountdown, 1000);
-                            });
-                        </script>
+                                    let targetTime = localStorage.getItem(storageKey);
+
+                                    if (!targetTime) {
+                                        targetTime = new Date();
+                                        const timeParts = "{{ $flight->time_count }}".split(':');
+                                        targetTime.setHours(targetTime.getHours() + parseInt(timeParts[0]));
+                                        targetTime.setMinutes(targetTime.getMinutes() + parseInt(timeParts[1]));
+                                        targetTime.setSeconds(targetTime.getSeconds() + parseInt(timeParts[2]));
+                                        localStorage.setItem(storageKey, targetTime.toISOString());
+                                    } else {
+                                        targetTime = new Date(targetTime);
+                                    }
+
+                                    function updateCountdown() {
+                                        const now = new Date();
+                                        const diff = targetTime - now;
+
+                                        if (diff > 0) {
+                                            const hours = Math.floor((diff % 86400000) / 3600000);
+                                            const minutes = Math.floor((diff % 3600000) / 60000);
+                                            const seconds = Math.floor((diff % 60000) / 1000);
+                                            countdownElement.textContent =
+                                                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                                        } else {
+                                            countdownElement.textContent = "EXPIRED";
+                                            localStorage.setItem(expiredKey, 'true');
+                                            localStorage.removeItem(storageKey);
+                                            clearInterval(interval);
+                                        }
+                                    }
+
+                                    updateCountdown();
+                                    const interval = setInterval(updateCountdown, 1000);
+                                });
+                            </script>
                         @endforeach
                     </tbody>
                 </table>

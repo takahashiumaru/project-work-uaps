@@ -2490,8 +2490,25 @@
             border-radius: 0.5rem !important;
             box-shadow: none !important;
         }
-        .swal2-confirm { background-color: #111827 !important; }
-        .swal2-cancel { background-color: #f3f4f6 !important; color: #374151 !important; }
+        .swal2-confirm {
+            background: linear-gradient(135deg, var(--aps-blue) 0%, var(--aps-blue-dark) 100%) !important;
+            border: 1px solid var(--aps-blue) !important;
+            color: #ffffff !important;
+            box-shadow: 0 12px 24px rgba(47, 128, 237, 0.22) !important;
+        }
+        .swal2-confirm:hover {
+            background: linear-gradient(135deg, #3b8df3 0%, #1f62c4 100%) !important;
+            border-color: var(--aps-blue-dark) !important;
+        }
+        .swal2-cancel {
+            background: #f8fafc !important;
+            border: 1px solid var(--aps-line) !important;
+            color: #475569 !important;
+        }
+        .swal2-cancel:hover {
+            background: #eef4fb !important;
+            color: #1f2937 !important;
+        }
         .swal2-icon { border-width: 2px !important; margin-bottom: 1.25rem !important; }
         .swal2-backdrop-show {
             background: rgba(17, 24, 39, 0.4) !important;
@@ -3376,8 +3393,10 @@
         .topbar-theme-switch {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.22rem;
             height: 48px;
+            width: 48px;
             padding: 0.24rem;
             border: 1px solid #e6edf5;
             border-radius: 999px;
@@ -3387,12 +3406,12 @@
 
         .topbar-theme-option {
             height: 38px;
+            width: 38px;
             min-width: 38px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.35rem;
-            padding: 0 0.68rem;
+            padding: 0;
             border: 0;
             border-radius: 999px;
             background: transparent;
@@ -3404,6 +3423,10 @@
 
         .topbar-theme-option i {
             font-size: 1.05rem;
+        }
+
+        .topbar-theme-toggle {
+            min-width: 38px;
         }
 
         .topbar-theme-option.is-active {
@@ -3636,6 +3659,7 @@
 
             .topbar-theme-switch {
                 height: 44px;
+                width: 44px;
                 padding: 0.2rem;
             }
 
@@ -3837,6 +3861,7 @@
 
             .topbar-theme-switch {
                 height: 40px !important;
+                width: 40px !important;
                 flex: 0 0 auto !important;
             }
 
@@ -4383,13 +4408,19 @@
 
         #layout-navbar .topbar-theme-switch {
             height: 42px !important;
+            width: 42px !important;
             padding: 0.18rem !important;
         }
 
         #layout-navbar .topbar-theme-option {
             height: 34px !important;
+            width: 34px !important;
             min-width: 34px !important;
-            padding: 0 0.58rem !important;
+            padding: 0 !important;
+        }
+
+        #layout-navbar .topbar-theme-toggle {
+            min-width: 34px !important;
         }
 
         html:not(.aps-dark) #layout-navbar .topbar-theme-option:not(.is-active) {
@@ -4444,6 +4475,7 @@
 
             #layout-navbar .topbar-theme-switch {
                 height: 38px !important;
+                width: 38px !important;
             }
 
             #layout-navbar .topbar-theme-option {
@@ -4767,6 +4799,17 @@
         html.aps-dark .swal2-html-container,
         html.aps-dark .swal2-content {
             color: #aebcd0 !important;
+        }
+
+        html.aps-dark .swal2-cancel {
+            background: #101a2c !important;
+            border-color: #2a3a55 !important;
+            color: #c7d4e6 !important;
+        }
+
+        html.aps-dark .swal2-cancel:hover {
+            background: #1b2b45 !important;
+            color: #ffffff !important;
         }
 
         html.aps-dark .apexcharts-canvas,
@@ -5660,7 +5703,7 @@
                         </ul>
                     </li>
 
-                    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'chief', 'leader']))
+                    @if (in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'Head Of Airport Service', 'leader']))
                     <li class="menu-item {{ request()->routeIs('shift.*') ? 'active' : '' }}">
                         <a href="{{ route('shift.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons ti ti-clock"></i>
@@ -5687,7 +5730,7 @@
                                 </a>
                             </li>
 
-                            @if (in_array(Auth::user()->role, ['Admin', 'CHIEF']))
+                            @if (in_array(Auth::user()->role, ['Admin', 'Head Of Airport Service']))
                                 <li class="menu-item {{ request()->routeIs('attendance.reports') ? 'active' : '' }}">
                                     <a href="{{ route('attendance.reports') }}" class="menu-link">
                                         <i class="menu-icon tf-icons ti ti-file-text"></i>
@@ -5706,7 +5749,7 @@
                             </li>
 
 
-                            @if (in_array(Auth::user()->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']))
+                            @if (in_array(Auth::user()->role, ['Admin', 'LEADER', 'Head Of Airport Service', 'ASS LEADER']))
                                 <li class="menu-item {{ request()->routeIs('overtime.approval') ? 'active' : '' }}">
                                     <a href="{{ route('overtime.approval') }}" class="menu-link">
                                         <i class="menu-icon tf-icons ti ti-circle-check"></i>
@@ -5837,9 +5880,7 @@
                                 </a>
                             </li>
                             @if (in_array(Auth::user()->role, [
-                                
                                     'Admin',
-                                    
                                     'Head Of Airport Service',
                                 ]))
                                 <li class="menu-item {{ request()->routeIs('leaves.index') ? 'active' : '' }}">
@@ -5892,8 +5933,8 @@
                         'ass leader apron',
                         'leader apron',
                     ]);
-                    $canViewAdminAttendance = in_array($currentUser->role, ['Admin', 'CHIEF']);
-                    $canApproveOvertime = in_array($currentUser->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER']);
+                    $canViewAdminAttendance = in_array($currentUser->role, ['Admin', 'Head Of Airport Service']);
+                    $canApproveOvertime = in_array($currentUser->role, ['Admin', 'LEADER', 'Head Of Airport Service', 'ASS LEADER']);
                     $canManageTraining = in_array($currentUser->role, ['Admin', 'HSE', 'Head Of Airport Service']);
                     $canManageLeave = in_array($currentUser->role, ['Admin', 'Head Of Airport Service']);
                     $topbarMenuLinks = [
@@ -5907,7 +5948,7 @@
                         $topbarMenuLinks[] = ['label' => 'Create / Update Schedule', 'category' => 'Schedule', 'hint' => 'Kelola pembuatan jadwal staff', 'icon' => 'ti-calendar-plus', 'url' => route('schedule.view')];
                     }
 
-                    if (in_array(strtolower((string) $currentUser->role), ['admin', 'ass leader', 'chief', 'leader'])) {
+                    if (in_array(strtolower((string) $currentUser->role), ['admin', 'ass leader', 'Head Of Airport Service', 'leader'])) {
                         $topbarMenuLinks[] = ['label' => 'Shift', 'category' => 'Menu', 'hint' => 'Data shift kerja', 'icon' => 'ti-clock', 'url' => route('shift.index')];
                     }
                     $topbarMenuLinks[] = ['label' => 'Absensi Hari Ini', 'category' => 'Attendance', 'hint' => 'Monitoring absensi staff', 'icon' => 'ti-stopwatch', 'url' => route('attendance.index')];
@@ -5975,19 +6016,13 @@
                         </button>
 
                         <div class="topbar-right">
-                            <div class="topbar-theme-switch" id="apsThemeSwitch" role="group"
-                                aria-label="Pilih tema tampilan">
-                                <button class="topbar-theme-option" type="button" data-theme-option="light"
-                                    aria-label="Light mode">
-                                    <i class="ti ti-sun"></i>
-                                    <span>Light</span>
-                                </button>
-                                <button class="topbar-theme-option" type="button" data-theme-option="dark"
-                                    aria-label="Dark mode">
-                                    <i class="ti ti-moon"></i>
-                                    <span>Dark</span>
-                                </button>
-                            </div>
+	                            <div class="topbar-theme-switch" id="apsThemeSwitch" aria-label="Toggle tema tampilan">
+	                                <button class="topbar-theme-option topbar-theme-toggle is-active" type="button"
+	                                    data-theme-toggle aria-label="Switch to dark mode" aria-pressed="false"
+                                        title="Switch to dark mode">
+	                                    <i class="ti ti-moon"></i>
+	                                </button>
+	                            </div>
                             <ul class="navbar-nav flex-row align-items-center">
                                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                     <a class="topbar-user-chip nav-link dropdown-toggle hide-arrow"
@@ -6184,6 +6219,22 @@
                     button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
                 });
 
+	                document.querySelectorAll('[data-theme-toggle]').forEach(function(button) {
+	                    const icon = button.querySelector('i');
+	                    const isDark = nextTheme === 'dark';
+	                    const targetTheme = isDark ? 'light' : 'dark';
+
+	                    button.dataset.themeTarget = targetTheme;
+	                    button.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+	                    button.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+	                    button.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+
+                    if (icon) {
+                        icon.className = isDark ? 'ti ti-sun' : 'ti ti-moon';
+                    }
+
+	                });
+
                 window.dispatchEvent(new CustomEvent('aps:theme-changed', {
                     detail: {
                         theme: nextTheme
@@ -6200,6 +6251,12 @@
                         applyTheme(button.getAttribute('data-theme-option'));
                     });
                 });
+
+                document.querySelectorAll('[data-theme-toggle]').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        applyTheme(button.dataset.themeTarget || 'dark');
+                    });
+                });
             });
         })();
     </script>
@@ -6210,7 +6267,7 @@
 	    </div>
 	    <script>
 	        (function() {
-	            const enhancedSelects = 'select:not([multiple]):not([size]):not([data-aps-native]):not(.select2)';
+	            const enhancedSelects = 'select:not([multiple]):not([size]):not([data-aps-native]):not(.select2):not(.swal2-select)';
 	            const temporalInputs = 'input[type="date"]:not([data-aps-native]), input[type="time"]:not([data-aps-native]), input[type="datetime-local"]:not([data-aps-native]), input[type="month"]:not([data-aps-native])';
 	            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 	            const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
@@ -6283,6 +6340,10 @@
 	                data.combo.classList.toggle('is-invalid', select.classList.contains('is-invalid'));
 	            }
 
+	            function shouldEnhanceSelect(select) {
+	                return !select.closest('.swal2-container, .swal2-popup');
+	            }
+
 	            function renderComboboxOptions(select, query) {
 	                const data = select._apsCombobox;
 	                if (!data) return;
@@ -6334,6 +6395,7 @@
 
 	            function initComboboxes(root) {
 	                root.querySelectorAll(enhancedSelects).forEach(function(select) {
+	                    if (!shouldEnhanceSelect(select)) return;
 	                    if (select.dataset.apsEnhanced === 'combobox') return;
 	                    if (select.closest('.aps-combobox')) return;
 

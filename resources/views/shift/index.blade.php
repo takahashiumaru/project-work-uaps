@@ -152,7 +152,8 @@
         <!-- Header -->
         <div class="row">
             <div class="col-lg-12 mb-4">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
+                <div
+                    class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
                     <h4 class="fw-bold pt-3 pb-1 mb-0">
                         <span class="text-muted fw-light">Schedule /</span> Shift Management
                     </h4>
@@ -180,7 +181,8 @@
         <!-- Action Buttons -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
+                <div
+                    class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1">
                     <div>
                         <h5 class="mb-0">Daftar Shift</h5>
                         <p class="text-muted mb-0">Kelola semua shift yang tersedia</p>
@@ -244,8 +246,8 @@
                                                 <small
                                                     class="text-muted">{{ $shift->updated_at->format('d M Y, H:i') }}</small>
                                             </td>
-                                             <td class="d-flex align-items-center gap-2">
-                                                @if (in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                                            <td class="d-flex align-items-center gap-2">
+                                                @if (in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
                                                     <a href="{{ route('shift.edit', $shift->id) }}" class="action-btn"
                                                         title="Edit Shift">
                                                         <i class="ti ti-pencil"></i>
@@ -255,14 +257,15 @@
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="button" class="action-btn bg-danger border-0"
-                                                            title="Delete Shift" onclick="confirmDeleteShift('{{ $shift->id }}')">
+                                                            title="Delete Shift"
+                                                            onclick="confirmDeleteShift('{{ $shift->id }}')">
                                                             <i class="ti ti-trash"></i>
                                                         </button>
                                                     </form>
                                                 @else
                                                     <span class="badge bg-label-secondary">No Access</span>
                                                 @endif
-                                             </td>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -383,6 +386,7 @@
                 });
             @endif
         });
+
         function confirmDeleteShift(id) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',

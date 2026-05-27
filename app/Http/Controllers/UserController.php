@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Certificate;
-use App\Models\User;
-use App\Models\Station;
 use App\Models\Blacklist;
+use App\Models\Certificate;
+use App\Models\Station;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +22,7 @@ class UserController extends Controller
 
     public function index(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -47,7 +47,7 @@ class UserController extends Controller
 
     public function indexApron(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -69,7 +69,7 @@ class UserController extends Controller
 
     public function indexBGE(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -91,7 +91,7 @@ class UserController extends Controller
 
     public function indexOffice(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -114,21 +114,23 @@ class UserController extends Controller
     public function CountIndex(): View
     {
         $user = User::latest()->paginate(10);
+
         return view('index', ['userCount' => $user->count()]);
     }
 
     public function show(User $user, Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $page = $request->get('page', 1);
+
         return view('user.show', compact('user', 'page'));
     }
 
     public function create(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $stations = Station::where('is_active', 1)
@@ -149,6 +151,12 @@ class UserController extends Controller
             'role' => 'required|string|max:50',
             'station' => 'required|string|max:15',
             'gender' => 'required|in:Male,Female',
+            'job_title' => 'required|string|max:255',
+            'cluster' => 'required|string|max:255',
+            'unit' => 'required|string|max:255',
+            'sub_unit' => 'required|string|max:255',
+            'manager' => 'required|string|max:255',
+            'senior_manager' => 'nullable|string|max:255',
             'is_qantas' => 'required|boolean',
             'join_date' => 'required|date',
             'salary' => 'required|numeric|min:0',
@@ -161,7 +169,7 @@ class UserController extends Controller
             // =========================
             $prefix = Carbon::now()->format('ym'); // contoh: 2602
 
-            $lastUser = User::where('id', 'like', $prefix . '%')
+            $lastUser = User::where('id', 'like', $prefix.'%')
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -172,7 +180,7 @@ class UserController extends Controller
                 $newNumber = '001';
             }
 
-            $generatedId = $prefix . $newNumber;
+            $generatedId = $prefix.$newNumber;
 
             // =========================
             // CEK BLACKLIST
@@ -181,10 +189,11 @@ class UserController extends Controller
             if ($isBlacklisted) {
                 Alert::error(
                     'PERINGATAN KERAS',
-                    "NIK ini terdaftar di BLACKLIST!\n" .
-                        "Nama: " . $isBlacklisted->fullname . "\n" .
-                        "Kasus: " . $isBlacklisted->reason
+                    "NIK ini terdaftar di BLACKLIST!\n".
+                        'Nama: '.$isBlacklisted->fullname."\n".
+                        'Kasus: '.$isBlacklisted->reason
                 );
+
                 return back()->withInput();
             }
 
@@ -198,26 +207,35 @@ class UserController extends Controller
             $user->role = $request->role;
             $user->station = $request->station;
             $user->gender = $request->gender;
+            $user->job_title = $request->job_title;
+            $user->cluster = $request->cluster;
+            $user->unit = $request->unit;
+            $user->sub_unit = $request->sub_unit;
+            $user->manager = $request->manager;
+            $user->senior_manager = $request->senior_manager;
             $user->is_qantas = $request->is_qantas;
             $user->join_date = $request->join_date;
             $user->salary = $request->salary;
             $user->password = Hash::make('password123');
             $user->save();
 
-            Alert::success('Success', 'User berhasil ditambahkan dengan ID: ' . $generatedId);
-            return redirect()->route('users.index');
+            Alert::success('Success', 'User berhasil ditambahkan dengan ID: '.$generatedId);
+
+            return redirect()->route('staff.index');
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Terjadi kesalahan: ' . $e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan: '.$e->getMessage());
+
             return back()->withInput();
         }
     }
 
     public function edit(User $user, Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $page = $request->get('page', 1);
+
         return view('user.edit', compact('user', 'page'));
     }
 
@@ -229,8 +247,14 @@ class UserController extends Controller
             'fullname' => 'required',
             'role' => 'required',
             'station' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'gender' => 'required|in:Male,Female',
+            'job_title' => 'required|string|max:255',
+            'cluster' => 'required|string|max:255',
+            'unit' => 'required|string|max:255',
+            'sub_unit' => 'required|string|max:255',
+            'manager' => 'required|string|max:255',
+            'senior_manager' => 'nullable|string|max:255',
             'is_qantas' => 'required|boolean',
             'join_date' => 'required|date',
             'salary' => 'required|numeric|min:0',
@@ -239,27 +263,31 @@ class UserController extends Controller
         try {
             $user->update($request->all());
             Alert::success('Success', 'Data user berhasil diupdate');
+
             return redirect()->route('users.index');
         } catch (\Exception $e) {
             Log::error('Gagal update user', ['error' => $e->getMessage()]);
-            Alert::error('Gagal', 'Terjadi kesalahan saat mengupdate user: ' . $e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan saat mengupdate user: '.$e->getMessage());
+
             return back()->withInput();
         }
     }
 
     public function destroy(User $user)
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         try {
             $user->delete();
             Alert::success('Berhasil', 'Data berhasil dihapus');
+
             return redirect()->route('users.index');
         } catch (\Exception $e) {
             Log::error('Gagal hapus user', ['error' => $e->getMessage()]);
-            Alert::error('Gagal', 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan saat menghapus data: '.$e->getMessage());
+
             return back();
         }
     }
@@ -269,7 +297,7 @@ class UserController extends Controller
     // =================================================================
     public function kontrak(Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -279,9 +307,9 @@ class UserController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('fullname', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                    ->orWhere('id', 'like', "%{$search}%");
             });
         }
 
@@ -301,11 +329,12 @@ class UserController extends Controller
 
     public function KontrakEdit($id, Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $user = User::findOrFail($id);
         $page = $request->get('page', 1);
+
         return view('user.kontrak_edit', compact('user', 'page'));
     }
 
@@ -316,12 +345,24 @@ class UserController extends Controller
             'contract_end' => 'nullable|date',
         ]);
 
+        if (
+            $request->filled('contract_start')
+            && $request->filled('contract_end')
+            && Carbon::parse($request->contract_start)->gt(Carbon::parse($request->contract_end))
+        ) {
+            Alert::error('Gagal', 'Tanggal mulai kontrak tidak boleh lebih besar dari tanggal selesai.');
+
+            return back()->withInput();
+        }
+
         try {
             $user->update($request->only(['contract_start', 'contract_end']));
             Alert::success('Berhasil', 'Data kontrak berhasil diperbarui');
+
             return redirect()->route('users.kontrak');
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Gagal update kontrak: ' . $e->getMessage());
+            Alert::error('Gagal', 'Gagal update kontrak: '.$e->getMessage());
+
             return back()->withInput();
         }
     }
@@ -331,7 +372,7 @@ class UserController extends Controller
     // =================================================================
     public function pas(Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -340,9 +381,9 @@ class UserController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('fullname', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                    ->orWhere('id', 'like', "%{$search}%");
             });
         }
 
@@ -362,10 +403,11 @@ class UserController extends Controller
 
     public function PASEdit($id)
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $user = User::findOrFail($id);
+
         return view('user.pas_edit', compact('user'));
     }
 
@@ -379,9 +421,11 @@ class UserController extends Controller
         try {
             $user->update($request->only(['pas_expired', 'pas_registered']));
             Alert::success('Berhasil', 'Data PAS berhasil diperbarui');
+
             return redirect()->route('users.pas');
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Gagal update PAS: ' . $e->getMessage());
+            Alert::error('Gagal', 'Gagal update PAS: '.$e->getMessage());
+
             return back()->withInput();
         }
     }
@@ -391,7 +435,7 @@ class UserController extends Controller
     // =================================================================
     public function tim(Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -400,9 +444,9 @@ class UserController extends Controller
         $search = $request->input('search');
 
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('fullname', 'like', "%{$search}%")
-                  ->orWhere('id', 'like', "%{$search}%");
+                    ->orWhere('id', 'like', "%{$search}%");
             });
         }
 
@@ -423,10 +467,11 @@ class UserController extends Controller
 
     public function TIMEdit($id)
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'CHIEF', 'LEADER'])) {
+        if (! in_array(Auth::user()->role, ['Admin', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
         $user = User::findOrFail($id);
+
         return view('user.tim_edit', compact('user'));
     }
 
@@ -441,9 +486,11 @@ class UserController extends Controller
         try {
             $user->update($request->only(['tim_number', 'tim_expired', 'tim_registered']));
             Alert::success('Berhasil', 'Data TIM Bandara berhasil diperbarui');
+
             return redirect()->route('users.tim');
         } catch (\Exception $e) {
-            Alert::error('Gagal', 'Terjadi kesalahan: ' . $e->getMessage());
+            Alert::error('Gagal', 'Terjadi kesalahan: '.$e->getMessage());
+
             return back()->withInput();
         }
     }
@@ -455,12 +502,14 @@ class UserController extends Controller
     public function profile()
     {
         $user = Auth::user();
+
         return view('user.profile', compact('user'));
     }
 
     public function userProfile($id)
     {
         $user = User::findOrFail($id);
+
         return view('staff.profile', compact('user'));
     }
 
@@ -474,18 +523,18 @@ class UserController extends Controller
             $user = User::findOrFail($userId);
             if ($request->hasFile('profile_picture')) {
                 $file = $request->file('profile_picture');
-                $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
+                $filename = time().'_'.$user->id.'.'.$file->getClientOriginalExtension();
 
                 // Simpan langsung ke public/storage/photo agar tidak bergantung pada symlink
                 $photoDir = public_path('storage/photo');
-                if (!file_exists($photoDir)) {
+                if (! file_exists($photoDir)) {
                     mkdir($photoDir, 0775, true);
                 }
                 $file->move($photoDir, $filename);
 
                 // Hapus foto lama jika bukan default
                 if ($user->profile_picture && $user->profile_picture !== 'user.jpg') {
-                    $oldPath = public_path('storage/photo/' . $user->profile_picture);
+                    $oldPath = public_path('storage/photo/'.$user->profile_picture);
                     if (file_exists($oldPath)) {
                         unlink($oldPath);
                     }
@@ -495,41 +544,50 @@ class UserController extends Controller
                 $user->save();
 
                 Alert::success('Berhasil', 'Foto profil berhasil diperbarui.');
+
                 return back();
             }
 
             Alert::error('Gagal', 'File tidak ditemukan.');
+
             return back();
         } catch (\Exception $e) {
-            Log::error('Error upload photo: ' . $e->getMessage());
-            Alert::error('Gagal', 'Gagal ubah foto: ' . $e->getMessage());
+            Log::error('Error upload photo: '.$e->getMessage());
+            Alert::error('Gagal', 'Gagal ubah foto: '.$e->getMessage());
+
             return back();
         }
     }
 
     public function resetPassword(Request $request, $id)
     {
-        if ($request->isMethod('get')) abort(405);
+        if ($request->isMethod('get')) {
+            abort(405);
+        }
         $user = User::findOrFail($id);
         $user->password = bcrypt('password123');
         $user->save();
+
         return redirect()->back()->with('success', 'Password berhasil direset.');
     }
 
     // --- Training & Sertifikat Admin ---
     public function indexAdmin(Request $request): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'CHIEF'])) abort(403);
+        if (! in_array(Auth::user()->role, ['Admin', 'Head Of Airport Service'])) {
+            abort(403);
+        }
 
         $query = Certificate::with('user');
         if ($request->has('search')) {
             $searchTerm = $request->search;
             $query->whereHas('user', function ($q) use ($searchTerm) {
-                $q->where('fullname', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('id', 'like', '%' . $searchTerm . '%');
-            })->orWhere('certificate_name', 'like', '%' . $searchTerm . '%');
+                $q->where('fullname', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('id', 'like', '%'.$searchTerm.'%');
+            })->orWhere('certificate_name', 'like', '%'.$searchTerm.'%');
         }
         $certificates = $query->orderBy('end_date', 'asc')->paginate(10);
+
         return view('admin.certificates.index', compact('certificates'));
     }
 
@@ -537,8 +595,11 @@ class UserController extends Controller
     // (Sudah diringkas agar tidak terlalu panjang, tapi tetap ada)
     public function createCertificate(): View
     {
-        if (! in_array(Auth::user()->role, ['Admin', 'CHIEF'])) abort(403);
-        $users = User::whereIn('role', ['USER', 'ASS LEADER', 'CHIEF', 'LEADER'])->orderBy('fullname', 'asc')->get();
+        if (! in_array(Auth::user()->role, ['Admin', 'Head Of Airport Service'])) {
+            abort(403);
+        }
+        $users = User::whereIn('role', ['USER', 'ASS LEADER', 'Head Of Airport Service', 'LEADER'])->orderBy('fullname', 'asc')->get();
+
         return view('admin.certificates.create', compact('users'));
     }
     // ... (Sisa fungsi sertifikat sama seperti sebelumnya) ...

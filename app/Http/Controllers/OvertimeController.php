@@ -61,7 +61,7 @@ class OvertimeController extends Controller
         $user = Auth::user();
 
         // Security Check: Hanya Admin/Leader yg boleh masuk
-        if (!in_array($user->role, ['Admin', 'LEADER', 'CHIEF', 'ASS LEADER'])) {
+        if (!in_array($user->role, ['Admin', 'LEADER', 'Head Of Airport Service', 'ASS LEADER'])) {
             abort(403);
         }
 

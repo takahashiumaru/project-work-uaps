@@ -30,6 +30,12 @@ class LeavesReportExport implements FromCollection, WithHeadings, WithStyles, Sh
                 default                         => $leave->status ?? '-',
             };
 
+            $isSelfApprovedFallback = ($leave->status ?? null) === 'approved' && empty($leave->approved_by);
+            $approverName = $leave->user_approve
+                ?? ($isSelfApprovedFallback ? ($leave->user_leave ?? ($leave->user->fullname ?? '-')) : '-');
+            $approvedAt = $leave->approved_at
+                ?: ($isSelfApprovedFallback ? ($leave->updated_at ?: $leave->created_at) : null);
+
             return [
                 'NIP'           => $leave->user_nip    ?? ($leave->user->id       ?? '-'),
                 'Nama'          => $leave->user_leave  ?? ($leave->user->fullname  ?? '-'),
@@ -40,8 +46,8 @@ class LeavesReportExport implements FromCollection, WithHeadings, WithStyles, Sh
                 'Total Hari'    => $leave->total_days  ?? 0,
                 'Status'        => $status,
                 'Keterangan'    => $leave->reason      ?? '-',
-                'Approver'      => $leave->user_approve  ?? '-',
-                'Tgl Approve'   => $leave->approved_at   ? \Carbon\Carbon::parse($leave->approved_at)->translatedFormat('d M Y H:i') : '-',
+                'Approver'      => $approverName,
+                'Tgl Approve'   => $approvedAt ? \Carbon\Carbon::parse($approvedAt)->translatedFormat('d M Y H:i') : '-',
                 'Rejector'      => $leave->user_rejected ?? '-',
             ];
         });

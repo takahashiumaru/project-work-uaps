@@ -13,7 +13,7 @@ class ShiftController extends Controller
 {
     private function canManageShifts(): bool
     {
-        return in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'chief', 'leader']);
+        return in_array(strtolower((string) Auth::user()->role), ['admin', 'ass leader', 'Head Of Airport Service', 'leader']);
     }
 
     public function index(): View

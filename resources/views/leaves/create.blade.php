@@ -81,10 +81,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="attachment_file" class="form-label">Lampiran (Opsional, max 2MB)</label>
-                        <input type="file" name="attachment_file" id="attachment_file" class="form-control @error('attachment_file') is-invalid @enderror">
+                        <label for="attachment" class="form-label">Lampiran (Opsional, max 2MB)</label>
+                        <input type="file" name="attachment" id="attachment" class="form-control @error('attachment') is-invalid @enderror">
                         <small class="form-text text-muted">Contoh: Surat dokter, surat keterangan.</small>
-                        @error('attachment_file')
+                        @error('attachment')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

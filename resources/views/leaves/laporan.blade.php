@@ -79,9 +79,16 @@
                                         @endphp
                                         <span class="status-badge {{ $statusConfig['class'] }}">{{ $statusConfig['text'] }}</span>
                                     </td>
+                                    @php
+                                        $isSelfApprovedFallback = $leave->status === 'approved' && empty($leave->approved_by);
+                                        $approverName = $leave->user_approve
+                                            ?? ($isSelfApprovedFallback ? ($leave->user_leave ?? '-') : '-');
+                                        $approvedAt = $leave->approved_at
+                                            ?: ($isSelfApprovedFallback ? ($leave->updated_at ?: $leave->created_at) : null);
+                                    @endphp
                                     <td>{{ $leave->reason ?? '-' }}</td>
-                                    <td>{{ $leave->user_approve ?? '-' }}</td>
-                                    <td>{{ $leave->approved_at ? \Carbon\Carbon::parse($leave->approved_at)->format('d M Y H:i') : '-' }}</td>
+                                    <td>{{ $approverName }}</td>
+                                    <td>{{ $approvedAt ? \Carbon\Carbon::parse($approvedAt)->format('d M Y H:i') : '-' }}</td>
                                     <td>{{ $leave->user_rejected ?? '-' }}</td>
                                 </tr>
                             @empty

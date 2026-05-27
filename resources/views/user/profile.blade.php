@@ -883,7 +883,7 @@
                                         </div>
                                     </div>
 
-                                    @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                                    @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
                                         <div class="col-md-6">
                                             <div class="info-tile">
                                                 <div class="tile-icon-wrapper">
@@ -908,7 +908,7 @@
                                         </div>
                                     @endif
 
-                                    @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Chief', 'Leader', 'Finance']))
+                                    @if (in_array(Auth::user()->role, ['Admin', 'Ass Leader', 'Head Of Airport Service', 'Leader', 'Finance']))
                                         <div class="col-12">
                                             <div class="info-tile">
                                                 <div class="tile-icon-wrapper">
@@ -916,7 +916,9 @@
                                                 </div>
                                                 <div class="tile-content">
                                                     <div class="tile-label">Salary</div>
-                                                    <div class="tile-value">Rp {{ $user->salary ? number_format((float) $user->salary, 0, ',', '.') : 'N/A' }}</div>
+                                                    <div class="tile-value">Rp
+                                                        {{ $user->salary ? number_format((float) $user->salary, 0, ',', '.') : 'N/A' }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -938,7 +940,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-6">
                                         <div class="info-tile">
                                             <div class="tile-icon-wrapper">
@@ -1033,33 +1035,33 @@
     </div>
 @endsection
 
-        @section('scripts')
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
 
-                    // Show loading state when uploading photo
-                    const photoForm = document.getElementById('photoForm');
-                    if (photoForm) {
-                        photoForm.addEventListener('submit', function() {
-                            const submitButton = photoForm.querySelector('button[type="submit"]');
-                            if (submitButton) {
-                                submitButton.innerHTML = '<i class="bx bx-loader bx-spin me-2"></i>Uploading...';
-                                submitButton.disabled = true;
-                            }
-                        });
-                    }
-
-                    // Add hover effect to profile photo
-                    const photo = document.querySelector('.profile-photo');
-                    if (photo) {
-                        photo.addEventListener('mouseenter', function() {
-                            this.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
-                        });
-
-                        photo.addEventListener('mouseleave', function() {
-                            this.style.boxShadow = 'none';
-                        });
+            // Show loading state when uploading photo
+            const photoForm = document.getElementById('photoForm');
+            if (photoForm) {
+                photoForm.addEventListener('submit', function() {
+                    const submitButton = photoForm.querySelector('button[type="submit"]');
+                    if (submitButton) {
+                        submitButton.innerHTML = '<i class="bx bx-loader bx-spin me-2"></i>Uploading...';
+                        submitButton.disabled = true;
                     }
                 });
-            </script>
-        @endsection
+            }
+
+            // Add hover effect to profile photo
+            const photo = document.querySelector('.profile-photo');
+            if (photo) {
+                photo.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                });
+
+                photo.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = 'none';
+                });
+            }
+        });
+    </script>
+@endsection

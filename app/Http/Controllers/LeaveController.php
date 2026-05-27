@@ -14,6 +14,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LeaveController extends Controller
 {
+    private const ANNUAL_LEAVE_QUOTA_DAYS = 12;
+
     /**
      * Menampilkan daftar riwayat pengajuan cuti.
      * Admin melihat semua, user biasa hanya melihat miliknya.
@@ -51,14 +53,9 @@ class LeaveController extends Controller
         $leaves = $query->paginate(10)->withQueryString(); // Paginasi data
 
         // --- Logika Perhitungan Sisa Cuti ---
-        $totalLeaveQuota = 12; // Asumsi kuota cuti tahunan adalah 12 hari
-        $usedLeaveDays = Leave::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->where('leave_type', 'Cuti Tahunan')
-            ->whereYear('start_date', date('Y'))
-            ->sum('total_days');
-
-        $leaveBalance = $totalLeaveQuota - $usedLeaveDays;
+        $annualLeaveUsage = $this->annualLeaveUsage($user->id);
+        $usedLeaveDays = $annualLeaveUsage['used'];
+        $leaveBalance = $annualLeaveUsage['balance'];
 
         return view('leaves.index', compact('leaves', 'user', 'leaveBalance', 'usedLeaveDays'));
     }
@@ -92,14 +89,9 @@ class LeaveController extends Controller
         $leaves = $query->paginate(10)->withQueryString(); // Paginasi data
 
         // --- Logika Perhitungan Sisa Cuti ---
-        $totalLeaveQuota = 12; // Asumsi kuota cuti tahunan adalah 12 hari
-        $usedLeaveDays = Leave::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->where('leave_type', 'Cuti Tahunan')
-            ->whereYear('start_date', date('Y'))
-            ->sum('total_days');
-
-        $leaveBalance = $totalLeaveQuota - $usedLeaveDays;
+        $annualLeaveUsage = $this->annualLeaveUsage($user->id);
+        $usedLeaveDays = $annualLeaveUsage['used'];
+        $leaveBalance = $annualLeaveUsage['balance'];
 
         return view('leaves.pengajuan', compact('leaves', 'user', 'leaveBalance', 'usedLeaveDays'));
     }
@@ -184,14 +176,8 @@ class LeaveController extends Controller
     {
         // Ambil data sisa cuti untuk ditampilkan di form
         $user = Auth::user();
-        $totalLeaveQuota = 12; // Asumsi kuota
-        $usedLeaveDays = Leave::where('user_id', $user->id)
-            ->where('status', 'approved')
-            ->where('leave_type', 'Cuti Tahunan')
-            ->whereYear('start_date', date('Y'))
-            ->sum('total_days');
-
-        $leaveBalance = $totalLeaveQuota - $usedLeaveDays;
+        $annualLeaveUsage = $this->annualLeaveUsage($user->id);
+        $leaveBalance = $annualLeaveUsage['balance'];
 
         return view('leaves.create', compact('leaveBalance'));
     }
@@ -227,21 +213,16 @@ class LeaveController extends Controller
         $startDate = Carbon::parse($request->start_date);
         $endDate = Carbon::parse($request->end_date);
         $totalDays = $startDate->diffInDays($endDate) + 1;
+        $annualLeaveDecision = null;
+        $isAutomaticallyRejected = false;
 
         // Cek sisa cuti jika jenisnya adalah 'Cuti Tahunan'
         if ($request->leave_type === 'Cuti Tahunan') {
-            $user = Auth::user();
-            $totalLeaveQuota = 12;
-            $usedLeaveDays = Leave::where('user_id', $user->id)
-                ->where('status', 'approved')
-                ->where('leave_type', 'Cuti Tahunan')
-                ->whereYear('start_date', date('Y'))
-                ->sum('total_days');
-            $leaveBalance = $totalLeaveQuota - $usedLeaveDays;
+            $annualLeaveDecision = $this->annualLeaveDecision($user->id, $startDate, $totalDays);
 
-            if ($totalDays > $leaveBalance) {
-                Alert::error('Gagal', 'Sisa cuti tahunan Anda tidak mencukupi.');
-                return redirect()->back()->withInput();
+            if ($annualLeaveDecision['exceeds']) {
+                $status = 'rejected by ho';
+                $isAutomaticallyRejected = true;
             }
         }
 
@@ -250,7 +231,7 @@ class LeaveController extends Controller
             $attachmentPath = $request->file('attachment')->store('leave_attachments', 'public');
         }
 
-        Leave::create([
+        $leaveData = [
             'user_id'       => Auth::id(),
             'leave_type'    => $request->leave_type,
             'start_date'    => $startDate,
@@ -260,7 +241,21 @@ class LeaveController extends Controller
             'attachment_path' => $attachmentPath,
             'replacement_employee_name' => $request->replacement_employee_name,
             'status'        => $status,
-        ]);
+        ];
+
+        if ($isAutomaticallyRejected) {
+            $leaveData['manager_comment'] = $this->annualLeaveRejectionComment($annualLeaveDecision);
+        } elseif ($status === 'approved') {
+            $leaveData['approved_by'] = Auth::id();
+            $leaveData['approved_at'] = now();
+        }
+
+        Leave::create($leaveData);
+
+        if ($isAutomaticallyRejected) {
+            Alert::warning('Ditolak Otomatis', 'Pengajuan cuti tahunan melebihi kuota 12 hari dan otomatis ditolak.');
+            return redirect()->route('leaves.pengajuan');
+        }
 
         Alert::success('Berhasil', 'Pengajuan Anda telah berhasil dikirim.');
         return redirect()->route('leaves.pengajuan');
@@ -279,18 +274,90 @@ class LeaveController extends Controller
 
         $status = $request->status;
 
+        if ($status === 'approved' && $leave->leave_type === 'Cuti Tahunan') {
+            $annualLeaveDecision = $this->annualLeaveDecision(
+                $leave->user_id,
+                Carbon::parse($leave->start_date),
+                (int) $leave->total_days,
+                $leave->id
+            );
+
+            if ($annualLeaveDecision['exceeds']) {
+                $leave->status = 'rejected by ho';
+                $leave->rejected_by = Auth::id();
+                $leave->approved_by = null;
+                $leave->approved_at = null;
+                $leave->manager_comment = $this->annualLeaveRejectionComment($annualLeaveDecision);
+                $leave->save();
+
+                Alert::warning('Ditolak Otomatis', 'Cuti tahunan ini melebihi kuota 12 hari, sehingga otomatis ditolak.');
+                return redirect()->route('leaves.index');
+            }
+        }
+
         $leave->status = $status;
 
         if ($status == 'approved') {
             $leave->approved_by = Auth::id();
             $leave->approved_at = now();
-        } else {
+            $leave->rejected_by = null;
+        } elseif (str_starts_with($status, 'rejected')) {
             $leave->rejected_by = Auth::id();
+            $leave->approved_by = null;
+            $leave->approved_at = null;
+        } else {
+            $leave->rejected_by = null;
         }
 
         $leave->save();
 
         Alert::success('Berhasil', 'Status pengajuan telah diubah.');
         return redirect()->route('leaves.index');
+    }
+
+    private function annualLeaveUsage(string $userId, ?int $year = null, ?int $excludeLeaveId = null): array
+    {
+        $year ??= (int) date('Y');
+
+        $query = Leave::where('user_id', $userId)
+            ->where('status', 'approved')
+            ->where('leave_type', 'Cuti Tahunan')
+            ->whereYear('start_date', $year);
+
+        if ($excludeLeaveId !== null) {
+            $query->where('id', '!=', $excludeLeaveId);
+        }
+
+        $used = (int) $query->sum('total_days');
+
+        return [
+            'quota' => self::ANNUAL_LEAVE_QUOTA_DAYS,
+            'used' => $used,
+            'balance' => max(0, self::ANNUAL_LEAVE_QUOTA_DAYS - $used),
+            'raw_balance' => self::ANNUAL_LEAVE_QUOTA_DAYS - $used,
+            'year' => $year,
+        ];
+    }
+
+    private function annualLeaveDecision(string $userId, Carbon $startDate, int $requestedDays, ?int $excludeLeaveId = null): array
+    {
+        $usage = $this->annualLeaveUsage($userId, (int) $startDate->year, $excludeLeaveId);
+        $projected = $usage['used'] + $requestedDays;
+
+        return array_merge($usage, [
+            'requested' => $requestedDays,
+            'projected' => $projected,
+            'exceeds' => $projected > self::ANNUAL_LEAVE_QUOTA_DAYS,
+        ]);
+    }
+
+    private function annualLeaveRejectionComment(array $decision): string
+    {
+        return sprintf(
+            'Otomatis ditolak karena total cuti tahunan %d menjadi %d hari, melebihi kuota %d hari.',
+            $decision['year'],
+            $decision['projected'],
+            $decision['quota']
+        );
     }
 }

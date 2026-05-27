@@ -32,12 +32,12 @@
             <div id="scheduleDropdown" class="collapse">
                 <a href="{{ route('schedule.now') }}" style="padding-left: 30px;">Jadwal Schedule Hari Ini </a>
                 <a href="{{ route('schedule.index') }}" style="padding-left: 30px;">Data Schedule</a>
-                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
                 <a href="{{ route('schedule.view') }}" style="padding-left: 30px;">Create / Update Schedule</a>
                 @endif
             </div>
         </div>
-        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
+        @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
         <a href="{{ route('shift.index') }}"><i class="bi bi-clock"></i> Shift</a>
         <div class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="collapse" data-target="#userDropdown">
@@ -117,7 +117,7 @@
                 <div>: {{ $user->pas_registered }}</div>
                 <div><strong>PAS Expired</strong></div>
                 <div>: {{ $user->pas_expired }}</div>
-                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'CHIEF', 'LEADER']))
+                @if (in_array(Auth::user()->role, ['ADMIN', 'ASS LEADER', 'Head Of Airport Service', 'LEADER']))
                 <div><strong>Salary</strong></div>
                 <div>: Rp {{ number_format($user->salary, 0, ',', '.') }}</div>
                 @endif

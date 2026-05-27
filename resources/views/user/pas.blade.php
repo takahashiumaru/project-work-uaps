@@ -2,15 +2,68 @@
 
 @section('title', 'Manajemen PAS Tahunan')
 
+@section('styles')
+<style>
+    .pas-page-header {
+        gap: 1rem;
+    }
+
+    .pas-page-heading {
+        min-width: 0;
+    }
+
+    .pas-page-heading .text-muted {
+        max-width: 760px;
+        line-height: 1.55;
+    }
+
+    .pas-page-header nav {
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+
+    .pas-page-header .breadcrumb {
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        row-gap: .35rem;
+    }
+
+    @media (min-width: 1200px) {
+        .pas-page-header nav {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .pas-page-header .breadcrumb {
+            justify-content: flex-end;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .pas-page-heading .text-muted {
+            max-width: 100%;
+        }
+
+        .pas-page-header .breadcrumb {
+            white-space: normal;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="py-4">
 
             {{-- Header --}}
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-1 mb-4">
-                <div>
+            <div class="pas-page-header d-flex flex-column flex-xl-row justify-content-between align-items-start align-items-xl-center mb-4">
+                <div class="pas-page-heading">
                     <h4 class="fw-bold mb-1">Manajemen PAS Tahunan</h4>
-                    <p class="text-muted mb-0" style="font-size:0.875rem;">Data PAS (Izin Masuk Area Terbatas) — Monitoring Validitas PAS (Merah: &lt; 30 Hari, Kuning: &lt; 60 Hari)</p>
+                    <p class="text-muted mb-0" style="font-size:0.875rem;">
+                        Data PAS (Izin Masuk Area Terbatas) - Monitoring validitas PAS
+                        (Merah: &lt; 30 hari, Kuning: &lt; 60 hari)
+                    </p>
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
