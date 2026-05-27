@@ -22,13 +22,13 @@
                 <div class="card-body">
                     {{-- Toolbar --}}
                     <div class="dt-toolbar">
-                        <form action="{{ route('users.index') }}" method="GET" class="dt-search">
+                        <form action="{{ route('users.office') }}" method="GET" class="dt-search">
                             <i class="bx bx-search search-icon"></i>
                             <input type="text" name="search" class="form-control" placeholder="Cari NIP atau Nama..." value="{{ request('search') }}">
                         </form>
                         @if (request('search'))
                         <div class="dt-actions">
-                            <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary">Reset</a>
+                            <a href="{{ route('users.office') }}" class="btn btn-sm btn-outline-secondary">Reset</a>
                         </div>
                         @endif
                     </div>

@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/stations/{id}', [StationController::class, 'destroy'])->name('stations.destroy');
 
     // --- FLIGHTS ---
-    Route::resource('flights', FlightController::class);
+    Route::resource('flights', FlightController::class)->only(['index', 'store', 'update']);
     Route::get('/flights/{id}/details', [FlightController::class, 'getDetails'])->name('flights.details');
     Route::get('/flight/{id}/users', [HomeController::class, 'getFlightUsers']);
 
@@ -114,7 +114,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/schedules/update-active', [ScheduleController::class, 'updateActive']);
     Route::get('/schedule-now', [ScheduleController::class, 'now'])->name('schedule.now');
     Route::get('/schedule/show', [ScheduleController::class, 'show'])->name('schedule.view');
-    Route::resource('schedule', ScheduleController::class);
+    Route::resource('schedule', ScheduleController::class)->only(['index', 'edit']);
 
     // Freelance Schedule
     Route::get('/schedule-freelances', [ScheduleController::class, 'freelances'])->name('schedule.freelances');
@@ -122,7 +122,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/schedule-freelance-create', [ScheduleController::class, 'store'])->name('freelance.store');
 
     // --- SHIFTS ---
-    Route::resource('shift', ShiftController::class);
+    Route::resource('shift', ShiftController::class)->except(['show']);
 
     // --- ATTENDANCE (ABSENSI) ---
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');

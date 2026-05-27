@@ -140,7 +140,7 @@
             padding: 14px 18px;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.03);
             position: relative;
-            overflow: hidden;
+            overflow: visible !important;
             margin-left: 0;
             margin-right: 0;
         }
@@ -185,7 +185,7 @@
         .station-filter-control {
             min-width: 210px;
             height: 36px;
-            overflow: hidden;
+            overflow: visible !important;
             border: 1px solid rgba(226, 232, 240, 0.85);
             border-radius: 8px;
             background: #ffffff;
@@ -219,6 +219,31 @@
 
         .station-filter-control .form-select:focus {
             box-shadow: none !important;
+        }
+
+        /* Support custom combobox styling inside station filter control */
+        .station-filter-control .aps-combobox {
+            flex: 1;
+            width: auto;
+        }
+
+        .station-filter-control .aps-combobox-trigger {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            height: 34px;
+            min-height: 34px;
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .station-filter-control .aps-combobox-value {
+            font-weight: 600;
         }
 
         /* --- STATION CARDS --- */
@@ -1016,6 +1041,11 @@
 
         html.aps-dark .station-filter-control .form-select,
         html.aps-dark .station-filter-control .input-group-text {
+            background: transparent !important;
+            color: #dbe7f6 !important;
+        }
+
+        html.aps-dark .station-filter-control .aps-combobox-trigger {
             background: transparent !important;
             color: #dbe7f6 !important;
         }

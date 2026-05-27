@@ -182,9 +182,10 @@ class HomeController extends Controller
         // =================================================================
         // BAGIAN 4: SWEETALERT & MONITORING
         // =================================================================
-        if ($user) {
+        if ($user && !session()->has('pas_warning_shown')) {
             if (empty($user->pas_expired)) {
                 Alert::warning('Peringatan', '⚠️ Belum ada data masa berlaku PAS Anda. Harap isi segera.');
+                session()->put('pas_warning_shown', true);
             } else {
                 $expiredDate = Carbon::parse($user->pas_expired);
                 $today = Carbon::today();
@@ -192,6 +193,7 @@ class HomeController extends Controller
 
                 if ($diffMonths <= 2 && $expiredDate->greaterThanOrEqualTo($today)) {
                     Alert::warning('Peringatan', '⚠️ Masa berlaku PAS Anda akan habis dalam ' . $diffMonths . ' bulan lagi. Harap segera perpanjang.');
+                    session()->put('pas_warning_shown', true);
                 }
             }
         }

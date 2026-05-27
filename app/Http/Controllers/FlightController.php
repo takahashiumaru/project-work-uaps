@@ -19,7 +19,7 @@ class FlightController extends Controller
     public function index(): View
     {
         $perPage = request()->input('per_page', 30);
-        $flights = Flights::orderBy('arrival_time', 'asc')->paginate($perPage)->withQueryString();
+        $flights = Flights::orderBy('arrival', 'asc')->paginate($perPage)->withQueryString();
 
         return view('flight.index', compact('flights'));
     }
