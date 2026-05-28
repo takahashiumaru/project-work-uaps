@@ -51,15 +51,22 @@
                             $attendance = $data['attendance'];
                             $schedule = $data['schedule'];
 
+                            $currentDate = \Carbon\Carbon::parse($month)->day($day);
+
                             $startTime = $schedule ? \Carbon\Carbon::parse($schedule->start_time) : null;
                             $endTime = $schedule ? \Carbon\Carbon::parse($schedule->end_time) : null;
+                            $shiftStart = $schedule ? \Carbon\Carbon::parse($currentDate->toDateString() . ' ' . $schedule->start_time) : null;
+                            $shiftEnd = $schedule ? \Carbon\Carbon::parse($currentDate->toDateString() . ' ' . $schedule->end_time) : null;
+
+                            if ($shiftStart && $shiftEnd && $shiftEnd->lte($shiftStart)) {
+                                $shiftEnd->addDay();
+                            }
 
                             $checkIn = $attendance && $attendance->check_in_time ? \Carbon\Carbon::parse($attendance->check_in_time) : null;
                             $checkOut = $attendance && $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time) : null;
 
                             $isShiftKosong = $startTime && $startTime->format('H:i') === '00:00' && $endTime && $endTime->format('H:i') === '00:00';
 
-                            $currentDate = \Carbon\Carbon::parse($month)->day($day);
                             $today = now()->startOfDay();
                             $isFuture = $currentDate->gt($today);
                             @endphp
@@ -77,31 +84,31 @@
                                 {{-- Kolom In --}}
                                 <td class="
                                     @if(!$isFuture && !$isShiftKosong)
-                                        @if(!$checkIn || !($checkIn instanceof \DateTimeInterface))
+                                        @if(!$checkIn)
                                             bg-danger text-white
-                                        @elseif($checkIn instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkIn->gt(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                        @elseif($shiftStart && $checkIn->gt($shiftStart))
                                             bg-danger text-white
-                                        @elseif($checkIn instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkIn->lte(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                        @elseif($shiftStart && $checkIn->lte($shiftStart))
                                             bg-success text-white
                                         @endif
                                     @endif
                                 " style="border-radius: 0.25rem;">
-                                    {{ $checkIn instanceof \DateTimeInterface ? $checkIn->format('H:i') : ($checkIn ? (string) $checkIn : '-') }}
+                                    {{ $checkIn ? $checkIn->format('H:i') : '-' }}
                                 </td>
 
                                 {{-- Kolom Out --}}
                                 <td class="
                                     @if(!$isFuture && !$isShiftKosong)
-                                        @if(!$checkOut || !($checkOut instanceof \DateTimeInterface))
+                                        @if(!$checkOut)
                                             bg-danger text-white
-                                        @elseif($checkOut instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkOut->gt(new \DateTime($startTime->format('Y-m-d H:i:s'))))
-                                            bg-danger text-white
-                                        @elseif($checkOut instanceof \DateTimeInterface && $startTime instanceof \DateTimeInterface && $checkOut->lte(new \DateTime($startTime->format('Y-m-d H:i:s'))))
+                                        @elseif($shiftEnd && $checkOut->gte($shiftEnd))
                                             bg-success text-white
+                                        @elseif($shiftEnd && $checkOut->lt($shiftEnd))
+                                            bg-danger text-white
                                         @endif
                                     @endif
                                 " style="border-radius: 0.25rem;">
-                                    {{ $checkIn instanceof \DateTimeInterface ? $checkOut->format('H:i') : ($checkOut ? (string) $checkOut : '-') }}
+                                    {{ $checkOut ? $checkOut->format('H:i') : '-' }}
                                 </td>
                             </tr>
                             @endforeach
