@@ -151,7 +151,11 @@ class Document extends Model
         }
 
         $roles = $this->role_access_values;
-        $shownRoles = array_slice($roles, 0, 3);
+        if (count($roles) > 2) {
+            return 'Akses: ' . count($roles) . ' Role';
+        }
+
+        $shownRoles = array_slice($roles, 0, 2);
         $label = implode(', ', $shownRoles);
         $remainingRoles = count($roles) - count($shownRoles);
 

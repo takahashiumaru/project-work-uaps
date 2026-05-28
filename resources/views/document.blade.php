@@ -19,7 +19,7 @@
             --doc-red-soft: #fdecec;
             --doc-amber: #b7791f;
             --doc-amber-soft: #fff7e6;
-            --doc-shadow: 0 18px 42px rgba(31, 49, 78, 0.075);
+            --doc-shadow: 0 14px 34px rgba(31, 49, 78, 0.07);
         }
 
         .document-page .document-page-header {
@@ -157,18 +157,65 @@
         .document-page .document-list {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
+            gap: 1.1rem;
         }
 
         .document-page .document-card {
+            --doc-card-accent: var(--doc-blue);
+            --doc-card-accent-deep: var(--doc-blue-deep);
+            --doc-card-soft: rgba(47, 128, 237, 0.09);
+            --doc-card-wash: rgba(47, 128, 237, 0.035);
+            --doc-card-border: rgba(47, 128, 237, 0.18);
+            --doc-card-shadow: rgba(47, 128, 237, 0.22);
+            position: relative;
             overflow: hidden;
+            min-height: 230px;
+            background:
+                linear-gradient(180deg, var(--doc-card-wash), transparent 44%),
+                var(--doc-surface);
             transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .document-page .document-card.is-all {
+            --doc-card-accent: var(--doc-blue);
+            --doc-card-accent-deep: var(--doc-blue-deep);
+            --doc-card-soft: rgba(47, 128, 237, 0.1);
+            --doc-card-wash: rgba(47, 128, 237, 0.04);
+            --doc-card-border: rgba(47, 128, 237, 0.2);
+            --doc-card-shadow: rgba(47, 128, 237, 0.24);
+        }
+
+        .document-page .document-card.is-admin {
+            --doc-card-accent: var(--doc-red);
+            --doc-card-accent-deep: #c83f3f;
+            --doc-card-soft: rgba(227, 77, 77, 0.1);
+            --doc-card-wash: rgba(227, 77, 77, 0.04);
+            --doc-card-border: rgba(227, 77, 77, 0.18);
+            --doc-card-shadow: rgba(227, 77, 77, 0.2);
+        }
+
+        .document-page .document-card.is-manager {
+            --doc-card-accent: var(--doc-amber);
+            --doc-card-accent-deep: #946315;
+            --doc-card-soft: rgba(183, 121, 31, 0.11);
+            --doc-card-wash: rgba(183, 121, 31, 0.045);
+            --doc-card-border: rgba(183, 121, 31, 0.2);
+            --doc-card-shadow: rgba(183, 121, 31, 0.2);
+        }
+
+        .document-page .document-card.is-staff-admin {
+            --doc-card-accent: var(--doc-green);
+            --doc-card-accent-deep: #0d8350;
+            --doc-card-soft: rgba(22, 161, 99, 0.1);
+            --doc-card-wash: rgba(22, 161, 99, 0.04);
+            --doc-card-border: rgba(22, 161, 99, 0.2);
+            --doc-card-shadow: rgba(22, 161, 99, 0.2);
         }
 
         .document-page .document-card:hover {
             transform: translateY(-2px);
-            border-color: var(--doc-border-strong);
-            box-shadow: 0 22px 48px rgba(31, 49, 78, 0.1);
+            border-color: var(--doc-card-border);
+            box-shadow: 0 20px 44px rgba(31, 49, 78, 0.105);
         }
 
         .document-page .document-empty {
@@ -185,16 +232,14 @@
         }
 
         .document-page .document-card-header {
-            padding: 1.1rem 1.25rem;
-            background:
-                linear-gradient(135deg, rgba(47, 128, 237, 0.1), rgba(22, 161, 99, 0.06)),
-                var(--doc-surface-soft);
-            border-bottom: 1px solid var(--doc-border);
+            padding: 1.18rem 1.2rem 0.9rem;
+            background: transparent;
+            border-bottom: 0;
         }
 
         .document-page .document-head {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
             gap: 1rem;
         }
@@ -207,17 +252,18 @@
         }
 
         .document-page .document-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--doc-blue), var(--doc-blue-deep));
+            width: 46px;
+            height: 46px;
+            border: 1px solid var(--doc-card-border);
+            background: var(--doc-card-accent);
             color: #ffffff;
-            font-size: 1.35rem;
-            box-shadow: 0 12px 22px rgba(47, 128, 237, 0.18);
+            font-size: 1.25rem;
+            box-shadow: 0 10px 20px var(--doc-card-shadow);
         }
 
         .document-page .document-kicker {
             margin-bottom: 0.15rem;
-            color: var(--doc-blue);
+            color: var(--doc-card-accent);
             font-size: 0.72rem;
             font-weight: 800;
             letter-spacing: 0.06em;
@@ -227,7 +273,7 @@
         .document-page .document-name {
             margin: 0;
             color: var(--doc-text);
-            font-size: 1.03rem;
+            font-size: 1rem;
             font-weight: 750;
             line-height: 1.3;
             text-align: left;
@@ -249,8 +295,8 @@
 
         .document-page .access-badge {
             flex: 0 0 auto;
-            max-width: min(360px, 48%);
-            padding: 0.5rem 0.75rem;
+            max-width: min(360px, 45%);
+            padding: 0.48rem 0.72rem;
             text-align: right;
         }
 
@@ -276,9 +322,9 @@
 
         .document-page .document-card-body {
             display: flex;
-            min-height: 135px;
+            min-height: 132px;
             flex-direction: column;
-            padding: 1.1rem 1.25rem 1.25rem;
+            padding: 0 1.2rem 1.15rem;
         }
 
         .document-page .document-description {
@@ -294,13 +340,18 @@
             justify-content: space-between;
             gap: 0.75rem;
             margin-top: auto;
-            padding-top: 1rem;
+            padding: 0.72rem 0;
+            border: 1px solid var(--doc-card-border);
+            border-radius: 14px;
+            border-right: 0;
+            border-left: 0;
+            background: transparent;
         }
 
         .document-page .document-size {
             padding: 0.42rem 0.65rem;
             background: var(--doc-surface);
-            border: 1px solid var(--doc-border);
+            border: 1px solid var(--doc-card-border);
             color: var(--doc-muted);
             font-family: "Courier New", monospace;
             opacity: 1;
@@ -308,20 +359,26 @@
 
         .document-page .document-download {
             min-height: 38px;
+            min-width: 118px;
             justify-content: center;
-            padding: 0.52rem 0.9rem;
-            border: 1px solid var(--doc-blue);
-            background: linear-gradient(135deg, var(--doc-blue), var(--doc-blue-deep));
-            color: #ffffff;
+            padding: 0.52rem 0.95rem;
+            border: 1px solid var(--doc-card-accent);
+            background: var(--doc-surface);
+            color: var(--doc-card-accent);
             text-decoration: none;
-            box-shadow: 0 10px 22px rgba(47, 128, 237, 0.18);
+            box-shadow: none;
             transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
         }
 
+        .document-page .document-download i {
+            line-height: 1;
+        }
+
         .document-page .document-download:hover {
+            background: linear-gradient(135deg, var(--doc-card-accent), var(--doc-card-accent-deep));
             color: #ffffff;
             transform: translateY(-1px);
-            box-shadow: 0 14px 28px rgba(47, 128, 237, 0.26);
+            box-shadow: 0 14px 28px var(--doc-card-shadow);
         }
 
         .document-page .document-download-icon {
@@ -331,9 +388,17 @@
             width: 22px;
             height: 22px;
             border-radius: 999px;
+            border: 1px solid var(--doc-card-border);
+            background: var(--doc-card-soft);
+            color: var(--doc-card-accent);
+            font-size: 0.92rem;
+            transition: border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+        }
+
+        .document-page .document-download:hover .document-download-icon {
+            border-color: rgba(255, 255, 255, 0.38);
             background: rgba(255, 255, 255, 0.18);
             color: #ffffff;
-            font-size: 0.92rem;
         }
 
         html.aps-dark .document-page {
@@ -361,10 +426,96 @@
             border-color: #315071;
         }
 
-        html.aps-dark .document-page .document-card-header {
+        html.aps-dark .document-page .document-card {
             background:
-                linear-gradient(135deg, rgba(47, 128, 237, 0.14), rgba(110, 231, 168, 0.07)),
-                var(--doc-surface-soft);
+                linear-gradient(180deg, var(--doc-card-wash), transparent 44%),
+                var(--doc-surface);
+        }
+
+        html.aps-dark .document-page .document-card.is-all {
+            --doc-card-accent: #8fc1ff;
+            --doc-card-accent-deep: #5aa3ff;
+            --doc-card-soft: rgba(47, 128, 237, 0.16);
+            --doc-card-wash: rgba(47, 128, 237, 0.08);
+            --doc-card-border: rgba(143, 193, 255, 0.28);
+            --doc-card-shadow: rgba(47, 128, 237, 0.22);
+        }
+
+        html.aps-dark .document-page .document-card.is-admin {
+            --doc-card-accent: #fb7185;
+            --doc-card-accent-deep: #f43f5e;
+            --doc-card-soft: rgba(239, 68, 68, 0.14);
+            --doc-card-wash: rgba(239, 68, 68, 0.07);
+            --doc-card-border: rgba(251, 113, 133, 0.3);
+            --doc-card-shadow: rgba(239, 68, 68, 0.18);
+        }
+
+        html.aps-dark .document-page .document-card.is-manager {
+            --doc-card-accent: #fbbf24;
+            --doc-card-accent-deep: #f59e0b;
+            --doc-card-soft: rgba(245, 158, 11, 0.16);
+            --doc-card-wash: rgba(245, 158, 11, 0.08);
+            --doc-card-border: rgba(251, 191, 36, 0.3);
+            --doc-card-shadow: rgba(245, 158, 11, 0.18);
+        }
+
+        html.aps-dark .document-page .document-card.is-staff-admin {
+            --doc-card-accent: #6ee7a8;
+            --doc-card-accent-deep: #22c55e;
+            --doc-card-soft: rgba(34, 197, 94, 0.14);
+            --doc-card-wash: rgba(34, 197, 94, 0.07);
+            --doc-card-border: rgba(110, 231, 168, 0.3);
+            --doc-card-shadow: rgba(34, 197, 94, 0.18);
+        }
+
+        html.aps-dark .document-page .document-card-header {
+            background: transparent;
+        }
+
+        html.aps-dark .document-page .document-page-header h4 {
+            color: var(--doc-text);
+        }
+
+        html.aps-dark .document-page .document-page-header .text-muted {
+            color: var(--doc-faint) !important;
+        }
+
+        html.aps-dark .document-page .access-badge.is-all {
+            background: rgba(47, 128, 237, 0.16);
+            color: #8fc1ff;
+        }
+
+        html.aps-dark .document-page .access-badge.is-admin {
+            background: rgba(239, 68, 68, 0.14);
+            color: #fb7185;
+        }
+
+        html.aps-dark .document-page .access-badge.is-manager {
+            background: rgba(245, 158, 11, 0.16);
+            color: #fbbf24;
+        }
+
+        html.aps-dark .document-page .access-badge.is-staff-admin {
+            background: rgba(34, 197, 94, 0.14);
+            color: #6ee7a8;
+        }
+
+        html.aps-dark .document-page .document-card-footer {
+            border-color: var(--doc-card-border);
+        }
+
+        html.aps-dark .document-page .document-size,
+        html.aps-dark .document-page .document-download {
+            background: var(--doc-surface-soft);
+        }
+
+        html.aps-dark .document-page .document-download:hover {
+            background: linear-gradient(135deg, var(--doc-card-accent), var(--doc-card-accent-deep));
+        }
+
+        html.aps-dark .document-page .document-download-icon {
+            background: var(--doc-card-soft);
+            color: var(--doc-card-accent);
         }
 
         @media (max-width: 1199.98px) {
@@ -428,7 +579,7 @@
             </section>
 
             <div class="document-stats" aria-label="Statistik dokumen">
-                <div class="document-stat">
+                <div class="document-stat" style="grid-column: span 2;">
                     <span class="document-stat-icon"><i class="bx bx-file"></i></span>
                     <div>
                         <div class="document-stat-value">{{ $totalDocuments }}</div>
@@ -442,13 +593,7 @@
                         <div class="document-stat-label">Semua Role</div>
                     </div>
                 </div>
-                <div class="document-stat">
-                    <span class="document-stat-icon"><i class="bx bx-shield-quarter"></i></span>
-                    <div>
-                        <div class="document-stat-value">{{ $adminDocuments }}</div>
-                        <div class="document-stat-label">Admin</div>
-                    </div>
-                </div>
+
                 <div class="document-stat">
                     <span class="document-stat-icon"><i class="bx bx-briefcase"></i></span>
                     <div>
@@ -461,7 +606,7 @@
 
         <div class="document-list">
             @forelse ($visibleDocuments as $document)
-                <article class="document-card">
+                <article class="document-card is-all">
                     <div class="document-card-header">
                         <div class="document-head">
                             <div class="document-title-group">
@@ -473,9 +618,7 @@
                                     <h5 class="document-name">{{ $document->nama_dokumen }}</h5>
                                 </div>
                             </div>
-                            <span class="access-badge {{ $document->access_class }}">
-                                {{ $document->access_label }}
-                            </span>
+
                         </div>
                     </div>
 
