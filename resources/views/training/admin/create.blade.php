@@ -12,7 +12,7 @@
             @csrf
             <div class="mb-3">
                 <label for="user_id" class="form-label">Pilih Staff</label>
-                <select class="form-select select2 @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
+                <select class="form-select @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
                     <option value="">-- Pilih Staff --</option>
                     @foreach ($users as $user)
                         <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
@@ -62,24 +62,4 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    {{-- CSS Select2 terbaru --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    {{-- Tema Bootstrap 5 (opsional) --}}
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
-
-    {{-- JS Select2 terbaru --}}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script>
-    $(document).ready(function() {
-        $('#user_id').select2({
-            allowClear: true,
-            width: '100%',
-            theme: 'bootstrap-5'  // jika kamu pakai tema bootstrap-5
-        });
-    });
-    </script>
 @endsection
