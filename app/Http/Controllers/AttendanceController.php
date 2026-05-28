@@ -99,7 +99,7 @@ class AttendanceController extends Controller
             return back()->with(
                 'error',
                 "Anda berada di luar radius {$station->name}. Jarak: "
-                    . round($distance) . " meter (Max {$allowedRadius}m)"
+                    . round($distance) . " meter"
             );
         }
 
