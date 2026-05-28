@@ -5829,11 +5829,33 @@
                         <span class="menu-header-text">General</span>
                     </li>
 
-                    <li class="menu-item {{ request()->routeIs('document') ? 'active' : '' }}">
-                        <a href="{{ route('document') }}" class="menu-link">
+                    <li class="menu-item {{ request()->routeIs('document') || request()->routeIs('admin.documents.*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons ti ti-file-text"></i>
                             <div data-i18n="Dokumen">Dokumen</div>
                         </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item {{ request()->routeIs('document') ? 'active' : '' }}">
+                                <a href="{{ route('document') }}" class="menu-link">
+                                    <i class="menu-icon tf-icons ti ti-printer"></i>
+                                    <div data-i18n="Cetak Dokumen">Cetak Dokumen</div>
+                                </a>
+                            </li>
+                            @if (Auth::user()->role === 'Admin')
+                                <li class="menu-item {{ request()->routeIs('admin.documents.index') || request()->routeIs('admin.documents.edit') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.documents.index') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons ti ti-folders"></i>
+                                        <div data-i18n="Manajemen Dokumen">Manajemen Dokumen</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item {{ request()->routeIs('admin.documents.create') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.documents.create') }}" class="menu-link">
+                                        <i class="menu-icon tf-icons ti ti-circle-plus"></i>
+                                        <div data-i18n="Tambah Dokumen">Tambah Dokumen</div>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
                     </li>
 
                     <li class="menu-item {{ request()->is('training*') ? 'active open' : '' }}">
@@ -5973,7 +5995,12 @@
                         $topbarMenuLinks[] = ['label' => 'TIM Bandara', 'category' => 'Administrator', 'hint' => 'Data TIM bandara', 'icon' => 'ti-badge', 'url' => route('users.tim')];
                     }
 
-                    $topbarMenuLinks[] = ['label' => 'Dokumen', 'category' => 'General', 'hint' => 'Dokumen dan surat', 'icon' => 'ti-file-text', 'url' => route('document')];
+                    $topbarMenuLinks[] = ['label' => 'Cetak Dokumen', 'category' => 'General', 'hint' => 'Dokumen dan surat', 'icon' => 'ti-file-text', 'url' => route('document')];
+
+                    if ($currentUser->role === 'Admin') {
+                        $topbarMenuLinks[] = ['label' => 'Manajemen Dokumen', 'category' => 'General', 'hint' => 'Kelola file dan akses dokumen', 'icon' => 'ti-folders', 'url' => route('admin.documents.index')];
+                        $topbarMenuLinks[] = ['label' => 'Tambah Dokumen', 'category' => 'General', 'hint' => 'Upload dokumen baru', 'icon' => 'ti-circle-plus', 'url' => route('admin.documents.create')];
+                    }
 
                     if ($canManageTraining) {
                         $topbarMenuLinks[] = ['label' => 'Manajemen Training', 'category' => 'Training', 'hint' => 'Kelola data sertifikat', 'icon' => 'ti-book', 'url' => route('admin.training.certificates.index')];

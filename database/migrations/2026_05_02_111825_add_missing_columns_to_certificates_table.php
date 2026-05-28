@@ -12,10 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
-            $table->string('certificate_name')->after('user_id');
-            $table->date('start_date')->after('certificate_name');
-            $table->date('end_date')->after('start_date');
-            $table->string('certificate_file')->nullable()->after('end_date');
+            if (! Schema::hasColumn('certificates', 'certificate_name')) {
+                $table->string('certificate_name')->after('user_id');
+            }
+
+            if (! Schema::hasColumn('certificates', 'start_date')) {
+                $table->date('start_date')->after('certificate_name');
+            }
+
+            if (! Schema::hasColumn('certificates', 'end_date')) {
+                $table->date('end_date')->after('start_date');
+            }
+
+            if (! Schema::hasColumn('certificates', 'certificate_file')) {
+                $table->string('certificate_file')->nullable()->after('end_date');
+            }
         });
     }
 
@@ -25,7 +36,14 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('certificates', function (Blueprint $table) {
-            $table->dropColumn(['certificate_name', 'start_date', 'end_date', 'certificate_file']);
+            $columns = array_filter(
+                ['certificate_name', 'start_date', 'end_date', 'certificate_file'],
+                fn ($column) => Schema::hasColumn('certificates', $column)
+            );
+
+            if ($columns !== []) {
+                $table->dropColumn($columns);
+            }
         });
     }
 };

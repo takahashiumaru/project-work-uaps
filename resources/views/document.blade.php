@@ -171,6 +171,19 @@
             box-shadow: 0 22px 48px rgba(31, 49, 78, 0.1);
         }
 
+        .document-page .document-empty {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            min-height: 118px;
+            padding: 1.25rem;
+            border: 1px solid var(--doc-border);
+            border-radius: 16px;
+            background: var(--doc-surface);
+            box-shadow: var(--doc-shadow);
+        }
+
         .document-page .document-card-header {
             padding: 1.1rem 1.25rem;
             background:
@@ -230,13 +243,15 @@
             border-radius: 999px;
             font-size: 0.78rem;
             font-weight: 700;
-            line-height: 1;
-            white-space: nowrap;
+            line-height: 1.25;
+            white-space: normal;
         }
 
         .document-page .access-badge {
             flex: 0 0 auto;
+            max-width: min(360px, 48%);
             padding: 0.5rem 0.75rem;
+            text-align: right;
         }
 
         .document-page .access-badge.is-all {
@@ -377,6 +392,8 @@
 
             .document-page .access-badge {
                 align-self: flex-start;
+                max-width: 100%;
+                text-align: left;
             }
 
             .document-page .document-download {
@@ -387,139 +404,6 @@
 @endsection
 
 @section('content')
-    @php
-        $documents = [
-            [
-                'accessType' => 'all',
-                'access' => 'Akses: Semua Role',
-                'accessClass' => 'is-all',
-                'title' => 'Formulir Perpanjangan Pas Bandara',
-                'description' => 'Dokumen resmi untuk keperluan perpanjangan Pas Bandara, termasuk persyaratan SKCK dan foto.',
-                'size' => '1.2 MB',
-                'url' => asset('storage/file/formulir_pas_bandara.pdf'),
-            ],
-            [
-                'accessType' => 'admin',
-                'access' => 'Akses: Khusus Admin',
-                'accessClass' => 'is-admin',
-                'title' => 'Laporan Keuangan Q1 2026',
-                'description' => 'Rekapitulasi pengeluaran dan pemasukan operasional bandara kuartal pertama.',
-                'size' => '4.5 MB',
-                'url' => asset('storage/file/laporan_keuangan_q1_2026.pdf'),
-            ],
-            [
-                'accessType' => 'manager',
-                'access' => 'Akses: Manager',
-                'accessClass' => 'is-manager',
-                'title' => 'SOP Penanganan Keadaan Darurat',
-                'description' => 'Standar operasional prosedur untuk penanganan insiden dan keadaan darurat di area stasiun.',
-                'size' => '2.8 MB',
-                'url' => asset('storage/file/sop_penanganan_keadaan_darurat.pdf'),
-            ],
-            [
-                'accessType' => 'all',
-                'access' => 'Akses: Semua Role',
-                'accessClass' => 'is-all',
-                'title' => 'Formulir Surat Pernyataan',
-                'description' => 'Surat pernyataan resmi untuk kelengkapan administrasi kepegawaian.',
-                'size' => '800 KB',
-                'url' => asset('storage/file/SURAT_PERNYATAAN.pdf'),
-            ],
-            [
-                'accessType' => 'staff-admin',
-                'access' => 'Akses: Staff & Admin',
-                'accessClass' => 'is-staff-admin',
-                'title' => 'Jadwal Shift Bulanan - Juni 2026',
-                'description' => 'Daftar jadwal dinas dan rotasi shift karyawan untuk bulan depan.',
-                'size' => '1.5 MB',
-                'url' => asset('storage/file/jadwal_shift_bulanan_juni_2026.pdf'),
-            ],
-            [
-                'accessType' => 'all',
-                'access' => 'Akses: Semua Role',
-                'accessClass' => 'is-all',
-                'title' => 'Kebijakan Privasi Perusahaan',
-                'description' => 'Dokumen pembaruan kebijakan privasi dan perlindungan data karyawan.',
-                'size' => '3.1 MB',
-                'url' => asset('storage/file/kebijakan_privasi_perusahaan.pdf'),
-            ],
-            [
-                'accessType' => 'admin',
-                'access' => 'Akses: Khusus Admin',
-                'accessClass' => 'is-admin',
-                'title' => 'Data Rekap Absensi Tahunan',
-                'description' => 'Dokumen rekapitulasi kehadiran seluruh karyawan selama tahun berjalan.',
-                'size' => '5.2 MB',
-                'url' => asset('storage/file/data_rekap_absensi_tahunan.pdf'),
-            ],
-            [
-                'accessType' => 'manager',
-                'access' => 'Akses: Manager',
-                'accessClass' => 'is-manager',
-                'title' => 'Evaluasi Kinerja Q1',
-                'description' => 'Hasil evaluasi KPI dan pencapaian target operasional departemen.',
-                'size' => '2.4 MB',
-                'url' => asset('storage/file/evaluasi_kinerja_q1.pdf'),
-            ],
-            [
-                'accessType' => 'all',
-                'access' => 'Akses: Semua Role',
-                'accessClass' => 'is-all',
-                'title' => 'Panduan Penggunaan Sistem AP3',
-                'description' => 'Buku saku manual penggunaan portal sistem informasi manajemen stasiun.',
-                'size' => '8.7 MB',
-                'url' => asset('storage/file/panduan_penggunaan_sistem_ap3.pdf'),
-            ],
-        ];
-
-        $role = strtolower(trim((string) Auth::user()->role));
-        $adminRoles = ['admin'];
-        $managerRoles = [
-            'head of airport service',
-            'spv apron',
-            'spv bge',
-            'spv',
-            'ass leader',
-            'ass leader apron',
-            'ass leader bge',
-            'leader',
-            'leader apron',
-            'leader bge',
-            'leader porter apron',
-            'leader aircraft interior exterior cleaning',
-        ];
-        $staffRoles = [
-            'aircraft interior exterior cleaning',
-            'controller',
-            'dispatcher',
-            'driver',
-            'finance',
-            'hse',
-            'porter',
-            'porter apron',
-            'porter bge',
-            'quality control',
-        ];
-
-        $isAdmin = in_array($role, $adminRoles, true);
-        $isManager = in_array($role, $managerRoles, true);
-        $isStaff = in_array($role, $staffRoles, true);
-
-        $visibleDocuments = collect($documents)->filter(function ($document) use ($isAdmin, $isManager, $isStaff) {
-            return match ($document['accessType']) {
-                'admin' => $isAdmin,
-                'manager' => $isAdmin || $isManager,
-                'staff-admin' => $isAdmin || $isStaff,
-                default => true,
-            };
-        })->values();
-
-        $totalDocuments = $visibleDocuments->count();
-        $allRoleDocuments = $visibleDocuments->where('accessType', 'all')->count();
-        $adminDocuments = $visibleDocuments->where('accessType', 'admin')->count();
-        $managerDocuments = $visibleDocuments->where('accessType', 'manager')->count();
-    @endphp
-
     <div class="container-xxl flex-grow-1 container-p-y document-page">
         <div class="document-page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
             <h4 class="fw-bold pt-3 pb-1 mb-0">
@@ -576,7 +460,7 @@
         </div>
 
         <div class="document-list">
-            @foreach ($visibleDocuments as $document)
+            @forelse ($visibleDocuments as $document)
                 <article class="document-card">
                     <div class="document-card-header">
                         <div class="document-head">
@@ -586,32 +470,42 @@
                                 </span>
                                 <div>
                                     <div class="document-kicker">Dokumen</div>
-                                    <h5 class="document-name">{{ $document['title'] }}</h5>
+                                    <h5 class="document-name">{{ $document->nama_dokumen }}</h5>
                                 </div>
                             </div>
-                            <span class="access-badge {{ $document['accessClass'] }}">
-                                {{ $document['access'] }}
+                            <span class="access-badge {{ $document->access_class }}">
+                                {{ $document->access_label }}
                             </span>
                         </div>
                     </div>
 
                     <div class="document-card-body">
-                        <p class="document-description">{{ $document['description'] }}</p>
+                        <p class="document-description">{{ $document->deskripsi_dokumen }}</p>
 
                         <div class="document-card-footer">
                             <span class="document-size">
                                 <i class="bx bx-data"></i>
-                                {{ $document['size'] }}
+                                {{ $document->ukuran_file ?? '-' }}
                             </span>
-                            <a href="{{ $document['url'] }}" class="document-download" download
-                                aria-label="Unduh {{ $document['title'] }}">
+                            <a href="{{ route('document.download', $document) }}" class="document-download"
+                                aria-label="Unduh {{ $document->nama_dokumen }}">
                                 <span class="document-download-icon"><i class="bx bx-download"></i></span>
                                 <span>Unduh</span>
                             </a>
                         </div>
                     </div>
                 </article>
-            @endforeach
+            @empty
+                <div class="document-empty">
+                    <span class="document-icon">
+                        <i class="bx bx-file"></i>
+                    </span>
+                    <div>
+                        <h5 class="document-name mb-1">Belum ada dokumen</h5>
+                        <p class="document-description mb-0">Dokumen untuk role Anda belum tersedia.</p>
+                    </div>
+                </div>
+            @endforelse
         </div>
     </div>
 @endsection

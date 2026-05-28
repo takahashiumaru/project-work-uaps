@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Flights; // Pastikan model ini benar
+use App\Models\Document;
 use App\Models\User;
 use App\Models\Leave;
 use App\Models\Attendance;
@@ -12,6 +13,7 @@ use Illuminate\View\View;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -284,8 +286,41 @@ class HomeController extends Controller
         return $pdf->download("Surat-Pengganti-ID-Card-{$karyawan->fullname}.pdf");
     }
 
-    public function Document(): View
+    public function document(): View
     {
-        return view('document');
+        $role = Auth::user()->role;
+        $visibleDocuments = Document::query()
+            ->orderBy('nama_dokumen')
+            ->get()
+            ->filter(fn (Document $document) => $document->isVisibleForRole($role))
+            ->values();
+
+        $totalDocuments = $visibleDocuments->count();
+        $allRoleDocuments = $visibleDocuments->filter(fn (Document $document) => $document->isAllRoleAccess())->count();
+        $adminDocuments = $visibleDocuments->filter(fn (Document $document) => $document->hasRoleAccess('Admin'))->count();
+        $managerDocuments = $visibleDocuments->filter(fn (Document $document) => $document->hasAnyRoleAccess(Document::managerRoles()))->count();
+
+        return view('document', compact(
+            'visibleDocuments',
+            'totalDocuments',
+            'allRoleDocuments',
+            'adminDocuments',
+            'managerDocuments'
+        ));
+    }
+
+    public function downloadDocument(Document $document)
+    {
+        if (!$document->isVisibleForRole(Auth::user()->role)) {
+            abort(403);
+        }
+
+        if (!$document->file_path || !Storage::disk('public')->exists($document->file_path)) {
+            Alert::error('File tidak ditemukan', 'Silakan unggah file dokumen terlebih dahulu.');
+
+            return redirect()->route('document');
+        }
+
+        return Storage::disk('public')->download($document->file_path, $document->nama_file);
     }
 }

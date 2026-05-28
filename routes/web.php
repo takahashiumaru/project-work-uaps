@@ -16,6 +16,7 @@ use App\Http\Controllers\FlightController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\AdminTrainingCertificateController;
+use App\Http\Controllers\AdminDocumentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportController;
 use App\Models\Blacklist;
@@ -54,6 +55,13 @@ Route::middleware(['auth'])->group(function () {
     // --- DASHBOARD & UMUM ---
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::get('document', [HomeController::class, 'document'])->name('document');
+    Route::get('document/{document}/download', [HomeController::class, 'downloadDocument'])->name('document.download');
+    Route::get('admin/documents', [AdminDocumentController::class, 'index'])->name('admin.documents.index');
+    Route::get('admin/documents/create', [AdminDocumentController::class, 'create'])->name('admin.documents.create');
+    Route::post('admin/documents', [AdminDocumentController::class, 'store'])->name('admin.documents.store');
+    Route::get('admin/documents/{document}/edit', [AdminDocumentController::class, 'edit'])->name('admin.documents.edit');
+    Route::put('admin/documents/{document}', [AdminDocumentController::class, 'update'])->name('admin.documents.update');
+    Route::delete('admin/documents/{document}', [AdminDocumentController::class, 'destroy'])->name('admin.documents.destroy');
     Route::get('/surat', [HomeController::class, 'generatePDF'])->name('surat.generate');
     Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout');
 
