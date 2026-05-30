@@ -515,9 +515,19 @@ class UserController extends Controller
 
     public function updatePhoto(Request $request, $userId)
     {
-        $request->validate([
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'profile_picture.required' => 'Foto profil wajib diunggah.',
+            'profile_picture.image' => 'File harus berupa gambar.',
+            'profile_picture.mimes' => 'Format foto hanya diperbolehkan JPG, JPEG, dan PNG.',
+            'profile_picture.max' => 'Ukuran foto maksimal adalah 2MB.',
         ]);
+
+        if ($validator->fails()) {
+            Alert::error('Gagal', $validator->errors()->first());
+            return back()->withErrors($validator)->withInput();
+        }
 
         try {
             $user = User::findOrFail($userId);

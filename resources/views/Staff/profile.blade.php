@@ -299,7 +299,7 @@
                             action="{{ route('user.updatePhoto', ['userId' => $user->id]) }}">
                             @csrf
                             <input type="file" name="profile_picture" id="fileInput" style="display: none;"
-                                onchange="document.getElementById('photoForm').submit();">
+                                accept="image/png, image/jpeg, image/jpg">
 
                             <div class="text-center mb-4">
                                 <div class="profile-photo-container">
@@ -674,13 +674,86 @@
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Handle photo upload click
+            // SweetAlert notifications for session status
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: '{{ session('success') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: '{{ session('error') }}',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            @endif
+
+            // Handle photo upload click and validation
             const profilePhoto = document.querySelector('.profile-photo');
             const fileInput = document.getElementById('fileInput');
 
             if (profilePhoto && fileInput) {
                 profilePhoto.addEventListener('click', function() {
                     fileInput.click();
+                });
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    if (this.files && this.files[0]) {
+                        const file = this.files[0];
+                        const fileSize = file.size / 1024 / 1024; // MB
+                        const fileName = file.name.toLowerCase();
+                        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+                        if (!allowedExtensions.exec(fileName)) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Format File Tidak Valid',
+                                text: 'Harap pilih file gambar dengan format PNG, JPG, atau JPEG.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                            this.value = '';
+                            return;
+                        }
+
+                        if (fileSize > 2) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'File Terlalu Besar',
+                                text: 'Ukuran file maksimal adalah 2MB.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
+                            this.value = '';
+                            return;
+                        }
+
+                        Swal.fire({
+                            title: 'Unggah Foto Profil?',
+                            text: 'Apakah Anda yakin ingin mengubah foto profil?',
+                            icon: 'question',
+                            showCancelButton: true,
+                            confirmButtonColor: '#667eea',
+                            cancelButtonColor: '#8592a3',
+                            confirmButtonText: 'Ya, Unggah!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('photoForm').submit();
+                            } else {
+                                this.value = '';
+                            }
+                        });
+                    }
                 });
             }
 

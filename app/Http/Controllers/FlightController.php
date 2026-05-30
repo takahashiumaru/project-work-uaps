@@ -27,14 +27,19 @@ class FlightController extends Controller
     public function store(Request $request)
     {
         try {
-            // Cek apakah flight sudah ada (Pencegahan duplikasi)
-            $arrivalDate = Carbon::parse($request->arrival)->toDateString();
+            $userStation = auth()->user()->station;
+            $arrivalDateTime = Carbon::parse($request->arrival);
+            $arrivalDate = $arrivalDateTime->toDateString();
+            $flightTime = $arrivalDateTime->format('H:i:s');
+
+            // Cek apakah flight sudah ada (Pencegahan duplikasi) berdasarkan stasiun dan tanggal kedatangan
             $exists = Flights::where('flight_number', $request->flight_number)
-                ->whereDate('arrival', $arrivalDate)
+                ->where('station', $userStation)
+                ->whereDate('created_at', $arrivalDate)
                 ->exists();
 
             if ($exists) {
-                Alert::warning('Peringatan', 'Nomor penerbangan ' . $request->flight_number . ' sudah terdaftar untuk tanggal tersebut.');
+                Alert::warning('Peringatan', 'Nomor penerbangan ' . $request->flight_number . ' sudah terdaftar untuk stasiun dan tanggal tersebut.');
                 return redirect()->route('home');
             }
 
@@ -43,9 +48,11 @@ class FlightController extends Controller
             $flight->flight_number = $request->flight_number;
             $flight->registasi = $request->registasi;
             $flight->type = $request->type;
-            $flight->arrival = $request->arrival;
-            $flight->time_count = $request->time_count;
+            $flight->arrival = $flightTime; // Simpan jam kedatangan
+            $flight->time_count = Carbon::parse($request->time_count)->format('H:i:s');
+            $flight->station = $userStation; // Set stasiun sesuai stasiun user yang login
             $flight->status = 0;
+            $flight->created_at = $arrivalDateTime; // Set created_at agar filter tanggal di dashboard sesuai dengan tanggal penerbangan
             $flight->save();
 
             $flightNumber = strtoupper($flight->flight_number);
@@ -59,30 +66,39 @@ class FlightController extends Controller
                 $requiredPeople = $type === 'widebody' ? 4 : 6;
             }
 
-            $now = Carbon::now();
-            $today = $now->format('Y-m-d');
-            $currentTime = $now->format('H:i:s');
-
-            $activeShifts = Shift::where('start_time', '<=', $currentTime)
-                ->where('end_time', '>=', $currentTime)
-                ->get();
+            // Ambil shift yang aktif pada jam kedatangan (Mendukung shift malam/overnight)
+            $activeShifts = Shift::all()->filter(function ($shift) use ($flightTime) {
+                $start = $shift->start_time;
+                $end = $shift->end_time;
+                if ($start <= $end) {
+                    return $flightTime >= $start && $flightTime <= $end;
+                } else {
+                    // Shift malam melewati tengah malam (contoh: 20:00:00 s.d 06:00:00)
+                    return $flightTime >= $start || $flightTime <= $end;
+                }
+            });
 
             if ($activeShifts->isEmpty()) {
-                Alert::error('Gagal', 'Tidak ada shift aktif saat ini');
+                Alert::error('Gagal', 'Tidak ada shift aktif untuk jam penerbangan tersebut');
                 return redirect()->route('home');
             }
 
-            $schedules = Schedule::where('date', $today)
+            // Ambil jadwal staff untuk stasiun ini dan tanggal kedatangan flight
+            $schedules = Schedule::where('date', $arrivalDate)
                 ->whereIn('shift_id', $activeShifts->pluck('id'))
                 ->get();
 
             $assigned = 0;
+            $assignedSchedules = [];
 
             foreach ($schedules as $schedule) {
                 if ($assigned >= $requiredPeople) break;
 
                 $user = User::find($schedule->user_id);
                 if (!$user) continue;
+
+                // Validasi agar hanya assign staff yang berada di stasiun yang sama dengan flight
+                if ($user->station !== $userStation) continue;
 
                 if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
 
@@ -91,23 +107,19 @@ class FlightController extends Controller
                     'schedule_id' => $schedule->id,
                 ]);
 
+                $assignedSchedules[] = $schedule;
                 $assigned++;
             }
 
             $botToken = env('TELEGRAM_BOT_TOKEN');
-
             $chatIds = ['2050877699', '1631339759'];
 
             $assignedUsers = [];
-            foreach ($schedules as $schedule) {
-                if (count($assignedUsers) >= $requiredPeople) break;
-
+            foreach ($assignedSchedules as $schedule) {
                 $user = User::find($schedule->user_id);
-                if (!$user) continue;
-
-                if (str_starts_with($flightNumber, 'QF') && !$user->is_qantas) continue;
-
-                array_push($assignedUsers, $user->fullname);
+                if ($user) {
+                    array_push($assignedUsers, $user->fullname);
+                }
             }
 
             $message = "✈️ Flight baru berhasil dibuat, Mohon untuk di lakukan pengerjaan:\n\n"
@@ -116,7 +128,7 @@ class FlightController extends Controller
                 . "Registrasi: {$flight->registasi}\n"
                 . "Type: {$flight->type}\n"
                 . "Arrival: {$flight->arrival}\n"
-                . "Tanggal: {$today}\n"
+                . "Tanggal: {$arrivalDate}\n"
                 . "Assigned: " . implode(', ', $assignedUsers) . " ({$assigned}/{$requiredPeople})";
 
             foreach ($chatIds as $chatId) {
@@ -134,7 +146,7 @@ class FlightController extends Controller
             return redirect()->route('home');
         } catch (\Exception $e) {
             Log::error('Error saat menyimpan data flight: ' . $e->getMessage());
-            Alert::error('Terjadi Kesalahan', 'Gagal menyimpan data flight.');
+            Alert::error('Terjadi Kesalahan', 'Gagal menyimpan data flight: ' . $e->getMessage());
             return redirect()->route('home');
         }
     }

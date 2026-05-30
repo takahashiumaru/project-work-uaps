@@ -40,7 +40,7 @@
                                         action="{{ route('user.updatePhoto', ['userId' => $user->id]) }}">
                                         @csrf
                                         <input type="file" name="profile_picture" id="fileInput" style="display: none;"
-                                            onchange="document.getElementById('photoForm').submit();">
+                                            accept="image/png, image/jpeg, image/jpg">
                                         <div class="text-center">
                                             <label for="fileInput" style="cursor: pointer; position: relative;">
                                                 <img src="{{ $user->profile_picture ? asset('storage/photo/' . $user->profile_picture) : asset('storage/photo/user.jpg') }}"
@@ -355,13 +355,14 @@
                 fileInput.addEventListener('change', function(e) {
                     if (this.files && this.files[0]) {
                         const fileSize = this.files[0].size / 1024 / 1024; // MB
-                        const fileType = this.files[0].type;
+                        const fileName = this.files[0].name.toLowerCase();
+                        const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
 
-                        if (!fileType.match('image.*')) {
+                        if (!allowedExtensions.exec(fileName)) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Format File Tidak Valid',
-                                text: 'Harap pilih file gambar (JPG, PNG, GIF)',
+                                text: 'Harap pilih file gambar dengan format PNG, JPG, atau JPEG.',
                                 timer: 3000,
                                 showConfirmButton: false
                             });
