@@ -59,34 +59,20 @@ class AttendanceController extends Controller
     |--------------------------------------------------------------------------
     */
 
-        $userStation = strtoupper(trim($user->station));
-        $stationsConfig = config('locations.stations');
-
-        if (!array_key_exists($userStation, $stationsConfig)) {
-            return back()->with('error', 'Station belum diatur di config.');
-        }
-
-        $target = $stationsConfig[$userStation];
-
-        $distance = $this->calculateDistance(
-            $request->latitude,
-            $request->longitude,
-            $target['latitude'],
-            $target['longitude']
-        );
-
-        $user = auth()->user();
-
         $station = Station::where('code', $user->station)->first();
 
         if (!$station) {
-            return back()->with('error', 'Station tidak ditemukan');
+            return back()->with('error', 'Station tidak ditemukan.');
+        }
+
+        if (!$station->is_active) {
+            return back()->with('error', 'Station Anda sedang dinonaktifkan.');
         }
 
         $targetLat = $station->latitude;
         $targetLong = $station->longitude;
 
-        $allowedRadius = config('locations.radius', 40);
+        $allowedRadius = $station->radius ?? config('locations.radius', 40);
 
         $distance = $this->calculateDistance(
             $request->latitude,
@@ -191,35 +177,34 @@ class AttendanceController extends Controller
             return response()->json(['success' => false, 'message' => 'Anda sudah melakukan Check-in hari ini.']);
         }
 
-        // 2. Ambil Nama Station User & Jadikan HURUF BESAR (UPPERCASE)
-        // Agar cocok dengan config (contoh: "Cgk" -> "CGK")
-        $userStation = strtoupper(trim($user->station));
+        // 2. Ambil Station User dari Database
+        $station = Station::where('code', $user->station)->first();
 
-        // 3. Ambil Konfigurasi Lokasi
-        $stationsConfig = config('locations.stations');
-
-        // Cek apakah station user terdaftar di Config
-        if (!array_key_exists($userStation, $stationsConfig)) {
+        if (!$station) {
             return response()->json([
                 'success' => false,
-                'message' => "Lokasi untuk station '{$user->station}' belum diatur di sistem (Config)."
+                'message' => "Lokasi untuk station '{$user->station}' tidak ditemukan di database."
             ]);
         }
 
-        // Ambil Koordinat Target (Kantor)
-        $targetLocation = $stationsConfig[$userStation];
-        $targetLat = $targetLocation['latitude'];
-        $targetLon = $targetLocation['longitude'];
-        $locationName = $targetLocation['name'] ?? $userStation;
+        if (!$station->is_active) {
+            return response()->json([
+                'success' => false,
+                'message' => "Station '{$station->name}' sedang dinonaktifkan."
+            ]);
+        }
+
+        // Ambil Koordinat Target & Radius
+        $targetLat = $station->latitude;
+        $targetLon = $station->longitude;
+        $locationName = $station->name;
+        $allowedRadius = $station->radius ?? config('locations.radius', 40);
 
         // 4. Hitung Jarak (GPS HP User vs GPS Kantor)
         $userLat = $request->latitude;
         $userLon = $request->longitude;
 
         $distance = $this->calculateDistance($userLat, $userLon, $targetLat, $targetLon);
-
-        // Ambil radius toleransi dari config (Default 40 meter jika tidak diatur)
-        $allowedRadius = config('locations.radius', 40);
 
         // 5. Validasi Radius (Geofencing)
         if ($distance > $allowedRadius) {

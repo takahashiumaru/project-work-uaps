@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('file_path');
             $table->string('ukuran_file', 50)->nullable();
             $table->string('role_akses_dokumen', 50)->default('all')->index();
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users')->nullOnDelete();

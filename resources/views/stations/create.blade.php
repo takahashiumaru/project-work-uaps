@@ -208,6 +208,22 @@
                             </div>
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label">Radius Absen (Meter)</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text"><i class="ti ti-radar"></i></span>
+                                <input
+                                    type="number"
+                                    name="radius"
+                                    class="form-control"
+                                    placeholder="Cth: 40"
+                                    min="1"
+                                    value="{{ old('radius') }}"
+                                    required />
+                            </div>
+                            <div class="form-text">Radius toleransi absensi dalam satuan meter.</div>
+                        </div>
+
                         <div class="station-map-field">
                             <label class="form-label">Preview Titik Lokasi</label>
                             <div class="station-map-preview js-station-map-preview" aria-label="Preview titik lokasi station">
@@ -228,7 +244,7 @@
                             <button type="submit" class="btn btn-primary">
                                 <i class="ti ti-device-floppy"></i> Buka Station Sekarang
                             </button>
-                            <a href="{{ route('stations.index') }}" class="btn btn-label-secondary">Batal</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-label-secondary">Batal</a>
                         </div>
                     </form>
                 </div>

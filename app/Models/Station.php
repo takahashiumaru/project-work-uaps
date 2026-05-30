@@ -17,5 +17,6 @@ class Station extends Model
         'is_active', // Status (1/0)
         'latitude',  // Latitude
         'longitude', // Longitude
+        'radius',    // Radius absensi (meter)
     ];
 }

@@ -27,6 +27,7 @@ class StationController extends Controller
             'name' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'radius' => 'required|integer|min:1',
         ]);
 
         Station::create([
@@ -34,7 +35,8 @@ class StationController extends Controller
             'name' => $request->name,
             'is_active' => true,
             'latitude' => $request->latitude,
-            'longitude' => $request->longitude
+            'longitude' => $request->longitude,
+            'radius' => $request->radius,
         ]);
 
         Alert::success('Berhasil', 'Station baru berhasil dibuka!');
@@ -94,11 +96,13 @@ class StationController extends Controller
         $request->validate([
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
+            'radius' => 'required|integer|min:1',
         ]);
 
         $station->update([
             'latitude' => $request->latitude,
-            'longitude' => $request->longitude
+            'longitude' => $request->longitude,
+            'radius' => $request->radius,
         ]);
 
         Alert::success('Berhasil', 'Station berhasil diubah!');

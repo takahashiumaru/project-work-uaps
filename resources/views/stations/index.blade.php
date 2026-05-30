@@ -25,6 +25,7 @@
                                 <th>Status</th>
                                 <th>Latitude</th>
                                 <th>Longitude</th>
+                                <th>Radius (m)</th>
                                 <th>Aksi Kontrol</th>
                                 <th>Aksi</th>
                             </tr>
@@ -43,6 +44,7 @@
                                 </td>
                                 <td>{{ $st->latitude }}</td>
                                 <td>{{ $st->longitude }}</td>
+                                <td>{{ $st->radius }} m</td>
                                 <td>
                                     <form action="{{ route('stations.toggle', $st->id) }}" method="POST">
                                         @csrf
