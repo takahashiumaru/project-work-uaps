@@ -65,10 +65,38 @@
                                         <strong>{{ $document->nama_dokumen }}</strong>
                                         <div class="small text-muted">{{ $document->deskripsi_dokumen }}</div>
                                     </td>
-                                    <td>
-                                        <span class="access-badge {{ $document->access_class }}">
-                                            {{ $document->access_full_label }}
-                                        </span>
+                                    <td style="min-width: 160px;">
+                                        @php
+                                            $roles = $document->role_access_values;
+                                            $isAll = $document->isAllRoleAccess();
+                                            $accessClass = $document->access_class;
+                                            $visibleRoles = $isAll ? [] : array_slice($roles, 0, 2);
+                                            $extraCount = $isAll ? 0 : max(0, count($roles) - 2);
+                                        @endphp
+
+                                        @if ($isAll)
+                                            <span class="role-chip role-chip--all">
+                                                <i class="ti ti-users-group"></i> Semua Role
+                                            </span>
+                                        @else
+                                            <div class="role-chips-wrap">
+                                                @foreach ($visibleRoles as $role)
+                                                    <span class="role-chip role-chip--{{ $accessClass }}">
+                                                        {{ $role }}
+                                                    </span>
+                                                @endforeach
+
+                                                @if ($extraCount > 0)
+                                                    <span class="role-chip role-chip--more"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        data-bs-html="true"
+                                                        title="<div class='role-tooltip-list'>{{ implode('<br>', array_map('htmlspecialchars', $roles)) }}</div>">
+                                                        +{{ $extraCount }} lainnya
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </td>
                                     <td style="min-width: 180px;">
                                         <div class="fw-semibold text-truncate" style="max-width: 220px;">

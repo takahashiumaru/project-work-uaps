@@ -1,34 +1,77 @@
 <style>
-    .document-admin-page .access-badge {
+    /* ── Role Chips ─────────────────────────────────────────── */
+    .document-admin-page .role-chips-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        align-items: center;
+    }
+
+    .document-admin-page .role-chip {
         display: inline-flex;
         align-items: center;
-        gap: 0.35rem;
-        padding: 0.42rem 0.68rem;
+        gap: 0.3rem;
+        padding: 0.28rem 0.6rem;
         border-radius: 999px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        line-height: 1.25;
-        white-space: normal;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1.3;
+        white-space: nowrap;
+        letter-spacing: 0.01em;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .document-admin-page .access-badge.is-all {
-        background: rgba(47, 128, 237, 0.1);
+    .document-admin-page .role-chip:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Semua Role */
+    .document-admin-page .role-chip--all {
+        background: linear-gradient(135deg, rgba(47, 128, 237, 0.14), rgba(47, 128, 237, 0.08));
         color: #2368c8;
+        border: 1px solid rgba(47, 128, 237, 0.25);
     }
 
-    .document-admin-page .access-badge.is-admin {
-        background: #fdecec;
-        color: #e34d4d;
+    /* Admin */
+    .document-admin-page .role-chip--is-admin {
+        background: linear-gradient(135deg, rgba(220, 53, 69, 0.12), rgba(220, 53, 69, 0.06));
+        color: #c0392b;
+        border: 1px solid rgba(220, 53, 69, 0.22);
     }
 
-    .document-admin-page .access-badge.is-manager {
-        background: #fff7e6;
-        color: #b7791f;
+    /* Manager / Head */
+    .document-admin-page .role-chip--is-manager {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.14), rgba(245, 158, 11, 0.07));
+        color: #92650a;
+        border: 1px solid rgba(245, 158, 11, 0.26);
     }
 
-    .document-admin-page .access-badge.is-staff-admin {
-        background: #e9f8f0;
-        color: #16a163;
+    /* Staff Admin */
+    .document-admin-page .role-chip--is-staff-admin {
+        background: linear-gradient(135deg, rgba(22, 161, 99, 0.13), rgba(22, 161, 99, 0.06));
+        color: #127a4e;
+        border: 1px solid rgba(22, 161, 99, 0.24);
+    }
+
+    /* +N more chip */
+    .document-admin-page .role-chip--more {
+        background: rgba(100, 116, 139, 0.1);
+        color: #64748b;
+        border: 1px solid rgba(100, 116, 139, 0.22);
+        cursor: pointer;
+    }
+
+    .document-admin-page .role-chip--more:hover {
+        background: rgba(100, 116, 139, 0.18);
+        color: #475569;
+    }
+
+    /* Tooltip untuk daftar role lengkap */
+    .role-tooltip-list {
+        text-align: left;
+        font-size: 0.75rem;
+        line-height: 1.7;
     }
 
     .document-admin-page .document-file-summary {
@@ -172,23 +215,33 @@
         border-color: #315071;
     }
 
-    html.aps-dark .document-admin-page .access-badge.is-all {
-        background: rgba(47, 128, 237, 0.16);
+    html.aps-dark .document-admin-page .role-chip--all {
+        background: rgba(47, 128, 237, 0.18);
         color: #8fc1ff;
+        border-color: rgba(47, 128, 237, 0.3);
     }
 
-    html.aps-dark .document-admin-page .access-badge.is-admin {
-        background: rgba(239, 68, 68, 0.14);
+    html.aps-dark .document-admin-page .role-chip--is-admin {
+        background: rgba(239, 68, 68, 0.15);
         color: #fb7185;
+        border-color: rgba(239, 68, 68, 0.28);
     }
 
-    html.aps-dark .document-admin-page .access-badge.is-manager {
-        background: rgba(245, 158, 11, 0.16);
+    html.aps-dark .document-admin-page .role-chip--is-manager {
+        background: rgba(245, 158, 11, 0.15);
         color: #fbbf24;
+        border-color: rgba(245, 158, 11, 0.28);
     }
 
-    html.aps-dark .document-admin-page .access-badge.is-staff-admin {
-        background: rgba(34, 197, 94, 0.14);
+    html.aps-dark .document-admin-page .role-chip--is-staff-admin {
+        background: rgba(34, 197, 94, 0.13);
         color: #6ee7a8;
+        border-color: rgba(34, 197, 94, 0.26);
+    }
+
+    html.aps-dark .document-admin-page .role-chip--more {
+        background: rgba(148, 163, 184, 0.1);
+        color: #94a3b8;
+        border-color: rgba(148, 163, 184, 0.22);
     }
 </style>
