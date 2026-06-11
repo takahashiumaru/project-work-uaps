@@ -198,6 +198,30 @@ class LeaveController extends Controller
             'replacement_employee_name' => 'nullable|string|max:255',
         ]);
 
+        // ===== CEK OVERLAP CUTI =====
+        // Tidak boleh mengajukan cuti jika sudah ada cuti (pending/approved) di rentang tanggal yang sama
+        $overlappingLeave = Leave::where('user_id', $user->id)
+            ->whereNotIn('status', ['rejected by ho', 'rejected by leader'])
+            ->where(function ($q) use ($request) {
+                $q->whereBetween('start_date', [$request->start_date, $request->end_date])
+                  ->orWhereBetween('end_date', [$request->start_date, $request->end_date])
+                  ->orWhere(function ($q2) use ($request) {
+                      $q2->where('start_date', '<=', $request->start_date)
+                         ->where('end_date', '>=', $request->end_date);
+                  });
+            })
+            ->first();
+
+        if ($overlappingLeave) {
+            $existStart = Carbon::parse($overlappingLeave->start_date)->translatedFormat('d M Y');
+            $existEnd   = Carbon::parse($overlappingLeave->end_date)->translatedFormat('d M Y');
+            Alert::error(
+                'Tanggal Sudah Digunakan',
+                "Anda sudah memiliki pengajuan cuti ({$overlappingLeave->leave_type}) pada tanggal {$existStart} – {$existEnd}. Tidak dapat mengajukan cuti di tanggal yang sama."
+            );
+            return redirect()->back()->withInput();
+        }
+
         $status = '';
 
         if ($user->role === 'Admin') {

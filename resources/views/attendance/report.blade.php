@@ -93,9 +93,12 @@
                             @forelse ($attendances as $row)
                             @php
                             $attendance = $row->attendance ?? null;
-                            $schedule = $row->schedule ?? null;
-                            $date = \Carbon\Carbon::parse($row->date);
-                            $today = \Carbon\Carbon::today();
+                            $schedule   = $row->schedule   ?? null;
+                            $leave      = $row->leave      ?? null;
+                            $date       = \Carbon\Carbon::parse($row->date);
+                            $today      = \Carbon\Carbon::today();
+
+                            $isOnLeave = $leave !== null;
 
                             $checkIn = $attendance?->check_in_time
                             ? \Carbon\Carbon::parse($attendance->check_in_time)
@@ -104,40 +107,52 @@
                             ? \Carbon\Carbon::parse($attendance->check_out_time)
                             : null;
 
-                            $checkInClass = '';
+                            $checkInClass  = '';
                             $checkOutClass = '';
-                            if ($date->lt($today)) {
-                            if (!$checkIn || !$checkOut) {
-                            $checkInClass = 'bg-danger text-white';
-                            $checkOutClass = 'bg-danger text-white';
-                            } elseif ($schedule) {
-                            $schedStart = \Carbon\Carbon::parse($schedule->start_time);
-                            $schedEnd = \Carbon\Carbon::parse($schedule->end_time);
 
-                            if ($checkIn->gt($schedStart)) {
-                            $checkInClass = 'bg-danger text-white';
-                            } elseif ($checkIn->lt($schedStart)) {
-                            $checkInClass = 'bg-success text-white';
-                            }
+                            if (!$isOnLeave) {
+                                if ($date->lt($today)) {
+                                    if (!$checkIn || !$checkOut) {
+                                        $checkInClass  = 'bg-danger text-white';
+                                        $checkOutClass = 'bg-danger text-white';
+                                    } elseif ($schedule) {
+                                        $schedStart = \Carbon\Carbon::parse($schedule->start_time);
+                                        $schedEnd   = \Carbon\Carbon::parse($schedule->end_time);
 
-                            if ($checkOut->lt($schedEnd)) {
-                            $checkOutClass = 'bg-danger text-white';
-                            } elseif ($checkOut->gt($schedEnd)) {
-                            $checkOutClass = 'bg-success text-white';
-                            }
-                            }
+                                        if ($checkIn->gt($schedStart)) {
+                                            $checkInClass = 'bg-danger text-white';
+                                        } elseif ($checkIn->lt($schedStart)) {
+                                            $checkInClass = 'bg-success text-white';
+                                        }
+
+                                        if ($checkOut->lt($schedEnd)) {
+                                            $checkOutClass = 'bg-danger text-white';
+                                        } elseif ($checkOut->gt($schedEnd)) {
+                                            $checkOutClass = 'bg-success text-white';
+                                        }
+                                    }
+                                }
                             }
 
                             $workDuration =
                             $checkIn && $checkOut ? $checkIn->diff($checkOut)->format('%H:%I:%S') : '-';
                             @endphp
 
-                            <tr>
+                            <tr class="{{ $isOnLeave ? 'table-info' : '' }}">
                                 <td>{{ $date->translatedFormat('d M Y') }}</td>
-                                <td class="{{ $checkInClass }}" style="border-radius: 0.25rem;">{{ $checkIn ? $checkIn->format('H:i:s') : '-' }}</td>
-                                <td class="{{ $checkOutClass }}" style="border-radius: 0.25rem;">{{ $checkOut ? $checkOut->format('H:i:s') : '-' }}</td>
-                                <td>{{ $checkIn ? $row->user?->station ?? ($attendance->check_in_notes ?? '-') : '-' }}</td>
-                                <td>{{ $workDuration }}</td>
+                                @if ($isOnLeave)
+                                    <td colspan="3" class="text-center">
+                                        <span class="badge" style="background-color:#3b82f6; font-size:0.85rem; padding:0.35em 0.85em; border-radius:0.5rem;">
+                                            <i class="bx bx-calendar-check me-1"></i>
+                                            Cuti — {{ $leave->leave_type }}
+                                        </span>
+                                    </td>
+                                @else
+                                    <td class="{{ $checkInClass }}" style="border-radius: 0.25rem;">{{ $checkIn ? $checkIn->format('H:i:s') : '-' }}</td>
+                                    <td class="{{ $checkOutClass }}" style="border-radius: 0.25rem;">{{ $checkOut ? $checkOut->format('H:i:s') : '-' }}</td>
+                                    <td>{{ $checkIn ? $row->user?->station ?? ($attendance->check_in_notes ?? '-') : '-' }}</td>
+                                @endif
+                                <td>{{ $isOnLeave ? '-' : $workDuration }}</td>
                             </tr>
                             @empty
                             <tr>
@@ -162,6 +177,10 @@
                     <div class="d-flex align-items-center gap-2">
                         <span style="display:inline-block;width:12px;height:12px;background-color:#fef2f2;border:1px solid #fecaca;border-radius:3px;"></span>
                         <small class="text-muted">Terlambat / Pulang cepat / Tidak absen</small>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span style="display:inline-block;width:12px;height:12px;background-color:#dbeafe;border:1px solid #bfdbfe;border-radius:3px;"></span>
+                        <small class="text-muted">Cuti (disetujui)</small>
                     </div>
                 </div>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AttendanceReportExport;
 use App\Models\Attendance;
+use App\Models\Leave;
 use App\Models\Schedule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -367,6 +368,32 @@ class AttendanceController extends Controller
                         ->get()
                         ->groupBy(fn($item) => \Carbon\Carbon::parse($item->date)->toDateString());
 
+                    // ===== LEAVE (CUTI) DATA =====
+                    // Ambil semua cuti approved user dalam periode ini
+                    $leaveData = Leave::where('user_id', $user->id)
+                        ->where('status', 'approved')
+                        ->where(function ($q) use ($startDate, $endDate) {
+                            $q->whereBetween('start_date', [$startDate->toDateString(), $endDate->toDateString()])
+                              ->orWhereBetween('end_date', [$startDate->toDateString(), $endDate->toDateString()])
+                              ->orWhere(function ($q2) use ($startDate, $endDate) {
+                                  $q2->where('start_date', '<=', $startDate->toDateString())
+                                     ->where('end_date', '>=', $endDate->toDateString());
+                              });
+                        })
+                        ->get();
+
+                    // Buat kumpulan tanggal-tanggal yang masuk dalam cuti
+                    $leaveDates = collect();
+                    foreach ($leaveData as $leave) {
+                        $leaveStart = Carbon::parse($leave->start_date);
+                        $leaveEnd   = Carbon::parse($leave->end_date);
+                        $leaveCursor = $leaveStart->copy();
+                        while ($leaveCursor->lte($leaveEnd)) {
+                            $leaveDates->put($leaveCursor->toDateString(), $leave);
+                            $leaveCursor->addDay();
+                        }
+                    }
+
                     // ===== GENERATE DATA =====
                     $cursor = $startDate->copy();
 
@@ -375,21 +402,24 @@ class AttendanceController extends Controller
 
                         $attendancesForDate = $attData->get($dateStr) ?? collect();
                         $schedulesForDate = $scheduleData->get($dateStr) ?? collect();
+                        $leaveForDate = $leaveDates->get($dateStr);
 
                         if ($schedulesForDate->isEmpty()) {
                             $attendances->push((object) [
-                                'date' => $dateStr,
+                                'date'       => $dateStr,
                                 'attendance' => $attendancesForDate->first(),
-                                'schedule' => null,
-                                'user' => $user,
+                                'schedule'   => null,
+                                'user'       => $user,
+                                'leave'      => $leaveForDate,
                             ]);
                         } else {
                             foreach ($schedulesForDate as $schedule) {
                                 $attendances->push((object) [
-                                    'date' => $dateStr,
+                                    'date'       => $dateStr,
                                     'attendance' => $attendancesForDate->first(),
-                                    'schedule' => $schedule,
-                                    'user' => $user,
+                                    'schedule'   => $schedule,
+                                    'user'       => $user,
+                                    'leave'      => $leaveForDate,
                                 ]);
                             }
                         }
